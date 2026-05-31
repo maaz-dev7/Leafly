@@ -1,0 +1,257 @@
+Build a full-stack web app called Leafly — a smart plant delivery and care platform. Use React + Vite for the frontend, Node.js + Express for the backend, and SQLite (or Supabase if available) for the database. Style with Tailwind CSS.
+
+APP NAME: Leafly
+Tagline: "Bring nature home. Keep it thriving."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION A — PLANT CATALOG (SEED THIS DATA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seed the database with exactly these plants. Every plant must have: id, name, scientific_name, category, size, price (PKR), care_difficulty, climate_tags, image_url (default: placeholder from https://placehold.co/400x400/1D9E75/white?text=Leafly), and is_available (boolean, default true).
+
+Name: Money Plant (Indoor / Karachi)
+Scientific: Epipremnum aureum
+Category: Indoor | Size: 18 inch | Price: Rs. 2,800
+Difficulty: Easy | Tags: humid, tropical, shade-tolerant
+
+Name: Paan Patta (Betel Leaf)
+Scientific: Piper betle
+Category: Indoor | Size: — | Price: TBD (admin to set)
+Difficulty: Easy | Tags: humid, tropical
+Note: Leave price as 0 and mark is_available = false until admin sets it.
+
+Name: Monstera (Bel / Plant)
+Scientific: Monstera deliciosa
+Category: Indoor | Size: 12 inch | Price: Rs. 1,050
+Difficulty: Easy | Tags: humid, tropical, indoor
+
+Name: Aglaonema
+Scientific: Aglaonema commutatum
+Category: Indoor | Size: 12 inch | Price: Rs. 1,050
+Difficulty: Easy | Tags: shade-tolerant, indoor, air-purifying
+
+Name: Dieffenbachia
+Scientific: Dieffenbachia seguine
+Category: Indoor | Size: 18 inch | Price: Rs. 2,800
+Difficulty: Medium | Tags: indoor, tropical, humid
+
+6a. Name: Song of India (Large)
+Scientific: Dracaena reflexa
+Category: Indoor | Size: 18 inch | Price: Rs. 2,100
+Difficulty: Easy | Tags: heat-tolerant, indoor, drought-resistant
+
+6b. Name: Song of India (Small)
+Scientific: Dracaena reflexa
+Category: Indoor | Size: Small | Price: Rs. 650
+Difficulty: Easy | Tags: heat-tolerant, indoor, drought-resistant
+
+Name: Marginata White
+Scientific: Dracaena marginata
+Category: Indoor | Size: — | Price: Rs. 650
+Difficulty: Easy | Tags: heat-tolerant, drought-resistant, air-purifying
+
+Name: Olive Plant
+Scientific: Olea europaea
+Category: Outdoor | Size: — | Price: Rs. 350
+Difficulty: Medium | Tags: arid, heat-tolerant, drought-resistant
+
+Name: Croton
+Scientific: Codiaeum variegatum
+Category: Outdoor | Size: — | Price: Rs. 550
+Difficulty: Easy | Tags: heat-tolerant, flowering, colorful
+
+Name: Mammy Croton
+Scientific: Codiaeum variegatum 'Mammy'
+Category: Outdoor | Size: — | Price: Rs. 2,100
+Difficulty: Medium | Tags: heat-tolerant, colorful, tropical
+
+Name: Lemon Croton
+Scientific: Codiaeum variegatum 'Lemon'
+Category: Outdoor | Size: 18 inch | Price: Rs. 1,700
+Difficulty: Medium | Tags: heat-tolerant, colorful, tropical
+
+12a. Name: Araucaria (Large)
+Scientific: Araucaria heterophylla
+Category: Indoor | Size: Large | Price: Rs. 2,800
+Difficulty: Medium | Tags: cool-climate, indoor, shade-tolerant
+
+12b. Name: Araucaria (Small)
+Scientific: Araucaria heterophylla
+Category: Indoor | Size: Small | Price: Rs. 650
+Difficulty: Easy | Tags: cool-climate, indoor, shade-tolerant
+
+Name: Trachycarpus (Windmill Palm)
+Scientific: Trachycarpus fortunei
+Category: Outdoor | Size: 24 inch pot | Price: Rs. 20,000
+Difficulty: Expert | Tags: heat-tolerant, outdoor, statement-plant
+
+Name: Musk Waheed (Fragrance Plant)
+Scientific: Lawsonia inermis / local variety
+Category: Outdoor | Size: — | Price: Rs. 200
+Difficulty: Easy | Tags: fragrant, outdoor, heat-tolerant
+
+Name: Wadenia Flower Plant
+Scientific: Gardenia jasminoides
+Category: Outdoor | Size: — | Price: Rs. 350
+Difficulty: Medium | Tags: flowering, fragrant, outdoor
+
+Name: Allamanda Bel
+Scientific: Allamanda cathartica
+Category: Outdoor | Size: — | Price: Rs. 400
+Difficulty: Easy | Tags: flowering, climbing, heat-tolerant
+
+Name: Adenium — Pink (Desert Rose)
+Scientific: Adenium obesum
+Category: Outdoor | Size: — | Price: Rs. 650
+Difficulty: Easy | Tags: arid, drought-resistant, flowering
+Note: Color = Pink. Other colors can be added by admin with their own prices.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION B — ADMIN PANEL (VERY IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build a full Admin Dashboard at route /admin (protected by a separate admin login).
+Admin username: admin | password: leafly2024 (hardcoded for now, changeable later).
+
+The admin must be able to do ALL of the following without touching code:
+
+PLANT MANAGEMENT
+
+View all plants in a table: name, price, size, category, status (available/unavailable)
+Edit any plant's: name, price, size, category, care difficulty, description, climate tags
+Toggle a plant on/off (show/hide from customer shop)
+Delete a plant
+Add a new plant with all fields
+IMAGE UPLOAD
+
+Each plant has an "Upload Image" button in the admin panel
+Admin can upload a JPG/PNG image from their computer
+Image is stored on the server (use multer for file uploads in Node.js)
+Uploaded image replaces the placeholder on the plant card in the shop
+Show a preview of the uploaded image in admin before saving
+PRICE EDITOR
+
+A dedicated "Price Manager" tab in admin
+Shows all plants in a simple editable list: plant name | current price | edit field | save button
+Admin can change any price and click Save — updates instantly in the shop
+Paan Patta is listed here with price = 0 and status = Unavailable, ready to be activated
+ADENIUM COLOR VARIANTS
+
+Admin can add color variants for Adenium (e.g. Red, Yellow, White, Purple)
+Each variant has its own price
+Pink is pre-seeded at Rs. 650
+ORDER MANAGEMENT
+
+View all orders: order ID, customer name, city, items, total, status
+Update order status: Confirmed / Packed / Out for Delivery / Delivered
+Filter orders by city and status
+HIRE-A-PRO BOOKINGS
+
+View all service bookings: name, phone, city, service type, date, notes
+Mark as confirmed / completed / cancelled
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION C — CUSTOMER-FACING FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOME / LANDING PAGE
+
+Hero: app name, tagline, "Shop Plants" CTA
+Featured categories: Indoor, Outdoor, Succulents, Flowering, Air-Purifying
+Location section: user enters city → shows "Best plants for [City]" based on climate tags
+City-to-tag mapping:
+Lahore → heat-tolerant, drought-resistant, flowering
+Karachi → coastal, humidity-tolerant, tropical
+Islamabad → cool-climate, shade-tolerant, ferns
+Peshawar → arid, xerophytic, drought-resistant
+Multan → hot-dry, arid, heat-tolerant
+Rawalpindi → cool-climate, shade-tolerant
+Other → show "Popular Picks" (top 6 by price desc)
+PLANT SHOP (/shop)
+
+Grid of plant cards: image, name, size, price in PKR, care badge
+Plants with is_available = false are hidden from customers
+Adenium shows a color selector (Pink default, others if admin added them)
+Filter: category, price range, care level, city suitability
+PLANT DETAIL PAGE (/plant/:id)
+
+Full info: name, scientific name, description, price, difficulty
+Care tabs: Watering, Sunlight, Soil, Temperature
+Delivery estimate:
+Lahore → "Estimated delivery: 2–4 working days"
+Others → "Estimated delivery: 7–9 working days"
+ADD-ONS (shown below main product):
+Pot style: ceramic, terracotta, hanging, geometric, minimalist, decorative
+(each with image, name, price — e.g. ceramic Rs. 350, terracotta Rs. 300, hanging Rs. 450)
+Fertiliser: liquid +Rs. 299, slow-release granules +Rs. 349, organic compost +Rs. 399
+Soil mix: standard potting mix +Rs. 199, succulent mix +Rs. 249, organic blend +Rs. 299
+Accessories: watering can +Rs. 450, moisture meter +Rs. 650, plant mister +Rs. 350,
+grow light +Rs. 1,200, drainage tray +Rs. 150
+Live order total updates as add-ons are selected
+ACCESSORIES SHOP (/shop/accessories)
+
+Standalone page: Pots & Planters, Soil & Fertilisers, Tools & Gadgets, Grow Lights
+HIRE A PRO (/hire)
+
+4 bookable services:
+Gardener → Rs. 500/hr
+Landscaper → From Rs. 5,000 (free consultation)
+Plant Decorator → Rs. 2,500/room
+Plant Consultant → Rs. 800/session (virtual or in-person)
+Booking form: name, phone, city, date, service, notes
+Confirmation page with booking ID
+SMART CARE DASHBOARD (/dashboard — protected)
+
+My Plants list with watering reminders
+Health indicator: Healthy / Needs Water / Check Sunlight
+Mark as watered / fertilized buttons
+In-app alert banners for overdue plants
+ORDER TRACKING (/orders — protected)
+
+Status: Confirmed → Packed → Out for Delivery → Delivered
+Delivery time based on city
+USER AUTH
+
+Signup / Login (JWT)
+Profile: name, city, saved plants, orders
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION D — DESIGN & TECH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Colors: primary green #1D9E75, dark green #3B6D11, warm white backgrounds, soft gray cards
+Typography: clean sans-serif, calm and earthy feel
+Mobile responsive — works on phone and desktop
+Placeholder images: https://placehold.co/400x400/1D9E75/white?text=Leafly
+Image uploads stored in /uploads folder on server (served as static files)
+Icons: Lucide or Heroicons
+Dark mode toggle in navbar
+Smooth page transitions
+Floating "Care Tips" button (modal with static tips per plant type)
+Delivery area checker widget on homepage
+
+Routes:
+/ → Landing page
+/shop → Plant shop
+/shop/accessories → Accessories
+/plant/:id → Plant detail + add-ons
+/hire → Hire a Pro
+/cart → Cart & checkout
+/dashboard → Care dashboard (auth protected)
+/orders → Order tracking (auth protected)
+/login → Login
+/signup → Signup
+/admin → Admin dashboard (admin-only)
+/admin/plants → Plant manager
+/admin/prices → Price editor
+/admin/orders → Order manager
+/admin/bookings → Pro bookings manager
+
+Start by scaffolding the full project. Then build in this order:
+
+Database schema + seed data
+Admin panel (plant manager, image upload, price editor)
+Landing page
+Plant shop + detail page with add-ons
+Cart + checkout
+Hire a Pro
+Care dashboard + order tracking
+Auth (signup/login)

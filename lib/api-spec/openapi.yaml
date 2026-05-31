@@ -3,20 +3,38 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Leafly – Smart plant delivery and care platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: plants
+    description: Plant catalog
+  - name: variants
+    description: Adenium color variants
+  - name: addons
+    description: Add-on products (pots, soil, fertilisers, accessories)
+  - name: auth
+    description: User authentication
+  - name: users
+    description: User profile and saved plants
+  - name: orders
+    description: Order management
+  - name: hire
+    description: Hire-a-Pro bookings
+  - name: care
+    description: Smart care dashboard
+  - name: admin
+    description: Admin operations
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +42,982 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ── Plants ──────────────────────────────────────────────────────────────────
+  /plants:
+    get:
+      operationId: listPlants
+      tags: [plants]
+      summary: List available plants (customer view)
+      parameters:
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: city
+          in: query
+          schema: { type: string }
+        - name: difficulty
+          in: query
+          schema: { type: string }
+        - name: minPrice
+          in: query
+          schema: { type: integer }
+        - name: maxPrice
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: List of plants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plant"
+
+  /plants/{id}:
+    get:
+      operationId: getPlant
+      tags: [plants]
+      summary: Get a single plant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Plant detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+        "404":
+          description: Not found
+
+  /plants/featured:
+    get:
+      operationId: getFeaturedPlants
+      tags: [plants]
+      summary: Featured / top plants for homepage
+      responses:
+        "200":
+          description: Featured plants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plant"
+
+  /plants/stats:
+    get:
+      operationId: getPlantStats
+      tags: [plants]
+      summary: Catalog statistics (total, by category)
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlantStats"
+
+  # ── Adenium Variants ────────────────────────────────────────────────────────
+  /variants:
+    get:
+      operationId: listVariants
+      tags: [variants]
+      summary: List Adenium color variants
+      responses:
+        "200":
+          description: Variants list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Variant"
+
+  /variants/{id}:
+    get:
+      operationId: getVariant
+      tags: [variants]
+      summary: Get a variant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Variant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Variant"
+
+  # ── Add-ons ─────────────────────────────────────────────────────────────────
+  /addons:
+    get:
+      operationId: listAddons
+      tags: [addons]
+      summary: List all add-ons, optionally filtered by type
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [pot, fertilizer, soil, accessory]
+      responses:
+        "200":
+          description: Add-ons list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Addon"
+
+  # ── Auth ────────────────────────────────────────────────────────────────────
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+        "409":
+          description: Email already exists
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user profile
+      responses:
+        "200":
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  # ── User Saved Plants ────────────────────────────────────────────────────────
+  /users/saved-plants:
+    get:
+      operationId: getSavedPlants
+      tags: [users]
+      summary: Get user's saved / wishlist plants
+      responses:
+        "200":
+          description: Saved plants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plant"
+    post:
+      operationId: savePlant
+      tags: [users]
+      summary: Save a plant to wishlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavePlantInput"
+      responses:
+        "201":
+          description: Saved
+
+  /users/saved-plants/{plantId}:
+    delete:
+      operationId: unsavePlant
+      tags: [users]
+      summary: Remove plant from wishlist
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Removed
+
+  # ── Orders ─────────────────────────────────────────────────────────────────
+  /orders:
+    get:
+      operationId: listOrders
+      tags: [orders]
+      summary: List user orders (or all orders for admin)
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: city
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Place an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  /orders/{id}:
+    get:
+      operationId: getOrder
+      tags: [orders]
+      summary: Get order details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Not found
+
+  /orders/{id}/status:
+    patch:
+      operationId: updateOrderStatus
+      tags: [orders]
+      summary: Update order status (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatusUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  # ── Hire-a-Pro ──────────────────────────────────────────────────────────────
+  /bookings:
+    get:
+      operationId: listBookings
+      tags: [hire]
+      summary: List bookings (admin sees all, user sees own)
+      responses:
+        "200":
+          description: Bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+    post:
+      operationId: createBooking
+      tags: [hire]
+      summary: Book a pro service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+
+  /bookings/{id}:
+    get:
+      operationId: getBooking
+      tags: [hire]
+      summary: Get booking details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+
+  /bookings/{id}/status:
+    patch:
+      operationId: updateBookingStatus
+      tags: [hire]
+      summary: Update booking status (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingStatusUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+
+  # ── Care Dashboard ──────────────────────────────────────────────────────────
+  /care/my-plants:
+    get:
+      operationId: listMyPlants
+      tags: [care]
+      summary: Get user's care dashboard plants
+      responses:
+        "200":
+          description: My plants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MyPlant"
+    post:
+      operationId: addMyPlant
+      tags: [care]
+      summary: Add a plant to care dashboard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MyPlantInput"
+      responses:
+        "201":
+          description: Added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyPlant"
+
+  /care/my-plants/{id}/water:
+    patch:
+      operationId: markWatered
+      tags: [care]
+      summary: Mark a plant as watered
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyPlant"
+
+  /care/my-plants/{id}/fertilize:
+    patch:
+      operationId: markFertilized
+      tags: [care]
+      summary: Mark a plant as fertilized
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyPlant"
+
+  /care/my-plants/{id}:
+    delete:
+      operationId: removeMyPlant
+      tags: [care]
+      summary: Remove plant from care dashboard
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Removed
+
+  # ── Admin Plants ─────────────────────────────────────────────────────────────
+  /admin/plants:
+    get:
+      operationId: adminListPlants
+      tags: [admin]
+      summary: Admin – list all plants including unavailable
+      responses:
+        "200":
+          description: All plants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plant"
+    post:
+      operationId: adminCreatePlant
+      tags: [admin]
+      summary: Admin – add a new plant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+
+  /admin/plants/{id}:
+    patch:
+      operationId: adminUpdatePlant
+      tags: [admin]
+      summary: Admin – update a plant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+    delete:
+      operationId: adminDeletePlant
+      tags: [admin]
+      summary: Admin – delete a plant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /admin/plants/{id}/toggle:
+    patch:
+      operationId: adminTogglePlant
+      tags: [admin]
+      summary: Admin – toggle plant availability
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Toggled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plant"
+
+  /admin/variants:
+    post:
+      operationId: adminCreateVariant
+      tags: [admin]
+      summary: Admin – add an Adenium color variant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VariantInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Variant"
+
+  /admin/variants/{id}:
+    patch:
+      operationId: adminUpdateVariant
+      tags: [admin]
+      summary: Admin – update a variant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VariantUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Variant"
+    delete:
+      operationId: adminDeleteVariant
+      tags: [admin]
+      summary: Admin – delete a variant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+
+  /admin/dashboard:
+    get:
+      operationId: getAdminDashboard
+      tags: [admin]
+      summary: Admin dashboard summary stats
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminDashboard"
+
 components:
   schemas:
     HealthStatus:
       type: object
       properties:
-        status:
-          type: string
-      required:
-        - status
+        status: { type: string }
+      required: [status]
 
+    # ── Plant ───────────────────────────────────────────────────────────────
+    Plant:
+      type: object
+      required: [id, name, scientificName, category, price, difficulty, isAvailable, imageUrl, climateTags]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        scientificName: { type: string }
+        category: { type: string }
+        size: { type: ["string", "null"] }
+        price: { type: integer }
+        difficulty: { type: string }
+        climateTags:
+          type: array
+          items: { type: string }
+        imageUrl: { type: string }
+        description: { type: ["string", "null"] }
+        isAvailable: { type: boolean }
+        createdAt: { type: string }
+
+    PlantInput:
+      type: object
+      required: [name, scientificName, category, price, difficulty]
+      properties:
+        name: { type: string }
+        scientificName: { type: string }
+        category: { type: string }
+        size: { type: string }
+        price: { type: integer }
+        difficulty: { type: string }
+        climateTags:
+          type: array
+          items: { type: string }
+        imageUrl: { type: string }
+        description: { type: string }
+        isAvailable: { type: boolean }
+
+    PlantUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        scientificName: { type: string }
+        category: { type: string }
+        size: { type: string }
+        price: { type: integer }
+        difficulty: { type: string }
+        climateTags:
+          type: array
+          items: { type: string }
+        imageUrl: { type: string }
+        description: { type: string }
+        isAvailable: { type: boolean }
+
+    PlantStats:
+      type: object
+      required: [total, available, byCategory]
+      properties:
+        total: { type: integer }
+        available: { type: integer }
+        byCategory:
+          type: array
+          items:
+            type: object
+            required: [category, count]
+            properties:
+              category: { type: string }
+              count: { type: integer }
+
+    # ── Variant ──────────────────────────────────────────────────────────────
+    Variant:
+      type: object
+      required: [id, color, price, isAvailable]
+      properties:
+        id: { type: integer }
+        color: { type: string }
+        price: { type: integer }
+        imageUrl: { type: ["string", "null"] }
+        isAvailable: { type: boolean }
+
+    VariantInput:
+      type: object
+      required: [color, price]
+      properties:
+        color: { type: string }
+        price: { type: integer }
+        imageUrl: { type: string }
+        isAvailable: { type: boolean }
+
+    VariantUpdate:
+      type: object
+      properties:
+        color: { type: string }
+        price: { type: integer }
+        imageUrl: { type: string }
+        isAvailable: { type: boolean }
+
+    # ── Add-on ───────────────────────────────────────────────────────────────
+    Addon:
+      type: object
+      required: [id, type, name, price]
+      properties:
+        id: { type: integer }
+        type: { type: string }
+        name: { type: string }
+        price: { type: integer }
+        description: { type: ["string", "null"] }
+        imageUrl: { type: ["string", "null"] }
+
+    # ── Auth ─────────────────────────────────────────────────────────────────
+    SignupInput:
+      type: object
+      required: [name, email, password]
+      properties:
+        name: { type: string }
+        email: { type: string }
+        password: { type: string }
+        city: { type: string }
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string }
+        password: { type: string }
+
+    AdminLoginInput:
+      type: object
+      required: [username, password]
+      properties:
+        username: { type: string }
+        password: { type: string }
+
+    AuthResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token: { type: string }
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      required: [id, name, email]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string }
+        city: { type: ["string", "null"] }
+        role: { type: string }
+        createdAt: { type: string }
+
+    SavePlantInput:
+      type: object
+      required: [plantId]
+      properties:
+        plantId: { type: integer }
+
+    # ── Order ────────────────────────────────────────────────────────────────
+    Order:
+      type: object
+      required: [id, customerName, customerPhone, city, items, total, status, createdAt]
+      properties:
+        id: { type: integer }
+        customerName: { type: string }
+        customerPhone: { type: string }
+        city: { type: string }
+        address: { type: ["string", "null"] }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItem"
+        total: { type: integer }
+        status: { type: string }
+        deliveryEstimate: { type: ["string", "null"] }
+        userId: { type: ["integer", "null"] }
+        createdAt: { type: string }
+
+    OrderItem:
+      type: object
+      required: [plantId, plantName, quantity, price]
+      properties:
+        plantId: { type: ["integer", "null"] }
+        plantName: { type: string }
+        variantColor: { type: ["string", "null"] }
+        quantity: { type: integer }
+        price: { type: integer }
+        addons:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderAddon"
+
+    OrderAddon:
+      type: object
+      required: [name, price]
+      properties:
+        name: { type: string }
+        price: { type: integer }
+
+    OrderInput:
+      type: object
+      required: [customerName, customerPhone, city, items]
+      properties:
+        customerName: { type: string }
+        customerPhone: { type: string }
+        city: { type: string }
+        address: { type: string }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemInput"
+
+    OrderItemInput:
+      type: object
+      required: [plantId, quantity, price]
+      properties:
+        plantId: { type: ["integer", "null"] }
+        plantName: { type: string }
+        variantColor: { type: string }
+        quantity: { type: integer }
+        price: { type: integer }
+        addons:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderAddonInput"
+
+    OrderAddonInput:
+      type: object
+      required: [name, price]
+      properties:
+        name: { type: string }
+        price: { type: integer }
+
+    OrderStatusUpdate:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string }
+
+    # ── Booking ──────────────────────────────────────────────────────────────
+    Booking:
+      type: object
+      required: [id, name, phone, city, serviceType, preferredDate, status, createdAt]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        phone: { type: string }
+        city: { type: string }
+        serviceType: { type: string }
+        preferredDate: { type: string }
+        notes: { type: ["string", "null"] }
+        status: { type: string }
+        bookingRef: { type: string }
+        userId: { type: ["integer", "null"] }
+        createdAt: { type: string }
+
+    BookingInput:
+      type: object
+      required: [name, phone, city, serviceType, preferredDate]
+      properties:
+        name: { type: string }
+        phone: { type: string }
+        city: { type: string }
+        serviceType: { type: string }
+        preferredDate: { type: string }
+        notes: { type: string }
+
+    BookingStatusUpdate:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string }
+
+    # ── Care ─────────────────────────────────────────────────────────────────
+    MyPlant:
+      type: object
+      required: [id, plantId, plantName, health, lastWatered, nextWaterDue]
+      properties:
+        id: { type: integer }
+        plantId: { type: integer }
+        plantName: { type: string }
+        plantImageUrl: { type: ["string", "null"] }
+        health: { type: string }
+        lastWatered: { type: ["string", "null"] }
+        lastFertilized: { type: ["string", "null"] }
+        nextWaterDue: { type: ["string", "null"] }
+        wateringFrequencyDays: { type: integer }
+        addedAt: { type: string }
+
+    MyPlantInput:
+      type: object
+      required: [plantId]
+      properties:
+        plantId: { type: integer }
+        wateringFrequencyDays: { type: integer }
+
+    # ── Admin Dashboard ──────────────────────────────────────────────────────
+    AdminDashboard:
+      type: object
+      required: [totalPlants, totalOrders, totalBookings, totalUsers, recentOrders, recentBookings]
+      properties:
+        totalPlants: { type: integer }
+        totalOrders: { type: integer }
+        totalBookings: { type: integer }
+        totalUsers: { type: integer }
+        revenueTotal: { type: integer }
+        recentOrders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+        recentBookings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Booking"
