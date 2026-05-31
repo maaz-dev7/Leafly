@@ -37,17 +37,10 @@ export function AdminLogin() {
 }
 
 export default function AdminDashboard() {
-  const { adminToken } = useAuth();
-  const [, setLocation] = useLocation();
   const { data, isLoading, isError } = useGetAdminDashboard();
 
-  if (!adminToken) {
-    setLocation("/admin/login");
-    return null;
-  }
-
-  if (isLoading) return <div className="container mx-auto px-4 py-8">Loading...</div>;
-  if (isError || !data) return <div className="container mx-auto px-4 py-8">Failed to load dashboard.</div>;
+  if (isLoading) return <div className="px-6 py-8 text-muted-foreground">Loading dashboard…</div>;
+  if (isError || !data) return <div className="px-6 py-8 text-muted-foreground">Failed to load dashboard.</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">

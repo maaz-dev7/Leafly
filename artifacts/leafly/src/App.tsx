@@ -18,10 +18,10 @@ import Orders from "@/pages/orders/index";
 
 import AdminDashboard, { AdminLogin } from "@/pages/admin/dashboard";
 import AdminPlants from "@/pages/admin/plants";
-import AdminPrices from "@/pages/admin/prices";
 import AdminOrders from "@/pages/admin/orders";
 import AdminBookings from "@/pages/admin/bookings";
 import AdminVariants from "@/pages/admin/variants";
+import { AdminLayout } from "@/components/admin-layout";
 
 const originalFetch = window.fetch;
 window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -77,25 +77,22 @@ function Router() {
       
       {/* Admin Routes */}
       <Route path="/admin">
-        <Layout><AdminDashboard /></Layout>
+        <AdminLayout><AdminDashboard /></AdminLayout>
       </Route>
       <Route path="/admin/login">
         <Layout><AdminLogin /></Layout>
       </Route>
       <Route path="/admin/plants">
-        <Layout><AdminPlants /></Layout>
-      </Route>
-      <Route path="/admin/prices">
-        <Layout><AdminPrices /></Layout>
+        <AdminLayout><AdminPlants /></AdminLayout>
       </Route>
       <Route path="/admin/orders">
-        <Layout><AdminOrders /></Layout>
+        <AdminLayout><AdminOrders /></AdminLayout>
       </Route>
-      <Route path="/admin/bookings">
-        <Layout><AdminBookings /></Layout>
+      <Route path="/admin/bookings">  
+        <AdminLayout><AdminBookings /></AdminLayout>
       </Route>
       <Route path="/admin/variants">
-        <Layout><AdminVariants /></Layout>
+        <AdminLayout><AdminVariants /></AdminLayout>
       </Route>
 
       <Route path="/:rest*">
