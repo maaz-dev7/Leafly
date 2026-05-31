@@ -105,9 +105,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link href="/login">
-                <Button size="sm" className="hidden md:flex">Sign In</Button>
-              </Link>
+              <div className="hidden md:flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/signup">
+                  <Button size="sm">Sign Up</Button>
+                </Link>
+              </div>
             )}
           </div>
         </div>

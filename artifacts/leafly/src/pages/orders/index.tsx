@@ -1,73 +1,172 @@
 import { useListOrders } from "@workspace/api-client-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "wouter";
+import { Package, Truck, CheckCircle, Clock, ChevronRight, ShoppingBag } from "lucide-react";
+
+const STATUS_STEPS = ["pending", "confirmed", "processing", "shipped", "delivered"];
+
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
+  pending:    { label: "Pending",    color: "text-yellow-700", bg: "bg-yellow-100 dark:bg-yellow-900/30",  icon: Clock },
+  confirmed:  { label: "Confirmed",  color: "text-blue-700",   bg: "bg-blue-100 dark:bg-blue-900/30",     icon: CheckCircle },
+  processing: { label: "Processing", color: "text-purple-700", bg: "bg-purple-100 dark:bg-purple-900/30", icon: Package },
+  shipped:    { label: "Shipped",    color: "text-orange-700", bg: "bg-orange-100 dark:bg-orange-900/30", icon: Truck },
+  delivered:  { label: "Delivered",  color: "text-green-700",  bg: "bg-green-100 dark:bg-green-900/30",   icon: CheckCircle },
+};
+
+function StatusBar({ status }: { status: string }) {
+  const currentIdx = STATUS_STEPS.indexOf(status.toLowerCase());
+  return (
+    <div className="flex items-center gap-0 mt-4 mb-1">
+      {STATUS_STEPS.map((step, idx) => {
+        const done = idx <= currentIdx;
+        const active = idx === currentIdx;
+        return (
+          <div key={step} className="flex items-center flex-1">
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-colors ${
+              done ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+            } ${active ? "ring-2 ring-primary ring-offset-2" : ""}`}>
+              {done ? "✓" : idx + 1}
+            </div>
+            {idx < STATUS_STEPS.length - 1 && (
+              <div className={`h-1 flex-1 transition-colors ${done && idx < currentIdx ? "bg-primary" : "bg-muted"}`} />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function Orders() {
   const { token } = useAuth();
+  const [, setLocation] = useLocation();
   const { data: orders, isLoading } = useListOrders({ query: { enabled: !!token } });
 
   if (!token) {
-    window.location.href = "/login";
-    return null;
+    return (
+      <div className="container mx-auto px-4 py-24 text-center max-w-md">
+        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <ShoppingBag className="text-primary" size={32} />
+        </div>
+        <h1 className="text-3xl font-serif font-bold mb-3">Track Your Orders</h1>
+        <p className="text-muted-foreground mb-2">
+          Sign in to your account to view your order history and track deliveries in real-time.
+        </p>
+        <p className="text-muted-foreground mb-8 text-sm">
+          Don't have an account yet?{" "}
+          <Link href="/signup" className="text-primary font-semibold hover:underline">Sign up free</Link>
+          {" "}— it only takes a minute.
+        </p>
+        <div className="flex flex-col gap-3">
+          <Button size="lg" className="w-full" onClick={() => setLocation("/login")}>Sign In to Track Orders</Button>
+          <Button size="lg" variant="outline" className="w-full" onClick={() => setLocation("/signup")}>Create Free Account</Button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <h1 className="text-3xl font-serif text-primary mb-8">My Orders</h1>
-      
+    <div className="container mx-auto px-4 py-12 max-w-3xl">
+      <div className="mb-10 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-serif font-bold">My Orders</h1>
+          <p className="text-muted-foreground mt-1">Track your deliveries and view order history</p>
+        </div>
+        <Link href="/shop">
+          <Button variant="outline" size="sm">Shop More Plants</Button>
+        </Link>
+      </div>
+
       {isLoading ? (
-        <div className="space-y-4">
-          {[1,2].map(i => <div key={i} className="h-40 bg-muted animate-pulse rounded-lg"></div>)}
+        <div className="space-y-5">
+          {[1,2].map(i => <div key={i} className="h-52 bg-muted animate-pulse rounded-2xl" />)}
+        </div>
+      ) : orders && orders.length > 0 ? (
+        <div className="space-y-6">
+          {orders.map(order => {
+            const statusKey = order.status?.toLowerCase() || "pending";
+            const cfg = STATUS_CONFIG[statusKey] || STATUS_CONFIG.pending;
+            const Icon = cfg.icon;
+
+            return (
+              <div key={order.id} className="bg-card border border-border/60 rounded-2xl overflow-hidden shadow-sm">
+                {/* Header */}
+                <div className="flex items-center justify-between px-6 py-4 border-b bg-muted/30">
+                  <div>
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Order ID</p>
+                    <p className="font-bold text-lg">#{String(order.id).padStart(5, "0")}</p>
+                  </div>
+                  <div className="text-center hidden sm:block">
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Placed On</p>
+                    <p className="font-medium">{new Date(order.createdAt).toLocaleDateString("en-PK", { day: "numeric", month: "long", year: "numeric" })}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Total</p>
+                    <p className="font-bold text-primary text-lg">Rs. {Number(order.total).toLocaleString()}</p>
+                  </div>
+                </div>
+
+                {/* Status bar */}
+                <div className="px-6 pt-5 pb-2">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${cfg.bg} ${cfg.color}`}>
+                      <Icon size={12} />
+                      {cfg.label}
+                    </span>
+                  </div>
+                  <StatusBar status={statusKey} />
+                  <div className="flex justify-between mt-2 text-[10px] text-muted-foreground px-0.5">
+                    {STATUS_STEPS.map(s => (
+                      <span key={s} className="capitalize w-10 text-center leading-tight">{s}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Items */}
+                <div className="px-6 py-4 border-t mt-2">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Items Ordered</p>
+                  <div className="space-y-2">
+                    {order.items.map((item, idx) => (
+                      <div key={idx} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                            <span className="text-xs font-bold text-primary">{item.quantity}×</span>
+                          </div>
+                          <span className="font-medium">
+                            {item.plantName}
+                            {item.variantColor && <span className="text-muted-foreground font-normal"> ({item.variantColor})</span>}
+                          </span>
+                        </div>
+                        <span className="font-semibold">Rs. {(Number(item.price) * item.quantity).toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Delivery info */}
+                <div className="mx-6 mb-5 bg-muted/40 rounded-xl p-4 flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <Truck size={16} className="text-primary" />
+                    <div>
+                      <p className="font-medium">Delivering to {order.city}</p>
+                      <p className="text-muted-foreground text-xs">{order.deliveryEstimate || "Estimate being calculated"}</p>
+                    </div>
+                  </div>
+                  <ChevronRight size={16} className="text-muted-foreground" />
+                </div>
+              </div>
+            );
+          })}
         </div>
       ) : (
-        <div className="space-y-6">
-          {orders?.map(order => (
-            <Card key={order.id} className="overflow-hidden">
-              <CardHeader className="bg-secondary/20 pb-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle className="text-lg">Order #{order.id}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{new Date(order.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="inline-block px-3 py-1 bg-primary text-primary-foreground text-xs font-bold rounded-full uppercase tracking-wider">
-                      {order.status}
-                    </span>
-                    <p className="text-sm font-bold mt-1">Rs. {order.total}</p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <div className="mb-6">
-                  <h4 className="font-medium mb-2">Items</h4>
-                  <ul className="space-y-2">
-                    {order.items.map((item, idx) => (
-                      <li key={idx} className="flex justify-between text-sm">
-                        <span>{item.quantity}x {item.plantName} {item.variantColor ? `(${item.variantColor})` : ''}</span>
-                        <span>Rs. {item.price * item.quantity}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="bg-muted p-4 rounded-lg flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">Delivery Estimate</p>
-                    <p className="text-sm text-muted-foreground">{order.deliveryEstimate || 'Calculating...'}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium">Shipping To</p>
-                    <p className="text-sm text-muted-foreground">{order.city}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-          {orders?.length === 0 && (
-            <div className="py-12 text-center text-muted-foreground">
-              You haven't placed any orders yet.
-            </div>
-          )}
+        <div className="py-24 text-center border-2 border-dashed rounded-2xl">
+          <div className="text-5xl mb-4">🌱</div>
+          <h3 className="text-xl font-semibold mb-2">No orders yet</h3>
+          <p className="text-muted-foreground mb-6">Once you place an order, you'll be able to track it right here.</p>
+          <Link href="/shop">
+            <Button>Browse Plants</Button>
+          </Link>
         </div>
       )}
     </div>
