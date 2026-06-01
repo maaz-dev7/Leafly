@@ -183,6 +183,9 @@ export default function AdminPlants() {
                   <SelectContent>
                     <SelectItem value="Indoor">Indoor</SelectItem>
                     <SelectItem value="Outdoor">Outdoor</SelectItem>
+                    <SelectItem value="Succulents">Succulents</SelectItem>
+                    <SelectItem value="Flowering">Flowering</SelectItem>
+                    <SelectItem value="Air-Purifying">Air-Purifying</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useListPlants, useGetFeaturedPlants } from "@workspace/api-client-react";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
-import { Leaf, ShieldCheck, Truck, HeartHandshake } from "lucide-react";
+import { Leaf, ShieldCheck, Truck, HeartHandshake, Mail, Phone, MapPin, Clock } from "lucide-react";
 
 const CATEGORIES = [
   { label: "Indoor", image: "https://placehold.co/400x400/1D9E75/white?text=Indoor", query: "Indoor" },
@@ -212,6 +213,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Contact Section */}
+      <ContactSection />
+
       {/* CTA banner */}
       <section className="bg-primary text-primary-foreground py-20 text-center">
         <div className="container mx-auto px-4 max-w-2xl">
@@ -225,5 +229,49 @@ export default function Home() {
         </div>
       </section>
     </div>
+  );
+}
+
+function ContactSection() {
+  const { data: contact } = useQuery({
+    queryKey: ["contact"],
+    queryFn: () => fetch("/api/contact").then(r => r.json()),
+    staleTime: 60_000,
+  });
+
+  const items = [
+    { icon: Mail, label: "Email Us", value: contact?.email, href: `mailto:${contact?.email}` },
+    { icon: Phone, label: "Call / WhatsApp", value: contact?.phone, href: `tel:${contact?.phone}` },
+    { icon: MapPin, label: "Our Office", value: contact?.address, href: undefined },
+    { icon: Clock, label: "Business Hours", value: contact?.hours, href: undefined },
+  ];
+
+  return (
+    <section className="container mx-auto px-4 py-20">
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+          <Phone size={14} /> Get In Touch
+        </div>
+        <h2 className="text-4xl font-serif font-bold mb-3">Contact Us</h2>
+        <p className="text-muted-foreground text-lg">We're here to help you grow. Reach out anytime.</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+        {items.map(({ icon: Icon, label, value, href }) => (
+          <div key={label} className="bg-card border border-border/60 rounded-2xl p-6 text-center hover:border-primary/40 hover:shadow-md transition-all group">
+            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+              <Icon className="text-primary" size={22} />
+            </div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">{label}</p>
+            {href ? (
+              <a href={href} className="font-medium text-sm hover:text-primary transition-colors leading-snug block">
+                {value || "—"}
+              </a>
+            ) : (
+              <p className="font-medium text-sm leading-snug">{value || "—"}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

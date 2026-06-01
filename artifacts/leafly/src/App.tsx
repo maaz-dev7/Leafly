@@ -21,21 +21,20 @@ import AdminPlants from "@/pages/admin/plants";
 import AdminOrders from "@/pages/admin/orders";
 import AdminBookings from "@/pages/admin/bookings";
 import AdminVariants from "@/pages/admin/variants";
+import AdminAccessories from "@/pages/admin/accessories";
+import AdminContact from "@/pages/admin/contact";
 import { AdminLayout } from "@/components/admin-layout";
 
 const originalFetch = window.fetch;
 window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   const token = localStorage.getItem("leafly_token");
   const adminToken = localStorage.getItem("leafly_admin_token");
-  
   const headers = new Headers(init?.headers);
-  
   if (input.toString().includes("/api/admin") && adminToken) {
     headers.set("Authorization", `Bearer ${adminToken}`);
   } else if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-  
   return originalFetch(input, { ...init, headers });
 };
 
@@ -44,60 +43,28 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
-      <Route path="/">
-        <Layout><Home /></Layout>
-      </Route>
-      <Route path="/shop">
-        <Layout><Shop /></Layout>
-      </Route>
-      <Route path="/shop/accessories">
-        <Layout><AccessoriesShop /></Layout>
-      </Route>
-      <Route path="/plant/:id">
-        <Layout><PlantDetail /></Layout>
-      </Route>
-      <Route path="/hire">
-        <Layout><HireAPro /></Layout>
-      </Route>
-      <Route path="/cart">
-        <Layout><Cart /></Layout>
-      </Route>
-      <Route path="/dashboard">
-        <Layout><Dashboard /></Layout>
-      </Route>
-      <Route path="/orders">
-        <Layout><Orders /></Layout>
-      </Route>
-      <Route path="/login">
-        <Layout><Login /></Layout>
-      </Route>
-      <Route path="/signup">
-        <Layout><Signup /></Layout>
-      </Route>
-      
-      {/* Admin Routes */}
-      <Route path="/admin">
-        <AdminLayout><AdminDashboard /></AdminLayout>
-      </Route>
-      <Route path="/admin/login">
-        <Layout><AdminLogin /></Layout>
-      </Route>
-      <Route path="/admin/plants">
-        <AdminLayout><AdminPlants /></AdminLayout>
-      </Route>
-      <Route path="/admin/orders">
-        <AdminLayout><AdminOrders /></AdminLayout>
-      </Route>
-      <Route path="/admin/bookings">  
-        <AdminLayout><AdminBookings /></AdminLayout>
-      </Route>
-      <Route path="/admin/variants">
-        <AdminLayout><AdminVariants /></AdminLayout>
-      </Route>
+      <Route path="/"><Layout><Home /></Layout></Route>
+      <Route path="/shop"><Layout><Shop /></Layout></Route>
+      <Route path="/shop/accessories"><Layout><AccessoriesShop /></Layout></Route>
+      <Route path="/plant/:id"><Layout><PlantDetail /></Layout></Route>
+      <Route path="/hire"><Layout><HireAPro /></Layout></Route>
+      <Route path="/cart"><Layout><Cart /></Layout></Route>
+      <Route path="/dashboard"><Layout><Dashboard /></Layout></Route>
+      <Route path="/orders"><Layout><Orders /></Layout></Route>
+      <Route path="/login"><Layout><Login /></Layout></Route>
+      <Route path="/signup"><Layout><Signup /></Layout></Route>
 
-      <Route path="/:rest*">
-        <Layout><NotFound /></Layout>
-      </Route>
+      {/* Admin Routes */}
+      <Route path="/admin"><AdminLayout><AdminDashboard /></AdminLayout></Route>
+      <Route path="/admin/login"><Layout><AdminLogin /></Layout></Route>
+      <Route path="/admin/plants"><AdminLayout><AdminPlants /></AdminLayout></Route>
+      <Route path="/admin/accessories"><AdminLayout><AdminAccessories /></AdminLayout></Route>
+      <Route path="/admin/orders"><AdminLayout><AdminOrders /></AdminLayout></Route>
+      <Route path="/admin/bookings"><AdminLayout><AdminBookings /></AdminLayout></Route>
+      <Route path="/admin/variants"><AdminLayout><AdminVariants /></AdminLayout></Route>
+      <Route path="/admin/contact"><AdminLayout><AdminContact /></AdminLayout></Route>
+
+      <Route path="/:rest*"><Layout><NotFound /></Layout></Route>
     </Switch>
   );
 }
