@@ -1,0 +1,3 @@
+- [Frozen production DB masquerades as empty data](frozen-production-db.md) — if plants/data show empty only on published site (fine in dev), check prod DB freeze status before debugging code.
+- [Free-tier email workaround](free-tier-email-smtp.md) — OAuth email connectors (Gmail/Resend/SendGrid) need a paid plan; use nodemailer + Gmail App Password env secrets instead.
+- [Card payment PCI-safety pattern](card-payment-mock-pattern.md) — collect card details client-side only, never transmit/store; persist only a payment-method flag server-side.
