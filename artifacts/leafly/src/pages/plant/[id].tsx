@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams } from "wouter";
-import { useGetPlant, useListVariants, useListAddons, OrderAddon } from "@workspace/api-client-react";
+import { useGetPlant, useListVariants, useListAddons, OrderAddon, getGetPlantQueryKey } from "@workspace/api-client-react";
 import { useCart } from "@/lib/cart";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 export default function PlantDetail() {
   const { id } = useParams();
   const plantId = parseInt(id || "0", 10);
-  const { data: plant, isLoading: plantLoading } = useGetPlant(plantId, { query: { enabled: !!plantId } });
+  const { data: plant, isLoading: plantLoading } = useGetPlant(plantId, { query: { enabled: !!plantId, queryKey: getGetPlantQueryKey(plantId) } });
   const { data: variants } = useListVariants();
   const { data: addons } = useListAddons();
   const { addItem } = useCart();

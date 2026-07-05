@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListPlants, useGetFeaturedPlants } from "@workspace/api-client-react";
+import { useListPlants, useGetFeaturedPlants, getListPlantsQueryKey } from "@workspace/api-client-react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export default function Home() {
 
   const { data: recommendations, isLoading: recoLoading } = useListPlants(
     { city: searchedCity },
-    { query: { enabled: !!searchedCity } }
+    { query: { enabled: !!searchedCity, queryKey: getListPlantsQueryKey({ city: searchedCity }) } }
   );
 
   return (

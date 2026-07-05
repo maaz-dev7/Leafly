@@ -114,6 +114,20 @@ export interface AdminLoginInput {
   password: string;
 }
 
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ResetPasswordInput {
+  email: string;
+  code: string;
+  newPassword: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
 export interface User {
   id: number;
   name: string;

@@ -1,4 +1,4 @@
-import { useListMyPlants, useMarkWatered, useMarkFertilized } from "@workspace/api-client-react";
+import { useListMyPlants, useMarkWatered, useMarkFertilized, getListMyPlantsQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Droplet, Leaf, Sun, Thermometer, FlaskConical } from "lucide-react";
 import { useAuth } from "@/lib/auth";
@@ -38,7 +38,7 @@ const CARE_TIPS = [
 export default function Dashboard() {
   const { token } = useAuth();
   const [, setLocation] = useLocation();
-  const { data: plants, refetch } = useListMyPlants({ query: { enabled: !!token } });
+  const { data: plants, refetch } = useListMyPlants({ query: { enabled: !!token, queryKey: getListMyPlantsQueryKey() } });
 
   const markWatered = useMarkWatered({ mutation: { onSuccess: () => refetch() } });
   const markFertilized = useMarkFertilized({ mutation: { onSuccess: () => refetch() } });

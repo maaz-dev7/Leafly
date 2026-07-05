@@ -8,6 +8,7 @@ import { Layout } from "@/components/layout";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
+import ForgotPassword from "@/pages/forgot-password";
 import Shop from "@/pages/shop/index";
 import AccessoriesShop from "@/pages/shop/accessories";
 import PlantDetail from "@/pages/plant/[id]";
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/orders"><Layout><Orders /></Layout></Route>
       <Route path="/login"><Layout><Login /></Layout></Route>
       <Route path="/signup"><Layout><Signup /></Layout></Route>
+      <Route path="/forgot-password"><Layout><ForgotPassword /></Layout></Route>
 
       {/* Admin Routes */}
       <Route path="/admin"><AdminLayout><AdminDashboard /></AdminLayout></Route>

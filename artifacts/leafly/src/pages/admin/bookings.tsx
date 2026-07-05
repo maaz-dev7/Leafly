@@ -30,15 +30,15 @@ export default function AdminBookings() {
                 <TableCell>{new Date(booking.preferredDate).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <Select 
-                    value={booking.status} 
+                    value={booking.status.toLowerCase()} 
                     onValueChange={(v) => updateMutation.mutate({ id: booking.id, data: { status: v }})}
                   >
                     <SelectTrigger className="w-[140px] h-8 text-xs"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Pending">Pending</SelectItem>
-                      <SelectItem value="Confirmed">Confirmed</SelectItem>
-                      <SelectItem value="Completed">Completed</SelectItem>
-                      <SelectItem value="Cancelled">Cancelled</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="confirmed">Confirmed</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
                     </SelectContent>
                   </Select>
                 </TableCell>

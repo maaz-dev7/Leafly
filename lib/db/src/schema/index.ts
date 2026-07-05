@@ -6,3 +6,4 @@ export * from "./orders";
 export * from "./bookings";
 export * from "./care";
 export * from "./settings";
+export * from "./password-reset";

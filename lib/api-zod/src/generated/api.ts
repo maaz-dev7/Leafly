@@ -180,6 +180,32 @@ export const LoginResponse = zod.object({
 
 
 /**
+ * @summary Request a password reset code sent to email
+ */
+export const ForgotPasswordBody = zod.object({
+  "email": zod.string()
+})
+
+export const ForgotPasswordResponse = zod.object({
+  "message": zod.string()
+})
+
+
+/**
+ * @summary Reset password using emailed verification code
+ */
+export const ResetPasswordBody = zod.object({
+  "email": zod.string(),
+  "code": zod.string(),
+  "newPassword": zod.string()
+})
+
+export const ResetPasswordResponse = zod.object({
+  "message": zod.string()
+})
+
+
+/**
  * @summary Get current user profile
  */
 export const GetMeResponse = zod.object({
