@@ -16,6 +16,7 @@ export interface Order {
   address?: string | null;
   items: OrderItem[];
   total: number;
+  paymentMethod: string;
   status: string;
   /** @nullable */
   deliveryEstimate?: string | null;

@@ -3,6 +3,8 @@ import { eq } from "drizzle-orm";
 import { db, ordersTable } from "@workspace/db";
 import { requireAuth, requireAdmin } from "../middlewares/requireAuth";
 import { serialize } from "../lib/serialize";
+import { sendMail } from "../lib/mailer";
+import { getContact } from "../lib/contact-store";
 import {
   CreateOrderBody,
   GetOrderParams,
@@ -48,7 +50,7 @@ router.post("/orders", async (req, res): Promise<void> => {
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message }); return;
   }
-  const { customerName, customerPhone, city, address, items } = parsed.data;
+  const { customerName, customerPhone, city, address, paymentMethod, items } = parsed.data;
   const itemsTotal = (items as any[]).reduce((sum: number, item: any) => {
     const addonTotal = (item.addons ?? []).reduce((s: number, a: any) => s + (a.price ?? 0), 0);
     return sum + item.price * item.quantity + addonTotal;
@@ -59,9 +61,28 @@ router.post("/orders", async (req, res): Promise<void> => {
   const userId = (req as any).user?.id ?? null;
   const [order] = await db
     .insert(ordersTable)
-    .values({ customerName, customerPhone, city, address: address ?? null, items, total, status: "Confirmed", deliveryEstimate, userId })
+    .values({ customerName, customerPhone, city, address, paymentMethod, items, total, status: "Confirmed", deliveryEstimate, userId })
     .returning();
   res.status(201).json(GetOrderResponse.parse(serialize(order)));
+
+  const contact = await getContact();
+  const itemsHtml = (items as any[])
+    .map((i) => `<li>${i.quantity} × ${i.plantName ?? "Item"} — Rs. ${i.price}${(i.addons ?? []).length ? ` (+ ${i.addons.map((a: any) => a.name).join(", ")})` : ""}</li>`)
+    .join("");
+  void sendMail({
+    to: contact.email,
+    subject: `New Leafly Order #${order.id} — Rs. ${total.toLocaleString()}`,
+    html: `
+      <h2>New order received</h2>
+      <p><strong>Customer:</strong> ${customerName} (${customerPhone})</p>
+      <p><strong>City:</strong> ${city}</p>
+      <p><strong>Address:</strong> ${address}</p>
+      <p><strong>Payment method:</strong> ${paymentMethod === "online" ? "Online (Card)" : "Cash on Delivery"}</p>
+      <ul>${itemsHtml}</ul>
+      <p><strong>Delivery fee:</strong> Rs. ${deliveryFee}</p>
+      <p><strong>Total:</strong> Rs. ${total.toLocaleString()}</p>
+    `,
+  });
 });
 
 router.get("/orders/:id", async (req, res): Promise<void> => {

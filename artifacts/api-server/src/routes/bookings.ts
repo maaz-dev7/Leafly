@@ -30,12 +30,12 @@ router.post("/bookings", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const { name, phone, city, serviceType, preferredDate, notes } = parsed.data;
+  const { name, phone, city, address, serviceType, preferredDate, paymentMethod, notes } = parsed.data;
   const userId = (req as any).user?.id ?? null;
   const bookingRef = generateRef();
   const [booking] = await db
     .insert(bookingsTable)
-    .values({ name, phone, city, serviceType, preferredDate, notes: notes ?? null, status: "pending", bookingRef, userId })
+    .values({ name, phone, city, address, serviceType, preferredDate, paymentMethod, notes: notes ?? null, status: "pending", bookingRef, userId })
     .returning();
   res.status(201).json(GetBookingResponse.parse(serialize(booking)));
 });

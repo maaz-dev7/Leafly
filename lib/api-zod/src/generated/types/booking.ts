@@ -11,8 +11,11 @@ export interface Booking {
   name: string;
   phone: string;
   city: string;
+  /** @nullable */
+  address?: string | null;
   serviceType: string;
   preferredDate: string;
+  paymentMethod: string;
   /** @nullable */
   notes?: string | null;
   status: string;

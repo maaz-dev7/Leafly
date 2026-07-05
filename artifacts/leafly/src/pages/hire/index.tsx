@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Banknote, CreditCard } from "lucide-react";
 
 const services = [
   { id: "gardener", name: "Gardener", price: "Rs. 500/hr", desc: "Basic maintenance, watering, pruning" },
@@ -16,9 +17,19 @@ const services = [
 
 export default function HireAPro() {
   const [formData, setFormData] = useState({
-    name: "", phone: "", city: "Lahore", serviceType: "", preferredDate: "", notes: ""
+    name: "", phone: "", city: "Lahore", address: "", serviceType: "", preferredDate: "", paymentMethod: "", notes: ""
   });
+  const [card, setCard] = useState({ number: "", name: "", expiry: "", cvv: "" });
   const [success, setSuccess] = useState<string | null>(null);
+
+  const isOnline = formData.paymentMethod === "online";
+  const cardValid = !isOnline || (
+    card.number.replace(/\s/g, "").length >= 12 &&
+    card.name.trim().length > 1 &&
+    /^\d{2}\/\d{2}$/.test(card.expiry) &&
+    card.cvv.length >= 3
+  );
+  const canSubmit = !!(formData.serviceType && formData.name && formData.phone && formData.address && formData.paymentMethod && cardValid);
 
   const bookingMutation = useCreateBooking({
     mutation: {
@@ -30,6 +41,7 @@ export default function HireAPro() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!canSubmit) return;
     bookingMutation.mutate({ data: formData });
   };
 
@@ -112,10 +124,48 @@ export default function HireAPro() {
                   </div>
                 </div>
                 <div className="space-y-2">
+                  <Label>Address</Label>
+                  <Input value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} required placeholder="Street, Area" />
+                </div>
+                <div className="space-y-2">
                   <Label>Additional Notes (Optional)</Label>
                   <Textarea value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} rows={3} />
                 </div>
-                <Button type="submit" className="w-full mt-4" disabled={bookingMutation.isPending || !formData.serviceType}>
+
+                <div className="space-y-2">
+                  <Label>Payment Method <span className="text-destructive">*</span></Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: "cod" })}
+                      className={`flex flex-col items-center gap-1.5 border rounded-lg py-3 text-sm font-medium transition-colors ${formData.paymentMethod === "cod" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    >
+                      <Banknote size={18} /> Cash on Service
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: "online" })}
+                      className={`flex flex-col items-center gap-1.5 border rounded-lg py-3 text-sm font-medium transition-colors ${formData.paymentMethod === "online" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    >
+                      <CreditCard size={18} /> Online (Card)
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">No delivery charge applies to Hire a Pro bookings.</p>
+                </div>
+
+                {isOnline && (
+                  <div className="space-y-2 border rounded-lg p-3 bg-muted/30">
+                    <p className="text-xs font-medium text-muted-foreground mb-1">Card Details</p>
+                    <Input placeholder="Card Number" inputMode="numeric" maxLength={19} value={card.number} onChange={e => setCard({ ...card, number: e.target.value.replace(/[^\d\s]/g, "") })} required />
+                    <Input placeholder="Name on Card" value={card.name} onChange={e => setCard({ ...card, name: e.target.value })} required />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input placeholder="MM/YY" maxLength={5} value={card.expiry} onChange={e => setCard({ ...card, expiry: e.target.value })} required />
+                      <Input placeholder="CVV" inputMode="numeric" maxLength={4} value={card.cvv} onChange={e => setCard({ ...card, cvv: e.target.value.replace(/\D/g, "") })} required />
+                    </div>
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full mt-4" disabled={bookingMutation.isPending || !canSubmit}>
                   {bookingMutation.isPending ? "Requesting..." : "Request Booking"}
                 </Button>
               </form>

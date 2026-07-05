@@ -158,6 +158,7 @@ export interface Order {
   address?: string | null;
   items: OrderItem[];
   total: number;
+  paymentMethod: string;
   status: string;
   /** @nullable */
   deliveryEstimate?: string | null;
@@ -185,7 +186,8 @@ export interface OrderInput {
   customerName: string;
   customerPhone: string;
   city: string;
-  address?: string;
+  address: string;
+  paymentMethod: string;
   items: OrderItemInput[];
 }
 
@@ -198,8 +200,11 @@ export interface Booking {
   name: string;
   phone: string;
   city: string;
+  /** @nullable */
+  address?: string | null;
   serviceType: string;
   preferredDate: string;
+  paymentMethod: string;
   /** @nullable */
   notes?: string | null;
   status: string;
@@ -213,8 +218,10 @@ export interface BookingInput {
   name: string;
   phone: string;
   city: string;
+  address: string;
   serviceType: string;
   preferredDate: string;
+  paymentMethod: string;
   notes?: string;
 }
 

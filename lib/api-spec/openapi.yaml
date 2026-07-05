@@ -868,7 +868,7 @@ components:
     # ── Order ────────────────────────────────────────────────────────────────
     Order:
       type: object
-      required: [id, customerName, customerPhone, city, items, total, status, createdAt]
+      required: [id, customerName, customerPhone, city, items, total, paymentMethod, status, createdAt]
       properties:
         id: { type: integer }
         customerName: { type: string }
@@ -880,6 +880,7 @@ components:
           items:
             $ref: "#/components/schemas/OrderItem"
         total: { type: integer }
+        paymentMethod: { type: string }
         status: { type: string }
         deliveryEstimate: { type: ["string", "null"] }
         userId: { type: ["integer", "null"] }
@@ -908,12 +909,13 @@ components:
 
     OrderInput:
       type: object
-      required: [customerName, customerPhone, city, items]
+      required: [customerName, customerPhone, city, address, paymentMethod, items]
       properties:
         customerName: { type: string }
         customerPhone: { type: string }
         city: { type: string }
         address: { type: string }
+        paymentMethod: { type: string }
         items:
           type: array
           items:
@@ -949,14 +951,16 @@ components:
     # ── Booking ──────────────────────────────────────────────────────────────
     Booking:
       type: object
-      required: [id, name, phone, city, serviceType, preferredDate, status, createdAt]
+      required: [id, name, phone, city, serviceType, preferredDate, paymentMethod, status, createdAt]
       properties:
         id: { type: integer }
         name: { type: string }
         phone: { type: string }
         city: { type: string }
+        address: { type: ["string", "null"] }
         serviceType: { type: string }
         preferredDate: { type: string }
+        paymentMethod: { type: string }
         notes: { type: ["string", "null"] }
         status: { type: string }
         bookingRef: { type: string }
@@ -965,13 +969,15 @@ components:
 
     BookingInput:
       type: object
-      required: [name, phone, city, serviceType, preferredDate]
+      required: [name, phone, city, address, serviceType, preferredDate, paymentMethod]
       properties:
         name: { type: string }
         phone: { type: string }
         city: { type: string }
+        address: { type: string }
         serviceType: { type: string }
         preferredDate: { type: string }
+        paymentMethod: { type: string }
         notes: { type: string }
 
     BookingStatusUpdate:

@@ -11,6 +11,7 @@ export interface OrderInput {
   customerName: string;
   customerPhone: string;
   city: string;
-  address?: string;
+  address: string;
+  paymentMethod: string;
   items: OrderItemInput[];
 }

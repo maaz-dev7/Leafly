@@ -10,6 +10,7 @@ export const ordersTable = pgTable("orders", {
   address: text("address"),
   items: jsonb("items").notNull().default([]),
   total: integer("total").notNull().default(0),
+  paymentMethod: text("payment_method").notNull().default("cod"),
   status: text("status").notNull().default("Confirmed"),
   deliveryEstimate: text("delivery_estimate"),
   userId: integer("user_id"),

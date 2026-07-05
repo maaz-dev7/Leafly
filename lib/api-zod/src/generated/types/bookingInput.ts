@@ -10,7 +10,9 @@ export interface BookingInput {
   name: string;
   phone: string;
   city: string;
+  address: string;
   serviceType: string;
   preferredDate: string;
+  paymentMethod: string;
   notes?: string;
 }

@@ -151,24 +151,24 @@ router.delete("/admin/addons/:id", requireAdmin, async (req, res): Promise<void>
   res.sendStatus(204);
 });
 
-router.get("/admin/contact", requireAdmin, (_req, res): void => {
-  res.json(getContact());
+router.get("/admin/contact", requireAdmin, async (_req, res): Promise<void> => {
+  res.json(await getContact());
 });
 
-router.patch("/admin/contact", requireAdmin, (req, res): void => {
+router.patch("/admin/contact", requireAdmin, async (req, res): Promise<void> => {
   const { email, phone, address, hours } = req.body ?? {};
   const updates: Record<string, string> = {};
   if (typeof email === "string") updates.email = email;
   if (typeof phone === "string") updates.phone = phone;
   if (typeof address === "string") updates.address = address;
   if (typeof hours === "string") updates.hours = hours;
-  const updated = setContact(updates);
+  const updated = await setContact(updates);
   res.json(updated);
 });
 
 // Public contact endpoint
-router.get("/contact", (_req, res): void => {
-  res.json(getContact());
+router.get("/contact", async (_req, res): Promise<void> => {
+  res.json(await getContact());
 });
 
 export default router;

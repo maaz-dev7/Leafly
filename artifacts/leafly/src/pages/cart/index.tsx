@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "wouter";
-import { Trash2, Plus, Minus, Truck, CheckCircle } from "lucide-react";
+import { Trash2, Plus, Minus, Truck, CheckCircle, Banknote, CreditCard } from "lucide-react";
 
 const DELIVERY_FEES: Record<string, number> = { lahore: 250 };
 const DEFAULT_DELIVERY = 400;
@@ -20,12 +20,22 @@ const CITIES = ["Lahore", "Karachi", "Islamabad", "Peshawar", "Quetta", "Multan"
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, getTotal, clearCart } = useCart();
-  const [formData, setFormData] = useState({ customerName: "", customerPhone: "", city: "Lahore", address: "" });
+  const [formData, setFormData] = useState({ customerName: "", customerPhone: "", city: "Lahore", address: "", paymentMethod: "" });
+  const [card, setCard] = useState({ number: "", name: "", expiry: "", cvv: "" });
   const [success, setSuccess] = useState(false);
 
   const deliveryFee = getDeliveryFee(formData.city);
   const subtotal = getTotal();
   const grandTotal = subtotal + deliveryFee;
+
+  const isOnline = formData.paymentMethod === "online";
+  const cardValid = !isOnline || (
+    card.number.replace(/\s/g, "").length >= 12 &&
+    card.name.trim().length > 1 &&
+    /^\d{2}\/\d{2}$/.test(card.expiry) &&
+    card.cvv.length >= 3
+  );
+  const canSubmit = !!(formData.customerName && formData.customerPhone && formData.address && formData.paymentMethod && cardValid);
 
   const orderMutation = useCreateOrder({
     mutation: {
@@ -35,6 +45,7 @@ export default function Cart() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!canSubmit) return;
     const orderItems = items.map(i => ({
       plantId: i.plantId,
       plantName: i.plantName,
@@ -185,7 +196,66 @@ export default function Cart() {
                   <Label className="text-xs">Delivery Address</Label>
                   <Input value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} required placeholder="Street, Area" />
                 </div>
-                <Button type="submit" className="w-full text-base h-11 mt-2" disabled={orderMutation.isPending}>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Payment Method <span className="text-destructive">*</span></Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: "cod" })}
+                      className={`flex flex-col items-center gap-1.5 border rounded-lg py-3 text-sm font-medium transition-colors ${formData.paymentMethod === "cod" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    >
+                      <Banknote size={18} /> Cash on Delivery
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: "online" })}
+                      className={`flex flex-col items-center gap-1.5 border rounded-lg py-3 text-sm font-medium transition-colors ${formData.paymentMethod === "online" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    >
+                      <CreditCard size={18} /> Online (Card)
+                    </button>
+                  </div>
+                </div>
+
+                {isOnline && (
+                  <div className="space-y-2 border rounded-lg p-3 bg-muted/30">
+                    <p className="text-xs font-medium text-muted-foreground mb-1">Card Details</p>
+                    <Input
+                      placeholder="Card Number"
+                      inputMode="numeric"
+                      maxLength={19}
+                      value={card.number}
+                      onChange={e => setCard({ ...card, number: e.target.value.replace(/[^\d\s]/g, "") })}
+                      required
+                    />
+                    <Input
+                      placeholder="Name on Card"
+                      value={card.name}
+                      onChange={e => setCard({ ...card, name: e.target.value })}
+                      required
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input
+                        placeholder="MM/YY"
+                        maxLength={5}
+                        value={card.expiry}
+                        onChange={e => setCard({ ...card, expiry: e.target.value })}
+                        required
+                      />
+                      <Input
+                        placeholder="CVV"
+                        inputMode="numeric"
+                        maxLength={4}
+                        value={card.cvv}
+                        onChange={e => setCard({ ...card, cvv: e.target.value.replace(/\D/g, "") })}
+                        required
+                      />
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">Rs. {grandTotal.toLocaleString()} will be charged to this card on order confirmation.</p>
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full text-base h-11 mt-2" disabled={orderMutation.isPending || !canSubmit}>
                   {orderMutation.isPending ? "Placing Order..." : `Place Order · Rs. ${grandTotal.toLocaleString()}`}
                 </Button>
               </form>
