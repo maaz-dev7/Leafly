@@ -31,7 +31,14 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   const token = localStorage.getItem("leafly_token");
   const adminToken = localStorage.getItem("leafly_admin_token");
   const headers = new Headers(init?.headers);
-  if (input.toString().includes("/api/admin") && adminToken) {
+  const url = input.toString();
+  // Admin pages call admin-only endpoints that don't always have "/api/admin"
+  // in the path (e.g. PATCH /api/orders/:id/status, /api/bookings/:id/status
+  // are admin-only actions but live under the public orders/bookings routes).
+  // Prefer the admin token whenever we're inside the admin section of the app,
+  // falling back to the customer token elsewhere.
+  const isAdminContext = window.location.pathname.includes("/admin");
+  if ((isAdminContext || url.includes("/api/admin")) && adminToken) {
     headers.set("Authorization", `Bearer ${adminToken}`);
   } else if (token) {
     headers.set("Authorization", `Bearer ${token}`);
