@@ -32,18 +32,21 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   const adminToken = localStorage.getItem("leafly_admin_token");
   const headers = new Headers(init?.headers);
   const url = input.toString();
-  // Admin pages call admin-only endpoints that don't always have "/api/admin"
-  // in the path (e.g. PATCH /api/orders/:id/status, /api/bookings/:id/status
-  // are admin-only actions but live under the public orders/bookings routes).
-  // Prefer the admin token whenever we're inside the admin section of the app,
-  // falling back to the customer token elsewhere.
   const isAdminContext = window.location.pathname.includes("/admin");
   if ((isAdminContext || url.includes("/api/admin")) && adminToken) {
     headers.set("Authorization", `Bearer ${adminToken}`);
   } else if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-  return originalFetch(input, { ...init, headers });
+  const response = await originalFetch(input, { ...init, headers });
+  // If the server rejects an admin request with 401/403, the stored token is
+  // stale (e.g. after a server restart). Clear it and bounce to login so the
+  // admin sees the login form instead of a "Failed to load" dead-end.
+  if ((response.status === 401 || response.status === 403) && isAdminContext) {
+    localStorage.removeItem("leafly_admin_token");
+    window.location.href = "/admin/login";
+  }
+  return response;
 };
 
 const queryClient = new QueryClient();
