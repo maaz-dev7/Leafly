@@ -30,7 +30,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex">
-      <aside className="w-56 bg-[#1D9E75] text-white flex flex-col shrink-0">
+      <aside className="w-56 bg-[#1B3D2A] text-white flex flex-col shrink-0">
         <div className="px-5 py-5 border-b border-white/20">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl">🌿</span>
@@ -43,7 +43,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             return (
               <Link key={href} href={href}>
                 <div className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors ${
-                  active ? "bg-white text-[#1D9E75]" : "text-white/80 hover:bg-white/15 hover:text-white"
+                  active ? "bg-white text-[#1B3D2A]" : "text-white/80 hover:bg-[#4A7C3F] hover:text-white"
                 }`}>
                   <Icon size={17} />
                   {label}
@@ -57,7 +57,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <Button
             variant="ghost" size="sm"
             onClick={handleLogout}
-            className="w-full justify-start gap-2 text-white/80 hover:text-white hover:bg-white/15"
+             className="w-full justify-start gap-2 text-white/80 hover:text-white hover:bg-[#4A7C3F]"
           >
             <LogOut size={16} /> Logout
           </Button>

@@ -144,7 +144,7 @@ export default function Shop() {
               <div className="group bg-card rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1 border border-border/50 h-full flex flex-col">
                 <div className="relative overflow-hidden">
                   <img
-                    src={plant.imageUrl || "https://placehold.co/400x400/1D9E75/white?text=Plant"}
+                    src={plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
                     alt={plant.name}
                     className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -155,9 +155,9 @@ export default function Shop() {
                   )}
                   <div className="absolute top-3 left-3">
                     <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                      plant.difficulty === "Easy" ? "bg-green-100 text-green-700" :
-                      plant.difficulty === "Medium" ? "bg-yellow-100 text-yellow-700" :
-                      "bg-red-100 text-red-700"
+                      plant.difficulty === "Easy" ? "bg-[#4A7C3F]/15 text-[#1B3D2A]" :
+                      plant.difficulty === "Medium" ? "bg-[#6B8F3E]/20 text-[#1B3D2A]" :
+                      "bg-[#1B3D2A]/10 text-[#1B3D2A]"
                     }`}>
                       {plant.difficulty}
                     </span>

@@ -109,7 +109,7 @@ export default function AdminAccessories() {
               <TableRow key={addon.id} className="hover:bg-muted/30">
                 <TableCell>
                   <img
-                    src={addon.imageUrl || `https://placehold.co/40x40/1D9E75/white?text=${encodeURIComponent(addon.name[0])}`}
+                    src={addon.imageUrl || `https://placehold.co/40x40/4A7C3F/FFFFFF?text=${encodeURIComponent(addon.name[0])}`}
                     alt={addon.name}
                     className="w-10 h-10 rounded-lg object-cover"
                   />

@@ -10,11 +10,11 @@ import { Package, Truck, CheckCircle, Clock, ChevronRight, ShoppingBag, Search }
 const STATUS_STEPS = ["pending", "confirmed", "processing", "shipped", "delivered"];
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  pending:    { label: "Pending",    color: "text-yellow-700", bg: "bg-yellow-100 dark:bg-yellow-900/30",  icon: Clock },
-  confirmed:  { label: "Confirmed",  color: "text-blue-700",   bg: "bg-blue-100 dark:bg-blue-900/30",     icon: CheckCircle },
-  processing: { label: "Processing", color: "text-purple-700", bg: "bg-purple-100 dark:bg-purple-900/30", icon: Package },
-  shipped:    { label: "Shipped",    color: "text-orange-700", bg: "bg-orange-100 dark:bg-orange-900/30", icon: Truck },
-  delivered:  { label: "Delivered",  color: "text-green-700",  bg: "bg-green-100 dark:bg-green-900/30",   icon: CheckCircle },
+  pending:    { label: "Pending",    color: "text-[#6B8F3E]", bg: "bg-[#6B8F3E]/15",  icon: Clock },
+  confirmed:  { label: "Confirmed",  color: "text-[#1B3D2A]", bg: "bg-[#1B3D2A]/10",     icon: CheckCircle },
+  processing: { label: "Processing", color: "text-[#4A7C3F]", bg: "bg-[#4A7C3F]/15", icon: Package },
+  shipped:    { label: "Shipped",    color: "text-[#1B3D2A]", bg: "bg-[#6B8F3E]/20", icon: Truck },
+  delivered:  { label: "Delivered",  color: "text-[#1B3D2A]",  bg: "bg-[#4A7C3F]/20",   icon: CheckCircle },
 };
 
 function StatusBar({ status }: { status: string }) {

@@ -7,10 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp, MapPin, CalendarDays, CreditCard, ClipboardList } from "lucide-react";
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  confirmed: "bg-blue-100 text-blue-700",
-  completed: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700",
+  pending: "bg-[#6B8F3E]/20 text-[#1B3D2A]",
+  confirmed: "bg-[#1B3D2A]/10 text-[#1B3D2A]",
+  completed: "bg-[#4A7C3F]/20 text-[#1B3D2A]",
+  cancelled: "bg-[#1B3D2A]/10 text-[#1B3D2A]",
 };
 
 const SERVICE_LABELS: Record<string, string> = {

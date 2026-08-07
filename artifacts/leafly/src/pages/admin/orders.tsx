@@ -7,10 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp, MapPin, Package } from "lucide-react";
 
 const STATUS_COLORS: Record<string, string> = {
-  Confirmed: "bg-blue-100 text-blue-700",
-  Packed: "bg-yellow-100 text-yellow-700",
-  "Out for Delivery": "bg-orange-100 text-orange-700",
-  Delivered: "bg-green-100 text-green-700",
+  Confirmed: "bg-[#1B3D2A]/10 text-[#1B3D2A]",
+  Packed: "bg-[#6B8F3E]/20 text-[#1B3D2A]",
+  "Out for Delivery": "bg-[#4A7C3F]/15 text-[#1B3D2A]",
+  Delivered: "bg-[#4A7C3F]/25 text-[#1B3D2A]",
 };
 
 type OrderItem = {

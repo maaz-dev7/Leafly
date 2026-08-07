@@ -1,10 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
-
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 @theme inline {
   --color-background: hsl(var(--background));
@@ -24,6 +23,9 @@
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-primary-border: var(--primary-border);
+  --color-leafly-dark: #1B3D2A;
+  --color-leafly-medium: #4A7C3F;
+  --color-leafly-olive: #6B8F3E;
 
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
@@ -67,51 +69,51 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  /* Earthy Warm Light Theme */
-  --background: 40 33% 98%;
-  --foreground: 161 40% 15%;
-  --border: 161 20% 88%;
+  /* Leafly logo palette: dark green #1B3D2A, medium green #4A7C3F, olive #6B8F3E */
+  --background: 0 0% 100%;
+  --foreground: 146.5 38.6% 17.3%;
+  --border: 86.7 39.5% 40.2%;
   
   --card: 0 0% 100%;
-  --card-foreground: 161 40% 15%;
-  --card-border: 161 20% 92%;
+  --card-foreground: 146.5 38.6% 17.3%;
+  --card-border: 86.7 39.5% 40.2%;
   
   --popover: 0 0% 100%;
-  --popover-foreground: 161 40% 15%;
-  --popover-border: 161 20% 92%;
+  --popover-foreground: 146.5 38.6% 17.3%;
+  --popover-border: 86.7 39.5% 40.2%;
 
-  --sidebar: 40 33% 98%;
-  --sidebar-foreground: 161 40% 15%;
-  --sidebar-border: 161 20% 88%;
-  --sidebar-primary: 161 69% 37%;
+  --sidebar: 146.5 38.6% 17.3%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 86.7 39.5% 40.2%;
+  --sidebar-primary: 109.2 32.6% 36.7%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 161 20% 92%;
-  --sidebar-accent-foreground: 161 40% 15%;
-  --sidebar-ring: 161 69% 37%;
+  --sidebar-accent: 109.2 32.6% 36.7%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 109.2 32.6% 36.7%;
 
-  --primary: 161 69% 37%; /* #1D9E75 */
+  --primary: 146.5 38.6% 17.3%; /* #1B3D2A */
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 40 40% 90%;
-  --secondary-foreground: 161 40% 25%;
+  --secondary: 86.7 39.5% 40.2%; /* #6B8F3E */
+  --secondary-foreground: 0 0% 100%;
   
-  --muted: 40 20% 94%;
-  --muted-foreground: 161 20% 45%;
+  --muted: 86.7 39.5% 95%;
+  --muted-foreground: 146.5 25% 34%;
   
-  --accent: 30 50% 94%;
-  --accent-foreground: 161 40% 20%;
+  --accent: 109.2 32.6% 36.7%; /* #4A7C3F */
+  --accent-foreground: 0 0% 100%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
   
-  --input: 161 20% 85%;
-  --ring: 161 69% 37%;
+  --input: 86.7 39.5% 40.2%;
+  --ring: 109.2 32.6% 36.7%;
   
-  --chart-1: 161 69% 37%;
-  --chart-2: 40 60% 70%;
-  --chart-3: 161 40% 25%;
-  --chart-4: 30 70% 60%;
-  --chart-5: 20 80% 50%;
+  --chart-1: 146.5 38.6% 17.3%;
+  --chart-2: 109.2 32.6% 36.7%;
+  --chart-3: 86.7 39.5% 40.2%;
+  --chart-4: 146.5 38.6% 17.3%;
+  --chart-5: 109.2 32.6% 36.7%;
 
   --app-font-sans: 'Plus Jakarta Sans', sans-serif;
   --app-font-serif: 'Fraunces', serif;
@@ -134,45 +136,45 @@
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
 
-  /* Deep Forest Dark Theme */
-  --background: 161 40% 8%;
-  --foreground: 40 33% 98%;
-  --border: 161 20% 20%;
+  /* The same Leafly palette remains recognizable in dark mode */
+  --background: 146.5 38.6% 17.3%;
+  --foreground: 0 0% 100%;
+  --border: 109.2 32.6% 36.7%;
   
-  --card: 161 35% 12%;
-  --card-foreground: 40 33% 98%;
-  --card-border: 161 20% 20%;
+  --card: 146.5 38.6% 17.3%;
+  --card-foreground: 0 0% 100%;
+  --card-border: 109.2 32.6% 36.7%;
   
-  --popover: 161 35% 12%;
-  --popover-foreground: 40 33% 98%;
-  --popover-border: 161 20% 20%;
+  --popover: 146.5 38.6% 17.3%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 109.2 32.6% 36.7%;
 
-  --sidebar: 161 35% 10%;
-  --sidebar-foreground: 40 33% 98%;
-  --sidebar-border: 161 20% 20%;
-  --sidebar-primary: 161 69% 37%;
+  --sidebar: 146.5 38.6% 17.3%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 109.2 32.6% 36.7%;
+  --sidebar-primary: 109.2 32.6% 36.7%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 161 20% 20%;
-  --sidebar-accent-foreground: 40 33% 98%;
-  --sidebar-ring: 161 69% 37%;
+  --sidebar-accent: 109.2 32.6% 36.7%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 109.2 32.6% 36.7%;
 
-  --primary: 161 69% 37%;
+  --primary: 109.2 32.6% 36.7%;
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 161 25% 20%;
-  --secondary-foreground: 40 33% 98%;
+  --secondary: 86.7 39.5% 40.2%;
+  --secondary-foreground: 0 0% 100%;
   
-  --muted: 161 20% 15%;
-  --muted-foreground: 161 10% 65%;
+  --muted: 146.5 30% 23%;
+  --muted-foreground: 0 0% 100%;
   
-  --accent: 161 30% 25%;
-  --accent-foreground: 40 33% 98%;
+  --accent: 109.2 32.6% 36.7%;
+  --accent-foreground: 0 0% 100%;
   
   --destructive: 0 62% 30%;
   --destructive-foreground: 40 33% 98%;
   
-  --input: 161 20% 25%;
-  --ring: 161 69% 37%;
+  --input: 109.2 32.6% 36.7%;
+  --ring: 86.7 39.5% 40.2%;
 }
 
 @layer base {

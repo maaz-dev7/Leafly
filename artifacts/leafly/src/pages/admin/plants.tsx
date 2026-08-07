@@ -106,7 +106,7 @@ export default function AdminPlants() {
               <TableRow key={plant.id} className="hover:bg-muted/30">
                 <TableCell>
                   <img
-                    src={plant.imageUrl || `https://placehold.co/40x40/1D9E75/white?text=${encodeURIComponent(plant.name[0])}`}
+                    src={plant.imageUrl || `https://placehold.co/40x40/4A7C3F/FFFFFF?text=${encodeURIComponent(plant.name[0])}`}
                     alt={plant.name}
                     className="w-10 h-10 rounded-lg object-cover"
                   />
@@ -120,9 +120,9 @@ export default function AdminPlants() {
                 </TableCell>
                 <TableCell>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    plant.difficulty === "Easy" ? "bg-green-100 text-green-700" :
-                    plant.difficulty === "Medium" ? "bg-yellow-100 text-yellow-700" :
-                    "bg-red-100 text-red-700"
+                    plant.difficulty === "Easy" ? "bg-[#4A7C3F]/15 text-[#1B3D2A]" :
+                    plant.difficulty === "Medium" ? "bg-[#6B8F3E]/20 text-[#1B3D2A]" :
+                    "bg-[#1B3D2A]/10 text-[#1B3D2A]"
                   }`}>{plant.difficulty}</span>
                 </TableCell>
                 <TableCell className="font-medium">Rs. {plant.price.toLocaleString()}</TableCell>

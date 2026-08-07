@@ -7,29 +7,29 @@ import { useLocation } from "wouter";
 const CARE_TIPS = [
   {
     icon: Droplet,
-    color: "text-blue-500",
-    bg: "bg-blue-50 dark:bg-blue-950/30",
+    color: "text-[#4A7C3F]",
+    bg: "bg-[#4A7C3F]/10",
     title: "Watering",
     desc: "Check the top inch of soil. If it's dry, it's time to water. Water thoroughly until it drains from the bottom.",
   },
   {
     icon: Sun,
-    color: "text-yellow-500",
-    bg: "bg-yellow-50 dark:bg-yellow-950/30",
+    color: "text-[#6B8F3E]",
+    bg: "bg-[#6B8F3E]/10",
     title: "Light",
     desc: "Most indoor plants thrive in bright, indirect sunlight. Keep away from harsh direct afternoon sun to prevent leaf burn.",
   },
   {
     icon: Thermometer,
-    color: "text-cyan-500",
-    bg: "bg-cyan-50 dark:bg-cyan-950/30",
+    color: "text-[#4A7C3F]",
+    bg: "bg-[#4A7C3F]/10",
     title: "Humidity",
     desc: "Tropical plants love humidity. Mist them occasionally or use a pebble tray with water underneath the pot.",
   },
   {
     icon: FlaskConical,
-    color: "text-green-600",
-    bg: "bg-green-50 dark:bg-green-950/30",
+    color: "text-[#1B3D2A]",
+    bg: "bg-[#1B3D2A]/10",
     title: "Fertilizer",
     desc: "Feed during the growing season (spring/summer) every 2–4 weeks. Pause during winter dormancy.",
   },
@@ -64,12 +64,12 @@ export default function Dashboard() {
             {plants.map(plant => (
               <div key={plant.id} className="bg-card rounded-2xl overflow-hidden border border-border/50 shadow-sm relative">
                 {plant.health === "Needs Water" && (
-                  <div className="bg-blue-500 text-white text-xs font-bold text-center py-1.5 tracking-wide">
+                    <div className="bg-[#4A7C3F] text-white text-xs font-bold text-center py-1.5 tracking-wide">
                     💧 WATERING OVERDUE
                   </div>
                 )}
                 <img
-                  src={plant.plantImageUrl || "https://placehold.co/400x400/1D9E75/white?text=Plant"}
+                  src={plant.plantImageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
                   alt={plant.plantName}
                   className="w-full h-48 object-cover"
                 />
@@ -77,9 +77,9 @@ export default function Dashboard() {
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="font-serif text-xl font-bold">{plant.plantName}</h3>
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      plant.health === "Healthy" ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400" :
-                      plant.health === "Needs Water" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400" :
-                      "bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-400"
+                       plant.health === "Healthy" ? "bg-[#4A7C3F]/15 text-[#1B3D2A]" :
+                       plant.health === "Needs Water" ? "bg-[#6B8F3E]/20 text-[#1B3D2A]" :
+                       "bg-[#1B3D2A]/10 text-[#1B3D2A]"
                     }`}>
                       {plant.health}
                     </span>
@@ -92,7 +92,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Next Water Due</span>
-                      <span className={`font-medium ${plant.health === "Needs Water" ? "text-blue-600 font-bold" : ""}`}>
+                       <span className={`font-medium ${plant.health === "Needs Water" ? "text-[#4A7C3F] font-bold" : ""}`}>
                         {plant.nextWaterDue ? new Date(plant.nextWaterDue).toLocaleDateString("en-PK", { day: "numeric", month: "short" }) : "Unknown"}
                       </span>
                     </div>
@@ -100,7 +100,7 @@ export default function Dashboard() {
 
                   <div className="flex gap-2">
                     <Button
-                      className="flex-1 gap-2 bg-blue-500 hover:bg-blue-600 text-white"
+                      className="flex-1 gap-2 bg-[#1B3D2A] hover:bg-[#4A7C3F] text-white"
                       size="sm"
                       onClick={() => markWatered.mutate({ id: plant.id })}
                       disabled={markWatered.isPending}

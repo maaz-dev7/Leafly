@@ -46,7 +46,7 @@ export default function PlantDetail() {
     }
     const variantData = availableVariants.find(v => v.color === selectedVariant);
     const basePrice = variantData?.price || plant.price;
-    const itemImage = variantData?.imageUrl || plant.imageUrl || "https://placehold.co/400x400/1D9E75/white?text=Plant";
+    const itemImage = variantData?.imageUrl || plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant";
     addItem({
       plantId: plant.id,
       plantName: plant.name,
@@ -63,11 +63,11 @@ export default function PlantDetail() {
     return (
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-pulse">
-          <div className="h-[500px] bg-muted rounded-3xl" />
+           <div className="h-[500px] bg-[#4A7C3F]/15 rounded-3xl" />
           <div className="space-y-4">
-            <div className="h-8 bg-muted rounded w-3/4" />
-            <div className="h-4 bg-muted rounded w-1/2" />
-            <div className="h-12 bg-muted rounded w-1/3 mt-6" />
+             <div className="h-8 bg-[#4A7C3F]/15 rounded w-3/4" />
+             <div className="h-4 bg-[#6B8F3E]/15 rounded w-1/2" />
+             <div className="h-12 bg-[#4A7C3F]/15 rounded w-1/3 mt-6" />
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function PlantDetail() {
         onCheckedChange={(c) => toggleAddon(addon.name, addon.price, c === true)}
       />
       <img
-        src={addon.imageUrl || "https://placehold.co/80x80/1D9E75/white?text=+"}
+         src={addon.imageUrl || "https://placehold.co/80x80/6B8F3E/FFFFFF?text=+"}
         alt={addon.name}
         className="w-10 h-10 rounded-lg object-cover shrink-0"
       />
@@ -116,7 +116,7 @@ export default function PlantDetail() {
         <div className="space-y-4">
           <div className="relative rounded-3xl overflow-hidden bg-muted aspect-square">
             <img
-              src={plant.imageUrl || "https://placehold.co/800x800/1D9E75/white?text=Plant"}
+               src={plant.imageUrl || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
               alt={plant.name}
               className="w-full h-full object-cover"
             />
@@ -140,9 +140,9 @@ export default function PlantDetail() {
             <div className="flex items-start gap-2 mb-2">
               <Badge variant="outline">{plant.category}</Badge>
               <Badge variant="outline" className={
-                plant.difficulty === "Easy" ? "border-green-300 text-green-700" :
-                plant.difficulty === "Medium" ? "border-yellow-300 text-yellow-700" :
-                "border-red-300 text-red-700"
+                 plant.difficulty === "Easy" ? "border-[#4A7C3F] text-[#4A7C3F]" :
+                 plant.difficulty === "Medium" ? "border-[#6B8F3E] text-[#6B8F3E]" :
+                 "border-[#1B3D2A] text-[#1B3D2A]"
               }>{plant.difficulty}</Badge>
             </div>
             <h1 className="text-4xl font-serif font-bold text-foreground">{plant.name}</h1>
@@ -161,7 +161,7 @@ export default function PlantDetail() {
             <div>
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <Tag size={16} className="text-primary" /> Color Variant
-                {!selectedVariant && <span className="text-sm text-red-500 font-normal">(required)</span>}
+                {!selectedVariant && <span className="text-sm text-[#4A7C3F] font-normal">(required)</span>}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {availableVariants.map(variant => (
@@ -242,18 +242,18 @@ export default function PlantDetail() {
 
           <TabsContent value="care" className="mt-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-start gap-4 p-5 bg-blue-50 dark:bg-blue-950/30 rounded-2xl">
+              <div className="flex items-start gap-4 p-5 bg-[#4A7C3F]/10 rounded-2xl">
                 <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Droplet className="text-blue-500" size={20} />
+                  <Droplet className="text-[#4A7C3F]" size={20} />
                 </div>
                 <div>
                   <h4 className="font-bold mb-1">Watering</h4>
                   <p className="text-sm text-muted-foreground">Check the top inch of soil. If it's dry, water thoroughly until it drains from the bottom.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-4 p-5 bg-yellow-50 dark:bg-yellow-950/30 rounded-2xl">
+              <div className="flex items-start gap-4 p-5 bg-[#6B8F3E]/10 rounded-2xl">
                 <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Sun className="text-yellow-500" size={20} />
+                  <Sun className="text-[#6B8F3E]" size={20} />
                 </div>
                 <div>
                   <h4 className="font-bold mb-1">Sunlight</h4>
@@ -269,9 +269,9 @@ export default function PlantDetail() {
                   <p className="text-sm text-muted-foreground">Tropical plants love humidity. Mist them occasionally or use a pebble tray underneath.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-4 p-5 bg-green-50 dark:bg-green-950/30 rounded-2xl">
+              <div className="flex items-start gap-4 p-5 bg-[#1B3D2A]/10 rounded-2xl">
                 <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Leaf className="text-green-600" size={20} />
+                  <Leaf className="text-[#1B3D2A]" size={20} />
                 </div>
                 <div>
                   <h4 className="font-bold mb-1">Fertilizer</h4>
@@ -310,7 +310,7 @@ export default function PlantDetail() {
                   <div key={city} className="flex items-center justify-between py-2 border-b last:border-0">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm">{city}</span>
-                      {badge && <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium">{badge}</span>}
+                      {badge && <span className="bg-[#4A7C3F]/15 text-[#1B3D2A] text-xs px-2 py-0.5 rounded-full font-medium">{badge}</span>}
                     </div>
                     <span className="text-muted-foreground text-sm">{days}</span>
                   </div>

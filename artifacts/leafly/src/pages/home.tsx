@@ -8,11 +8,11 @@ import { Link } from "wouter";
 import { Leaf, ShieldCheck, Truck, HeartHandshake, Mail, Phone, MapPin, Clock } from "lucide-react";
 
 const CATEGORIES = [
-  { label: "Indoor", image: "https://placehold.co/400x400/1D9E75/white?text=Indoor", query: "Indoor" },
-  { label: "Outdoor", image: "https://placehold.co/400x400/2d6a4f/white?text=Outdoor", query: "Outdoor" },
-  { label: "Succulents", image: "https://placehold.co/400x400/52b788/white?text=Succulents", query: "Succulents" },
-  { label: "Flowering", image: "https://placehold.co/400x400/b7e4c7/1D9E75?text=Flowering", query: "Flowering" },
-  { label: "Air-Purifying", image: "https://placehold.co/400x400/74c69d/white?text=Air+Purifying", query: "Air-Purifying" },
+  { label: "Indoor", image: "https://placehold.co/400x400/1B3D2A/FFFFFF?text=Indoor", query: "Indoor" },
+  { label: "Outdoor", image: "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Outdoor", query: "Outdoor" },
+  { label: "Succulents", image: "https://placehold.co/400x400/6B8F3E/FFFFFF?text=Succulents", query: "Succulents" },
+  { label: "Flowering", image: "https://placehold.co/400x400/6B8F3E/FFFFFF?text=Flowering", query: "Flowering" },
+  { label: "Air-Purifying", image: "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Air+Purifying", query: "Air-Purifying" },
 ];
 
 const FEATURES = [
@@ -36,7 +36,7 @@ export default function Home() {
     <div className="w-full">
       {/* Hero */}
       <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://placehold.co/1920x1080/1D9E75/white?text=Leafly+Hero')] bg-cover bg-center opacity-20 dark:opacity-10" />
+        <div className="absolute inset-0 bg-[url('https://placehold.co/1920x1080/1B3D2A/FFFFFF?text=Leafly+Hero')] bg-cover bg-center opacity-20 dark:opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background/60 to-background" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6">
@@ -101,7 +101,7 @@ export default function Home() {
                         <div className="group relative rounded-2xl overflow-hidden bg-card border hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1">
                           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                           <img
-                            src={plant.imageUrl || "https://placehold.co/400x400/1D9E75/white?text=Plant"}
+                            src={plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
                             alt={plant.name}
                             className="w-full h-40 object-cover"
                           />
@@ -168,7 +168,7 @@ export default function Home() {
                   <div className="group bg-card rounded-2xl overflow-hidden hover:shadow-xl transition-all cursor-pointer hover:-translate-y-2 border border-border/50">
                     <div className="relative overflow-hidden">
                       <img
-                        src={plant.imageUrl || "https://placehold.co/800x800/1D9E75/white?text=Plant"}
+                        src={plant.imageUrl || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
                         alt={plant.name}
                         className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
                       />

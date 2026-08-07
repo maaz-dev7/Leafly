@@ -14,10 +14,10 @@ const TABS = [
 ];
 
 const TYPE_IMAGES: Record<string, string> = {
-  pot: "https://placehold.co/400x400/1D9E75/white?text=Pot",
-  fertilizer: "https://placehold.co/400x400/52b788/white?text=Fertilizer",
-  tool: "https://placehold.co/400x400/2d6a4f/white?text=Tool",
-  light: "https://placehold.co/400x400/74c69d/white?text=Grow+Light",
+  pot: "https://placehold.co/400x400/6B8F3E/FFFFFF?text=Pot",
+  fertilizer: "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Fertilizer",
+  tool: "https://placehold.co/400x400/1B3D2A/FFFFFF?text=Tool",
+  light: "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Grow+Light",
 };
 
 export default function AccessoriesShop() {
@@ -34,7 +34,7 @@ export default function AccessoriesShop() {
       plantName: addon.name,
       price: addon.price,
       quantity: 1,
-      imageUrl: addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/1D9E75/white?text=Accessory",
+      imageUrl: addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Accessory",
       addons: [],
     });
     toast({ title: "Added to cart", description: `${addon.name} added to your cart.` });
@@ -79,7 +79,7 @@ export default function AccessoriesShop() {
             <div key={addon.id} className="group bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-lg transition-all flex flex-col">
               <div className="overflow-hidden">
                 <img
-                  src={addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/1D9E75/white?text=Accessory"}
+                  src={addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Accessory"}
                   alt={addon.name}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />

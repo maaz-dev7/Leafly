@@ -53,10 +53,10 @@ export default function AdminDashboard() {
   if (isError || !data) return <div className="px-6 py-8 text-destructive">Failed to load dashboard. Please refresh.</div>;
 
   const stats = [
-    { label: "Total Plants", value: data.totalPlants, icon: Leaf, color: "text-green-600" },
-    { label: "Total Orders", value: data.totalOrders, icon: ShoppingBag, color: "text-blue-600" },
-    { label: "Bookings", value: data.totalBookings, icon: CalendarDays, color: "text-purple-600" },
-    { label: "Customers", value: data.totalUsers, icon: Users, color: "text-orange-600" },
+    { label: "Total Plants", value: data.totalPlants, icon: Leaf, color: "text-[#4A7C3F]" },
+    { label: "Total Orders", value: data.totalOrders, icon: ShoppingBag, color: "text-[#1B3D2A]" },
+    { label: "Bookings", value: data.totalBookings, icon: CalendarDays, color: "text-[#6B8F3E]" },
+    { label: "Customers", value: data.totalUsers, icon: Users, color: "text-[#4A7C3F]" },
   ];
 
   return (
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
         <CardContent className="pt-5 pb-4">
           <div className="flex items-center justify-between mb-1">
             <p className="text-sm text-muted-foreground">Total Revenue</p>
-            <TrendingUp size={18} className="text-emerald-600" />
+            <TrendingUp size={18} className="text-[#4A7C3F]" />
           </div>
           <p className="text-3xl font-bold">Rs. {(data.revenueTotal ?? 0).toLocaleString()}</p>
         </CardContent>

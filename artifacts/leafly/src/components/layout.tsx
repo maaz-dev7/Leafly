@@ -29,10 +29,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b border-[#4A7C3F]/60 bg-[#1B3D2A] text-white shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 text-primary shrink-0">
+          <Link href="/" className="flex items-center shrink-0 rounded-lg bg-[#6B8F3E] px-2 py-0.5">
             <img
               src="/leafly-horizontal.png"
               alt="Leafly"
@@ -41,25 +41,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </Link>
 
           {/* Main Nav */}
-          <nav className="hidden md:flex items-center gap-1 text-sm font-medium">
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-white">
             <Link href="/shop">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-primary hover:bg-primary/5 ${location === "/shop" ? "text-primary bg-primary/5" : "text-foreground/70"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/shop" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
                 Shop Plants
               </div>
             </Link>
             <Link href="/shop/accessories">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-primary hover:bg-primary/5 ${location === "/shop/accessories" ? "text-primary bg-primary/5" : "text-foreground/70"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/shop/accessories" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
                 Accessories
               </div>
             </Link>
             <Link href="/hire">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-primary hover:bg-primary/5 ${location === "/hire" ? "text-primary bg-primary/5" : "text-foreground/70"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/hire" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
                 Hire a Pro
               </div>
             </Link>
             {token && (
               <Link href="/dashboard">
-                <div className={`px-3 py-2 rounded-lg transition-colors hover:text-primary hover:bg-primary/5 ${location === "/dashboard" ? "text-primary bg-primary/5" : "text-foreground/70"}`}>
+                <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/dashboard" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
                   Dashboard
                 </div>
               </Link>
@@ -68,12 +68,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)} className="shrink-0">
+             <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)} className="shrink-0 text-white hover:bg-white/10 hover:text-white">
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
             <Link href="/cart">
-              <Button variant="ghost" size="icon" className="relative shrink-0">
+               <Button variant="ghost" size="icon" className="relative shrink-0 text-white hover:bg-white/10 hover:text-white">
                 <ShoppingCart className="h-5 w-5" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
@@ -86,7 +86,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {token ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="shrink-0">
+                   <Button variant="ghost" size="icon" className="shrink-0 text-white hover:bg-white/10 hover:text-white">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -110,7 +110,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ) : (
               <div className="hidden md:flex items-center gap-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm">Sign In</Button>
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 hover:text-white">Sign In</Button>
                 </Link>
                 <Link href="/signup">
                   <Button size="sm">Sign Up</Button>
@@ -125,7 +125,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      <footer className="bg-card border-t mt-auto py-16">
+       <footer className="bg-[#1B3D2A] text-white border-t border-[#4A7C3F]/60 mt-auto py-16">
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="inline-flex text-primary mb-4">
@@ -135,13 +135,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 className="h-36 w-auto max-w-[140px] object-contain object-left"
               />
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+             <p className="text-white/75 text-sm leading-relaxed">
               Pakistan's smart plant delivery & care platform. Discover the perfect plants for your space and climate.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Shop</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
+             <ul className="space-y-3 text-sm text-white/75">
               <li><Link href="/shop?category=Indoor" className="hover:text-primary transition-colors">Indoor Plants</Link></li>
               <li><Link href="/shop?category=Outdoor" className="hover:text-primary transition-colors">Outdoor Plants</Link></li>
               <li><Link href="/shop/accessories" className="hover:text-primary transition-colors">Accessories</Link></li>
@@ -149,7 +149,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Services</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
+             <ul className="space-y-3 text-sm text-white/75">
               <li><Link href="/hire" className="hover:text-primary transition-colors">Hire a Gardener</Link></li>
               <li><Link href="/hire" className="hover:text-primary transition-colors">Plant Consultation</Link></li>
               <li><Link href="/hire" className="hover:text-primary transition-colors">Landscaping</Link></li>
@@ -158,7 +158,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Account</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
+             <ul className="space-y-3 text-sm text-white/75">
               <li><Link href="/login" className="hover:text-primary transition-colors">Login</Link></li>
               <li><Link href="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link></li>
               <li><Link href="/orders" className="hover:text-primary transition-colors">Track Order</Link></li>
@@ -167,7 +167,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="container mx-auto px-4 mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Leafly Pakistan. All rights reserved.
+           © {new Date().getFullYear()} Leafly Pakistan. All rights reserved.
         </div>
       </footer>
     </div>
