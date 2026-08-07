@@ -43,6 +43,11 @@ export default function Home() {
             <Leaf size={14} />
             Pakistan's #1 Plant Delivery Platform
           </div>
+          <img
+            src="/leafly-vertical.png"
+            alt="Leafly — bring nature home"
+            className="mx-auto mb-8 h-44 w-auto max-w-[190px] object-contain drop-shadow-sm"
+          />
           <h1 className="text-5xl md:text-7xl font-serif text-foreground mb-6 leading-tight">
             Bring nature home.{" "}
             <span className="text-primary">Keep it thriving.</span>

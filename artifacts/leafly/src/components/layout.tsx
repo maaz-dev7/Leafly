@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useCart } from "@/lib/cart";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Leaf, Moon, Sun, User, LayoutDashboard, ClipboardList, LogOut } from "lucide-react";
+import { ShoppingCart, Moon, Sun, User, LayoutDashboard, ClipboardList, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   DropdownMenu,
@@ -33,8 +33,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 text-primary shrink-0">
-            <Leaf className="h-6 w-6" />
-            <span className="font-serif text-xl font-bold tracking-tight">Leafly</span>
+            <img
+              src="/leafly-horizontal.png"
+              alt="Leafly"
+              className="h-10 w-auto max-w-[150px] object-contain"
+            />
           </Link>
 
           {/* Main Nav */}
@@ -125,9 +128,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <footer className="bg-card border-t mt-auto py-16">
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 text-primary mb-4">
-              <Leaf className="h-6 w-6" />
-              <span className="font-serif text-xl font-bold">Leafly</span>
+            <Link href="/" className="inline-flex text-primary mb-4">
+              <img
+                src="/leafly-vertical.png"
+                alt="Leafly — bring nature home"
+                className="h-36 w-auto max-w-[140px] object-contain object-left"
+              />
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Pakistan's smart plant delivery & care platform. Discover the perfect plants for your space and climate.
