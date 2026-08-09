@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { LayoutDashboard, Leaf, ShoppingBag, CalendarDays, Tag, LogOut, ChevronRight, Package, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PageTransition } from "@/components/motion";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -64,7 +65,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
       <main className="flex-1 bg-muted/30 overflow-auto">
-        {children}
+        <PageTransition pageKey={location}>{children}</PageTransition>
       </main>
     </div>
   );

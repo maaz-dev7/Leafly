@@ -4,3 +4,4 @@
 - [Orval hook queryKey requirement](orval-query-hooks.md) — generated `use*` query hooks require an explicit `queryKey` option or typecheck fails; a recurring gotcha across pages in this repo.
 - [Status enum casing](status-enum-casing.md) — match Select/dropdown option values to the exact casing the backend stores for status fields, or the current selection silently fails to display.
 - [Admin token selection by URL substring](admin-token-context-fetch.md) — fetch wrappers picking admin/customer token via URL substring miss admin-only endpoints outside `/api/admin/*`; key off page context instead.
+- [Framer Motion variant typing](framer-motion-typing.md) — explicit `Variants` typing is needed when variants use custom delays/easing in this workspace.

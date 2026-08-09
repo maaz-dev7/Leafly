@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { Leaf, ShieldCheck, Truck, HeartHandshake, Mail, Phone, MapPin, Clock } from "lucide-react";
+import { motion } from "framer-motion";
+import { cardVariants, RevealMotion } from "@/components/motion";
 
 const CATEGORIES = [
   { label: "Indoor", image: "https://placehold.co/400x400/1B3D2A/FFFFFF?text=Indoor", query: "Indoor" },
@@ -36,33 +38,70 @@ export default function Home() {
     <div className="w-full">
       {/* Hero */}
       <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://placehold.co/1920x1080/1B3D2A/FFFFFF?text=Leafly+Hero')] bg-cover bg-center opacity-20 dark:opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background/60 to-background" />
+        <div className="absolute inset-0 hero-gradient" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1B3D2A]/5 via-white/50 to-background" />
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          {Array.from({ length: 14 }, (_, index) => (
+            <span
+              key={index}
+              className="leaf-particle"
+              style={{
+                left: `${(index * 17 + 5) % 100}%`,
+                animationDelay: `${-(index * 1.8)}s`,
+              }}
+            />
+          ))}
+          <Leaf className="floating-leaf absolute left-[10%] top-[28%] h-10 w-10 text-[#4A7C3F]/20" />
+          <Leaf className="floating-leaf absolute right-[12%] top-[45%] h-14 w-14 text-[#6B8F3E]/20 [animation-delay:1.2s]" />
+        </div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .55, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6"
+          >
             <Leaf size={14} />
             Pakistan's #1 Plant Delivery Platform
-          </div>
-          <img
+          </motion.div>
+          <motion.img
+            initial={{ opacity: 0, scale: .9 }}
+            animate={{ opacity: 1, scale: [1, 1.045, 1] }}
+            transition={{ opacity: { duration: .45 }, scale: { duration: 1.4, delay: .35, ease: "easeInOut" } }}
             src="/leafly-vertical.png"
             alt="Leafly — bring nature home"
             className="mx-auto mb-8 h-44 w-auto max-w-[190px] object-contain drop-shadow-sm"
           />
-          <h1 className="text-5xl md:text-7xl font-serif text-foreground mb-6 leading-tight">
+          <motion.h1
+            initial={{ opacity: 0, y: 34 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .8, delay: .45, ease: [.22, 1, .36, 1] }}
+            className="text-5xl md:text-7xl font-serif text-foreground mb-6 leading-tight"
+          >
             Bring nature home.{" "}
             <span className="text-primary">Keep it thriving.</span>
-          </h1>
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .65, delay: .65, ease: "easeOut" }}
+            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
+          >
             Pakistan's smart plant delivery & care platform. Discover the perfect plants for your space and climate.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .6, delay: .8, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
             <Link href="/shop">
               <Button size="lg" className="text-lg h-13 px-10">Shop Plants</Button>
             </Link>
             <Link href="/hire">
               <Button size="lg" variant="outline" className="text-lg h-13 px-10">Hire a Pro</Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -96,9 +135,16 @@ export default function Home() {
                     🌱 Plants for <span className="text-primary">{searchedCity}</span>
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {recommendations?.slice(0, 4).map(plant => (
+                    {recommendations?.slice(0, 4).map((plant, index) => (
                       <Link key={plant.id} href={`/plant/${plant.id}`}>
-                        <div className="group relative rounded-2xl overflow-hidden bg-card border hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1">
+                        <motion.div
+                          custom={index}
+                          variants={cardVariants}
+                          initial="hidden"
+                          whileInView="visible"
+                          viewport={{ once: true, amount: .12 }}
+                          className="plant-card group relative rounded-2xl overflow-hidden bg-card border cursor-pointer"
+                        >
                           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                           <img
                             src={plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
@@ -109,13 +155,13 @@ export default function Home() {
                             <p className="font-semibold text-sm truncate">{plant.name}</p>
                             <p className="text-primary text-sm font-bold mt-1">Rs. {plant.price.toLocaleString()}</p>
                           </div>
-                        </div>
+                        </motion.div>
                       </Link>
                     ))}
                     {recommendations?.length === 0 && (
                       <p className="col-span-full text-muted-foreground py-8">No plants found for "{searchedCity}". Try Lahore, Karachi, or Islamabad.</p>
                     )}
-                  </div>
+                   </div>
                 </>
               )}
             </div>
@@ -132,7 +178,7 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {CATEGORIES.map(cat => (
             <Link key={cat.label} href={`/shop?category=${cat.query}`}>
-              <div className="group relative aspect-square rounded-3xl overflow-hidden bg-muted cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+              <div className="plant-card group relative aspect-square rounded-3xl overflow-hidden bg-muted cursor-pointer">
                 <img
                   src={cat.image}
                   alt={cat.label}
@@ -163,9 +209,16 @@ export default function Home() {
             <p className="text-center text-muted-foreground py-12">No featured plants available right now.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {featured?.map(plant => (
+              {featured?.map((plant, index) => (
                 <Link key={plant.id} href={`/plant/${plant.id}`}>
-                  <div className="group bg-card rounded-2xl overflow-hidden hover:shadow-xl transition-all cursor-pointer hover:-translate-y-2 border border-border/50">
+                  <motion.div
+                    custom={index}
+                    variants={cardVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: .12 }}
+                    className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border"
+                  >
                     <div className="relative overflow-hidden">
                       <img
                         src={plant.imageUrl || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
@@ -185,7 +238,7 @@ export default function Home() {
                         <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full font-medium">View Details →</span>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </Link>
               ))}
             </div>
@@ -208,7 +261,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {FEATURES.map(f => (
             <div key={f.title} className="text-center group">
-              <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+              <div className="floating-leaf w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                 <f.icon className="text-primary" size={24} />
               </div>
               <h3 className="font-bold text-lg mb-2">{f.title}</h3>

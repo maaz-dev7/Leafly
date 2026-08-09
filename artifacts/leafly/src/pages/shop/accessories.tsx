@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart";
 import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+import { cardVariants } from "@/components/motion";
 
 const TABS = [
   { label: "All Categories", value: "all" },
@@ -75,8 +77,16 @@ export default function AccessoriesShop() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filtered.map(addon => (
-            <div key={addon.id} className="group bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-lg transition-all flex flex-col">
+          {filtered.map((addon, index) => (
+            <motion.div
+              key={addon.id}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: .12 }}
+              className="plant-card group bg-card rounded-2xl overflow-hidden border flex flex-col"
+            >
               <div className="overflow-hidden">
                 <img
                   src={addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Accessory"}
@@ -101,7 +111,7 @@ export default function AccessoriesShop() {
                   </Button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}

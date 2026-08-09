@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Moon, Sun, User, LayoutDashboard, ClipboardList, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
+import { PageTransition } from "@/components/motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,24 +20,36 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const cartItems = useCart(state => state.items);
   const { token, logout } = useAuth();
   const [location] = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     if (isDark) document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
   }, [isDark]);
 
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b border-[#4A7C3F]/60 bg-[#1B3D2A] text-white shadow-sm">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <header className={`sticky top-0 z-50 w-full border-b border-[#4A7C3F]/60 bg-[#1B3D2A] text-white transition-all duration-300 ${
+        isScrolled ? "shadow-xl shadow-[#1B3D2A]/20" : "shadow-sm"
+      }`}>
+        <div className={`container mx-auto flex items-center justify-between px-4 transition-[height] duration-300 ${
+          isScrolled ? "h-14" : "h-16"
+        }`}>
           {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0 rounded-lg bg-[#6B8F3E] px-2 py-0.5">
+          <Link href="/" className="flex items-center shrink-0 rounded-lg bg-white px-2 py-0.5 shadow-sm">
             <img
               src="/leafly-horizontal.png"
               alt="Leafly"
-              className="h-10 w-auto max-w-[150px] object-contain"
+              className="h-[45px] w-auto max-w-[150px] object-contain"
             />
           </Link>
 
@@ -122,7 +135,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="flex-1">
-        {children}
+        <PageTransition pageKey={location}>{children}</PageTransition>
       </main>
 
        <footer className="bg-[#1B3D2A] text-white border-t border-[#4A7C3F]/60 mt-auto py-16">

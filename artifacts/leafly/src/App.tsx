@@ -25,6 +25,7 @@ import AdminVariants from "@/pages/admin/variants";
 import AdminAccessories from "@/pages/admin/accessories";
 import AdminContact from "@/pages/admin/contact";
 import { AdminLayout } from "@/components/admin-layout";
+import { ScrollRevealShell } from "@/components/motion";
 
 const originalFetch = window.fetch;
 window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -86,7 +87,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <ScrollRevealShell>
+            <Router />
+          </ScrollRevealShell>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

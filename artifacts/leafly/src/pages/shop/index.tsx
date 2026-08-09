@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+import { cardVariants } from "@/components/motion";
 
 const CATEGORIES = ["Indoor", "Outdoor", "Succulents", "Flowering", "Air-Purifying"];
 const CITIES = ["Lahore", "Karachi", "Islamabad", "Peshawar", "Quetta", "Multan", "Faisalabad"];
@@ -139,9 +141,16 @@ export default function Shop() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filtered.map(plant => (
+          {filtered.map((plant, index) => (
             <Link key={plant.id} href={`/plant/${plant.id}`}>
-              <div className="group bg-card rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1 border border-border/50 h-full flex flex-col">
+              <motion.div
+                custom={index}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: .12 }}
+                className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border h-full flex flex-col"
+              >
                 <div className="relative overflow-hidden">
                   <img
                     src={plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
@@ -172,7 +181,7 @@ export default function Shop() {
                     <span className="text-xs text-muted-foreground">{plant.size}</span>
                   </div>
                 </CardContent>
-              </div>
+              </motion.div>
             </Link>
           ))}
         </div>
