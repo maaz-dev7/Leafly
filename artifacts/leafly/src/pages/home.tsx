@@ -70,8 +70,16 @@ export default function Home() {
             transition={{ opacity: { duration: .45 }, scale: { duration: 1.4, delay: .35, ease: "easeInOut" } }}
             src="/icon.png"
             alt="Leafly — bring nature home"
-            className="mx-auto mb-8 h-44 w-auto max-w-[190px] object-contain drop-shadow-sm"
+            className="mx-auto mb-2 h-44 w-auto max-w-[190px] object-contain drop-shadow-sm"
           />
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .5, delay: .55, ease: "easeOut" }}
+            className="mb-8 text-4xl font-serif lowercase tracking-tight text-[#1B3D2A]"
+          >
+            leafly
+          </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 34 }}
             animate={{ opacity: 1, y: 0 }}
