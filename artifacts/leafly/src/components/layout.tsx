@@ -38,41 +38,41 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
-      <header className={`sticky top-0 z-50 w-full border-b border-[#6B8F3E]/25 bg-[#F5F8F1] text-[#1B3D2A] transition-all duration-300 ${
+      <header className={`sticky top-0 z-50 w-full border-b border-[#6B8F3E]/20 bg-[#F7FAF4]/95 text-[#1B3D2A] backdrop-blur-xl transition-all duration-300 ${
         isScrolled ? "shadow-xl shadow-[#1B3D2A]/10" : "shadow-sm"
       }`}>
         <div className={`container mx-auto flex items-center justify-between px-4 transition-[height] duration-300 ${
           isScrolled ? "h-14" : "h-16"
         }`}>
           {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0 rounded-lg bg-white px-2 py-0.5 shadow-sm">
+          <Link href="/" className="flex items-center shrink-0 rounded-xl px-1.5 py-1 transition-colors hover:bg-white/55">
             <img
               src="/leafly-brand.png"
               alt="Leafly"
-              className="h-[42px] w-auto max-w-[150px] object-contain"
+              className="h-10 w-auto max-w-[150px] object-contain"
             />
           </Link>
 
           {/* Main Nav */}
           <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#1B3D2A]">
             <Link href="/shop">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/shop" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/shop" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
                 Shop Plants
               </div>
             </Link>
             <Link href="/shop/accessories">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/shop/accessories" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/shop/accessories" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
                 Accessories
               </div>
             </Link>
             <Link href="/hire">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/hire" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/hire" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
                 Hire a Pro
               </div>
             </Link>
             {token && (
               <Link href="/dashboard">
-                <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/dashboard" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
+                <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/dashboard" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
                   Dashboard
                 </div>
               </Link>
@@ -81,12 +81,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-             <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)} className="shrink-0 text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">
+             <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)} className="shrink-0 text-[#1B3D2A] hover:bg-[#E8F1E4] hover:text-[#1B3D2A]">
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
             <Link href="/cart">
-                <Button variant="ghost" size="icon" className="relative shrink-0 text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">
+                <Button variant="ghost" size="icon" className="relative shrink-0 text-[#1B3D2A] hover:bg-[#E8F1E4] hover:text-[#1B3D2A]">
                 <ShoppingCart className="h-5 w-5" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
@@ -99,7 +99,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {token ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                   <Button variant="ghost" size="icon" className="shrink-0 text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">
+                   <Button variant="ghost" size="icon" className="shrink-0 text-[#1B3D2A] hover:bg-[#E8F1E4] hover:text-[#1B3D2A]">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -123,10 +123,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ) : (
               <div className="hidden md:flex items-center gap-2">
                 <Link href="/login">
-                   <Button variant="ghost" size="sm" className="text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">Sign In</Button>
+                   <Button variant="ghost" size="sm" className="text-[#1B3D2A] hover:bg-[#E8F1E4] hover:text-[#1B3D2A]">Sign In</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm">Sign Up</Button>
+                   <Button size="sm" className="border border-[#6B8F3E]/25 bg-[#DCEBD8] text-[#1B3D2A] shadow-none hover:bg-[#CFE3C8] hover:text-[#1B3D2A]">Sign Up</Button>
                 </Link>
               </div>
             )}
