@@ -68,7 +68,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: .9 }}
             animate={{ opacity: 1, scale: [1, 1.045, 1] }}
             transition={{ opacity: { duration: .45 }, scale: { duration: 1.4, delay: .35, ease: "easeInOut" } }}
-            src="/leafly-vertical.png"
+            src="/icon.png"
             alt="Leafly — bring nature home"
             className="mx-auto mb-8 h-44 w-auto max-w-[190px] object-contain drop-shadow-sm"
           />
