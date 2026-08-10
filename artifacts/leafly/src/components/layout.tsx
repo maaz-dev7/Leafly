@@ -38,8 +38,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
-      <header className={`sticky top-0 z-50 w-full border-b border-[#4A7C3F]/60 bg-[#1B3D2A] text-white transition-all duration-300 ${
-        isScrolled ? "shadow-xl shadow-[#1B3D2A]/20" : "shadow-sm"
+      <header className={`sticky top-0 z-50 w-full border-b border-[#6B8F3E]/25 bg-[#F5F8F1] text-[#1B3D2A] transition-all duration-300 ${
+        isScrolled ? "shadow-xl shadow-[#1B3D2A]/10" : "shadow-sm"
       }`}>
         <div className={`container mx-auto flex items-center justify-between px-4 transition-[height] duration-300 ${
           isScrolled ? "h-14" : "h-16"
@@ -47,32 +47,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0 rounded-lg bg-white px-2 py-0.5 shadow-sm">
             <img
-              src="/leafly-horizontal.png"
+              src="/leafly-brand.png"
               alt="Leafly"
-              className="h-[45px] w-auto max-w-[150px] object-contain"
+              className="h-[42px] w-auto max-w-[150px] object-contain"
             />
           </Link>
 
           {/* Main Nav */}
-          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-white">
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#1B3D2A]">
             <Link href="/shop">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/shop" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/shop" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
                 Shop Plants
               </div>
             </Link>
             <Link href="/shop/accessories">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/shop/accessories" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/shop/accessories" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
                 Accessories
               </div>
             </Link>
             <Link href="/hire">
-              <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/hire" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/hire" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
                 Hire a Pro
               </div>
             </Link>
             {token && (
               <Link href="/dashboard">
-                <div className={`px-3 py-2 rounded-lg transition-colors hover:text-white hover:bg-white/10 ${location === "/dashboard" ? "text-[#1B3D2A] bg-white" : "text-white/80"}`}>
+                <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#DCEBD8] ${location === "/dashboard" ? "text-[#1B3D2A] bg-[#DCEBD8]" : "text-[#1B3D2A]/75"}`}>
                   Dashboard
                 </div>
               </Link>
@@ -81,12 +81,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-             <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)} className="shrink-0 text-white hover:bg-white/10 hover:text-white">
+             <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)} className="shrink-0 text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
             <Link href="/cart">
-               <Button variant="ghost" size="icon" className="relative shrink-0 text-white hover:bg-white/10 hover:text-white">
+                <Button variant="ghost" size="icon" className="relative shrink-0 text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">
                 <ShoppingCart className="h-5 w-5" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
@@ -99,7 +99,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {token ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                   <Button variant="ghost" size="icon" className="shrink-0 text-white hover:bg-white/10 hover:text-white">
+                   <Button variant="ghost" size="icon" className="shrink-0 text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -123,7 +123,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ) : (
               <div className="hidden md:flex items-center gap-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 hover:text-white">Sign In</Button>
+                   <Button variant="ghost" size="sm" className="text-[#1B3D2A] hover:bg-[#DCEBD8] hover:text-[#1B3D2A]">Sign In</Button>
                 </Link>
                 <Link href="/signup">
                   <Button size="sm">Sign Up</Button>
@@ -138,48 +138,48 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <PageTransition pageKey={location}>{children}</PageTransition>
       </main>
 
-       <footer className="bg-[#1B3D2A] text-white border-t border-[#4A7C3F]/60 mt-auto py-16">
+        <footer className="bg-[#F5F8F1] text-[#1B3D2A] border-t border-[#6B8F3E]/25 mt-auto py-16">
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <Link href="/" className="inline-flex text-primary mb-4">
+            <Link href="/" className="inline-flex mb-4 rounded-xl bg-white/70 px-3 py-2">
               <img
-                src="/leafly-vertical.png"
-                alt="Leafly — bring nature home"
-                className="h-36 w-auto max-w-[140px] object-contain object-left"
+                src="/leafly-brand.png"
+                alt="Leafly"
+                className="h-14 w-auto max-w-[180px] object-contain object-left"
               />
             </Link>
-             <p className="text-white/75 text-sm leading-relaxed">
+             <p className="text-[#1B3D2A]/70 text-sm leading-relaxed">
               Pakistan's smart plant delivery & care platform. Discover the perfect plants for your space and climate.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Shop</h4>
-             <ul className="space-y-3 text-sm text-white/75">
-              <li><Link href="/shop?category=Indoor" className="hover:text-primary transition-colors">Indoor Plants</Link></li>
-              <li><Link href="/shop?category=Outdoor" className="hover:text-primary transition-colors">Outdoor Plants</Link></li>
-              <li><Link href="/shop/accessories" className="hover:text-primary transition-colors">Accessories</Link></li>
+             <ul className="space-y-3 text-sm text-[#1B3D2A]/70">
+               <li><Link href="/shop?category=Indoor" className="hover:text-[#4A7C3F] transition-colors">Indoor Plants</Link></li>
+               <li><Link href="/shop?category=Outdoor" className="hover:text-[#4A7C3F] transition-colors">Outdoor Plants</Link></li>
+               <li><Link href="/shop/accessories" className="hover:text-[#4A7C3F] transition-colors">Accessories</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Services</h4>
-             <ul className="space-y-3 text-sm text-white/75">
-              <li><Link href="/hire" className="hover:text-primary transition-colors">Hire a Gardener</Link></li>
-              <li><Link href="/hire" className="hover:text-primary transition-colors">Plant Consultation</Link></li>
-              <li><Link href="/hire" className="hover:text-primary transition-colors">Landscaping</Link></li>
-              <li><Link href="/dashboard" className="hover:text-primary transition-colors">Smart Care Dashboard</Link></li>
+              <ul className="space-y-3 text-sm text-[#1B3D2A]/70">
+               <li><Link href="/hire" className="hover:text-[#4A7C3F] transition-colors">Hire a Gardener</Link></li>
+               <li><Link href="/hire" className="hover:text-[#4A7C3F] transition-colors">Plant Consultation</Link></li>
+               <li><Link href="/hire" className="hover:text-[#4A7C3F] transition-colors">Landscaping</Link></li>
+               <li><Link href="/dashboard" className="hover:text-[#4A7C3F] transition-colors">Smart Care Dashboard</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Account</h4>
-             <ul className="space-y-3 text-sm text-white/75">
-              <li><Link href="/login" className="hover:text-primary transition-colors">Login</Link></li>
-              <li><Link href="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link></li>
-              <li><Link href="/orders" className="hover:text-primary transition-colors">Track Order</Link></li>
-              <li><Link href="/admin" className="hover:text-primary transition-colors">Admin Dashboard</Link></li>
+              <ul className="space-y-3 text-sm text-[#1B3D2A]/70">
+               <li><Link href="/login" className="hover:text-[#4A7C3F] transition-colors">Login</Link></li>
+               <li><Link href="/dashboard" className="hover:text-[#4A7C3F] transition-colors">Dashboard</Link></li>
+               <li><Link href="/orders" className="hover:text-[#4A7C3F] transition-colors">Track Order</Link></li>
+               <li><Link href="/admin" className="hover:text-[#4A7C3F] transition-colors">Admin Dashboard</Link></li>
             </ul>
           </div>
         </div>
-        <div className="container mx-auto px-4 mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+         <div className="container mx-auto px-4 mt-8 pt-8 border-t border-[#6B8F3E]/20 text-center text-sm text-[#1B3D2A]/60">
            © {new Date().getFullYear()} Leafly Pakistan. All rights reserved.
         </div>
       </footer>
