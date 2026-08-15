@@ -22,8 +22,11 @@ import {
   AdminListPlantsResponse,
 } from "@workspace/api-zod";
 
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "leafly2024";
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  throw new Error("ADMIN_PASSWORD environment secret is not set. Add it via the Secrets panel.");
+}
 
 const router: IRouter = Router();
 
