@@ -125,8 +125,8 @@ export default function Home() {
         >
           {/* left-edge gradient fade blending into page */}
           <div
-            className="absolute inset-y-0 left-0 z-10 w-[55%] pointer-events-none"
-            style={{ background: "linear-gradient(to right, rgba(250,250,248,1) 0%, rgba(250,250,248,0.7) 15%, rgba(250,250,248,0.2) 30%, rgba(250,250,248,0) 50%)" }}
+            className="absolute inset-y-0 left-0 z-10 w-full pointer-events-none"
+            style={{ background: "linear-gradient(to right, rgba(250,250,248,1) 0%, rgba(250,250,248,0.97) 8%, rgba(250,250,248,0.88) 18%, rgba(250,250,248,0.65) 28%, rgba(250,250,248,0.38) 40%, rgba(250,250,248,0.14) 54%, rgba(250,250,248,0) 68%)" }}
           />
           <img
             src="/hero-section.jpg"
