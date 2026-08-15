@@ -124,7 +124,10 @@ export default function Home() {
           className="hidden md:block md:w-[45%] relative"
         >
           {/* left-edge gradient fade blending into page */}
-          <div className="absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-[#FAFAF8] to-transparent" />
+          <div
+            className="absolute inset-y-0 left-0 z-10 w-[55%] pointer-events-none"
+            style={{ background: "linear-gradient(to right, rgba(250,250,248,1) 0%, rgba(250,250,248,0.7) 15%, rgba(250,250,248,0.2) 30%, rgba(250,250,248,0) 50%)" }}
+          />
           <img
             src="/hero-section.jpg"
             alt="Beautiful living room with lush indoor plants"
