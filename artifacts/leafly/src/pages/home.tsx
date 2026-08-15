@@ -36,73 +36,102 @@ export default function Home() {
 
   return (
     <div className="w-full">
-      {/* Hero */}
-      <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 hero-gradient" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1B3D2A]/5 via-white/50 to-background" />
-        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-          {Array.from({ length: 14 }, (_, index) => (
-            <span
-              key={index}
-              className="leaf-particle"
-              style={{
-                left: `${(index * 17 + 5) % 100}%`,
-                animationDelay: `${-(index * 1.8)}s`,
-              }}
-            />
-          ))}
-          <Leaf className="floating-leaf absolute left-[10%] top-[28%] h-10 w-10 text-[#4A7C3F]/20" />
-          <Leaf className="floating-leaf absolute right-[12%] top-[45%] h-14 w-14 text-[#6B8F3E]/20 [animation-delay:1.2s]" />
-        </div>
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      {/* Hero — magazine split */}
+      <section className="relative flex min-h-[680px] md:min-h-[780px] overflow-hidden bg-[#FAFAF8]">
+
+        {/* LEFT — text content, 55% */}
+        <div className="relative z-10 flex w-full md:w-[55%] flex-col justify-center px-8 sm:px-14 lg:px-20 py-20">
+
+          {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .55, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-[#6B8F3E]/30 bg-[#EDF4E9] px-4 py-1.5 text-sm font-medium text-[#1B3D2A]"
           >
-            <Leaf size={14} />
+            <Leaf size={13} />
             Pakistan's #1 Plant Delivery Platform
           </motion.div>
-          <motion.img
-            initial={{ opacity: 0, scale: .9 }}
-            animate={{ opacity: 1, scale: [1, 1.045, 1] }}
-            transition={{ opacity: { duration: .45 }, scale: { duration: 1.4, delay: .35, ease: "easeInOut" } }}
-            src="/icon.png"
-            alt="Leafly — bring nature home"
-            className="mx-auto mb-8 h-44 w-auto max-w-[190px] object-contain drop-shadow-sm"
-          />
+
+          {/* Heading */}
           <motion.h1
-            initial={{ opacity: 0, y: 34 }}
+            initial={{ opacity: 0, y: 36 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .8, delay: .45, ease: [.22, 1, .36, 1] }}
-            className="text-5xl md:text-7xl font-serif text-foreground mb-6 leading-tight"
+            transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-6 font-serif text-5xl font-bold leading-[1.1] tracking-tight text-[#1B3D2A] md:text-6xl lg:text-[4.25rem]"
           >
             Bring nature home.{" "}
-            <span className="text-primary">Keep it thriving.</span>
+            <span className="text-[#4A7C3F]">Keep it thriving.</span>
           </motion.h1>
+
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .65, delay: .65, ease: "easeOut" }}
-            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
+            transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
+            className="mb-10 max-w-lg text-lg leading-relaxed text-[#1B3D2A]/60"
           >
-            Pakistan's smart plant delivery & care platform. Discover the perfect plants for your space and climate.
+            Pakistan's smart plant delivery &amp; care platform. Discover the perfect plants for your space and climate.
           </motion.p>
+
+          {/* CTA buttons */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .6, delay: .8, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+            className="flex flex-wrap gap-4"
           >
             <Link href="/shop">
-              <Button size="lg" className="text-lg h-13 px-10">Shop Plants</Button>
+              <Button
+                size="lg"
+                className="h-13 bg-[#1B3D2A] px-9 text-base text-white shadow-md hover:bg-[#2a5a3e]"
+              >
+                Shop Plants
+              </Button>
             </Link>
             <Link href="/hire">
-              <Button size="lg" variant="outline" className="text-lg h-13 px-10">Hire a Pro</Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-13 border-[#1B3D2A]/30 px-9 text-base text-[#1B3D2A] hover:bg-[#EDF4E9] hover:border-[#1B3D2A]/50"
+              >
+                Hire a Pro
+              </Button>
             </Link>
           </motion.div>
+
+          {/* Subtle stat strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.75 }}
+            className="mt-14 flex gap-10 border-t border-[#1B3D2A]/10 pt-8"
+          >
+            {[["500+", "Plant varieties"], ["20k+", "Happy customers"], ["7-day", "Guarantee"]].map(([val, label]) => (
+              <div key={label}>
+                <p className="font-serif text-2xl font-bold text-[#1B3D2A]">{val}</p>
+                <p className="text-sm text-[#1B3D2A]/55">{label}</p>
+              </div>
+            ))}
+          </motion.div>
         </div>
+
+        {/* RIGHT — hero image, 45% */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="hidden md:block md:w-[45%] relative"
+        >
+          {/* left-edge gradient fade blending into page */}
+          <div className="absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-[#FAFAF8] to-transparent" />
+          <img
+            src="/hero-section.jpg"
+            alt="Beautiful living room with lush indoor plants"
+            className="h-full w-full object-cover object-center"
+            style={{ borderRadius: "2.5rem 0 0 2.5rem" }}
+          />
+        </motion.div>
       </section>
 
       {/* City search */}
