@@ -132,7 +132,7 @@ export default function Home() {
             src="/hero-section.jpg"
             alt="Beautiful living room with lush indoor plants"
             className="h-full w-full object-cover object-center"
-            style={{ borderRadius: "2.5rem 0 0 2.5rem" }}
+            style={{ borderRadius: "2.5rem 0 0 2.5rem", transform: "scaleX(-1)" }}
           />
         </motion.div>
       </section>
