@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, and, gt } from "drizzle-orm";
 import bcrypt from "bcryptjs";
-import { db, usersTable, passwordResetCodesTable } from "@workspace/db";
+import { db, usersTable, passwordResetCodesTable, emailVerifCodesTable } from "@workspace/db";
 import { signToken, extractToken, verifyToken } from "../lib/auth";
 import { serialize } from "../lib/serialize";
 import { sendMail } from "../lib/mailer";
@@ -12,6 +12,8 @@ import {
   GetMeResponse,
   ForgotPasswordBody,
   ResetPasswordBody,
+  InitiateSignupBody,
+  VerifySignupBody,
 } from "@workspace/api-zod";
 
 const router: IRouter = Router();
@@ -19,6 +21,82 @@ const router: IRouter = Router();
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
+/**
+ * POST /auth/initiate-signup
+ * Step 1: store pending signup, email a verification code.
+ */
+router.post("/auth/initiate-signup", async (req, res): Promise<void> => {
+  const parsed = InitiateSignupBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.message });
+    return;
+  }
+  const { name, email, password, city } = parsed.data;
+  const [existing] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+  if (existing) {
+    res.status(409).json({ error: "This email is already registered. Try signing in instead." });
+    return;
+  }
+  const passwordHash = await bcrypt.hash(password, 10);
+  const code = generateCode();
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+  await db.insert(emailVerifCodesTable).values({ email, name, passwordHash, city: city ?? null, code, expiresAt, used: false });
+  void sendMail({
+    to: email,
+    subject: "Your Leafly verification code",
+    html: `<p>Hi ${name},</p><p>Welcome to Leafly! Your verification code is:</p><h2 style="letter-spacing:0.3em">${code}</h2><p>This code expires in 15 minutes. If you didn't request this, you can ignore this email.</p>`,
+  });
+  req.log.info({ email }, "Signup verification code sent");
+  res.json({ message: "Verification code sent to your email." });
+});
+
+/**
+ * POST /auth/verify-signup
+ * Step 2: verify code, create the user, return auth token.
+ */
+router.post("/auth/verify-signup", async (req, res): Promise<void> => {
+  const parsed = VerifySignupBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid request" });
+    return;
+  }
+  const { email, code } = parsed.data;
+  const [pending] = await db
+    .select()
+    .from(emailVerifCodesTable)
+    .where(
+      and(
+        eq(emailVerifCodesTable.email, email),
+        eq(emailVerifCodesTable.code, code),
+        eq(emailVerifCodesTable.used, false),
+        gt(emailVerifCodesTable.expiresAt, new Date()),
+      ),
+    )
+    .orderBy(emailVerifCodesTable.createdAt);
+  if (!pending) {
+    res.status(400).json({ error: "Invalid or expired code. Please request a new one." });
+    return;
+  }
+  // Double-check email not registered between initiate and verify
+  const [existing] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+  if (existing) {
+    res.status(409).json({ error: "This email is already registered. Try signing in." });
+    return;
+  }
+  const [user] = await db
+    .insert(usersTable)
+    .values({ name: pending.name, email: pending.email, passwordHash: pending.passwordHash, city: pending.city, role: "user" })
+    .returning();
+  await db.update(emailVerifCodesTable).set({ used: true }).where(eq(emailVerifCodesTable.id, pending.id));
+  const token = signToken({ id: user.id, email: user.email, role: user.role });
+  res.status(201).json(
+    LoginResponse.parse(serialize({
+      token,
+      user: { id: user.id, name: user.name, email: user.email, city: user.city, role: user.role, createdAt: user.createdAt },
+    }))
+  );
+});
 
 router.post("/auth/signup", async (req, res): Promise<void> => {
   const parsed = SignupBody.safeParse(req.body);

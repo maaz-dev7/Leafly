@@ -773,6 +773,20 @@ export const GetAdminDashboardResponse = zod.object({
 
 
 
+// ─── Email Verification ────────────────────────────────────────────────────────
+
+export const InitiateSignupBody = zod.object({
+  name: zod.string(),
+  email: zod.string().email(),
+  password: zod.string().min(6),
+  city: zod.string().optional(),
+});
+
+export const VerifySignupBody = zod.object({
+  email: zod.string(),
+  code: zod.string().length(6),
+});
+
 // ─── Object Storage ───────────────────────────────────────────────────────────
 
 export const RequestUploadUrlBody = zod.object({

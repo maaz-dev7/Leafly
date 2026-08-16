@@ -63,12 +63,7 @@ export default function Login() {
 
           <div className="mb-8">
             <h1 className="text-3xl font-serif font-bold mb-2">Sign In</h1>
-            <p className="text-muted-foreground">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-primary font-semibold hover:underline">
-                Create one free
-              </Link>
-            </p>
+            <p className="text-muted-foreground text-sm">Welcome back to your plant journey.</p>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-5">
@@ -119,6 +114,13 @@ export default function Login() {
             >
               {loginMutation.isPending ? "Signing in..." : "Sign In"}
             </Button>
+
+            <p className="text-center text-sm text-muted-foreground pt-1">
+              Don't have an account?{" "}
+              <Link href="/signup" className="text-primary font-semibold hover:underline transition-colors">
+                Sign up now
+              </Link>
+            </p>
           </form>
 
           <div className="mt-8 p-4 bg-muted/50 rounded-xl text-sm text-muted-foreground">

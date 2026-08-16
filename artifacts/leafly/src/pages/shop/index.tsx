@@ -56,75 +56,70 @@ export default function Shop() {
         <p className="text-muted-foreground">Find your perfect green companion.</p>
       </div>
 
-      {/* Search + Filters */}
-      <div className="bg-card border rounded-2xl p-5 mb-8 shadow-sm">
-        <div className="flex flex-col gap-4">
-          {/* Search bar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-            <Input
-              placeholder="Search plants by name, type..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="pl-10 h-11 bg-background"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-              >
-                <X size={18} />
-              </button>
-            )}
-          </div>
-
-          {/* Filter row */}
-          <div className="flex flex-wrap gap-3 items-center">
-            <SlidersHorizontal size={16} className="text-muted-foreground shrink-0" />
-
-            <Select value={category || "all"} onValueChange={setCategory}>
-              <SelectTrigger className="w-[165px] h-9">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-              </SelectContent>
-            </Select>
-
-            <Select value={difficulty || "all"} onValueChange={setDifficulty}>
-              <SelectTrigger className="w-[165px] h-9">
-                <SelectValue placeholder="Care Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Any Difficulty</SelectItem>
-                <SelectItem value="Easy">Easy</SelectItem>
-                <SelectItem value="Medium">Medium</SelectItem>
-                <SelectItem value="Expert">Expert</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={city || "all"} onValueChange={setCity}>
-              <SelectTrigger className="w-[165px] h-9">
-                <SelectValue placeholder="City Climate" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Cities</SelectItem>
-                {CITIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-              </SelectContent>
-            </Select>
-
-            {hasFilters && (
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="h-9 gap-1.5 text-muted-foreground hover:text-foreground">
-                <X size={14} /> Clear Filters
-              </Button>
-            )}
-
-            {!isLoading && (
-              <span className="ml-auto text-sm text-muted-foreground">{filtered.length} plant{filtered.length !== 1 ? "s" : ""} found</span>
-            )}
-          </div>
+      {/* Search + Filters — no wrapper card */}
+      <div className="flex flex-wrap gap-3 items-center mb-8">
+        {/* Search bar — compact width */}
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <Input
+            placeholder="Search plants…"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="pl-9 h-10 bg-background"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X size={15} />
+            </button>
+          )}
         </div>
+
+        <div className="h-6 w-px bg-border hidden sm:block" />
+
+        <Select value={category || "all"} onValueChange={setCategory}>
+          <SelectTrigger className="w-[150px] h-10 hover:border-primary/50 transition-colors cursor-pointer">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            {CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+          </SelectContent>
+        </Select>
+
+        <Select value={difficulty || "all"} onValueChange={setDifficulty}>
+          <SelectTrigger className="w-[150px] h-10 hover:border-primary/50 transition-colors cursor-pointer">
+            <SelectValue placeholder="Difficulty" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Any Difficulty</SelectItem>
+            <SelectItem value="Easy">Easy</SelectItem>
+            <SelectItem value="Medium">Medium</SelectItem>
+            <SelectItem value="Expert">Expert</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={city || "all"} onValueChange={setCity}>
+          <SelectTrigger className="w-[150px] h-10 hover:border-primary/50 transition-colors cursor-pointer">
+            <SelectValue placeholder="City" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Cities</SelectItem>
+            {CITIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+          </SelectContent>
+        </Select>
+
+        {hasFilters && (
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="h-10 gap-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer">
+            <X size={14} /> Clear
+          </Button>
+        )}
+
+        {!isLoading && (
+          <span className="ml-auto text-sm text-muted-foreground">{filtered.length} plant{filtered.length !== 1 ? "s" : ""}</span>
+        )}
       </div>
 
       {/* Plant grid */}
@@ -174,11 +169,13 @@ export default function Shop() {
                 </div>
                 <CardContent className="p-4 flex-1 flex flex-col">
                   <p className="text-xs text-primary font-semibold uppercase tracking-wider mb-1">{plant.category}</p>
-                  <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-2 flex-1">{plant.name}</h3>
-                  <p className="text-sm text-muted-foreground italic mb-3">{plant.scientificName}</p>
-                  <div className="flex items-center justify-between mt-auto">
+                  <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-2">{plant.name}</h3>
+                  <p className="text-sm text-muted-foreground italic mb-4 flex-1">{plant.scientificName}</p>
+                  <div className="flex flex-col gap-2 mt-auto">
                     <p className="text-primary font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
-                    <span className="text-xs font-semibold bg-primary/10 text-primary px-3 py-1 rounded-full group-hover:bg-primary group-hover:text-white transition-all duration-200">View Details →</span>
+                    <span className="text-xs font-semibold bg-primary/10 text-primary py-1.5 rounded-full group-hover:bg-primary group-hover:text-white transition-all duration-200 text-center w-full">
+                      View Details →
+                    </span>
                   </div>
                 </CardContent>
               </motion.div>
