@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import { Layout } from "@/components/layout";
 
 import Home from "@/pages/home";
+import Contact from "@/pages/contact";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
 import ForgotPassword from "@/pages/forgot-password";
@@ -66,6 +67,7 @@ function Router() {
       <Route path="/login"><Layout><Login /></Layout></Route>
       <Route path="/signup"><Layout><Signup /></Layout></Route>
       <Route path="/forgot-password"><Layout><ForgotPassword /></Layout></Route>
+      <Route path="/contact"><Layout><Contact /></Layout></Route>
 
       {/* Admin Routes */}
       <Route path="/admin"><AdminLayout><AdminDashboard /></AdminLayout></Route>

@@ -139,8 +139,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
         <footer className="bg-[#F5F8F1] text-[#1B3D2A] border-t border-[#6B8F3E]/25 mt-auto py-16">
-        <div className="container mx-auto px-5 md:px-20 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
+        <div className="container mx-auto px-5 md:px-20 grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-flex mb-4 rounded-xl bg-white/70 px-3 py-2">
               <img
                 src="/leafly-brand.png"
@@ -175,7 +175,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
                <li><Link href="/login" className="hover:text-[#4A7C3F] transition-colors">Login</Link></li>
                <li><Link href="/dashboard" className="hover:text-[#4A7C3F] transition-colors">Dashboard</Link></li>
                <li><Link href="/orders" className="hover:text-[#4A7C3F] transition-colors">Track Order</Link></li>
-               <li><Link href="/admin" className="hover:text-[#4A7C3F] transition-colors">Admin Dashboard</Link></li>
+               <li><Link href="/contact" className="hover:text-[#4A7C3F] transition-colors">Contact Us</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">About Us</h4>
+            <ul className="space-y-3 text-sm text-[#1B3D2A]/70">
+              <li className="leading-relaxed">Leafly was born from a love of greenery and a desire to make plant ownership easy for every Pakistani household.</li>
+              <li className="leading-relaxed">We curate plants suited to Pakistan's diverse climates — from humid Karachi to cool Islamabad — and deliver them safely, nationwide.</li>
+              <li><Link href="/contact" className="hover:text-[#4A7C3F] transition-colors font-medium">Get in touch →</Link></li>
             </ul>
           </div>
         </div>

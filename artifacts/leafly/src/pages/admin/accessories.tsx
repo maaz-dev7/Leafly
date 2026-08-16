@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { ImageUploader } from "@/components/admin-image-uploader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -169,8 +170,8 @@ export default function AdminAccessories() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Image URL</Label>
-              <Input placeholder="https://..." value={form.imageUrl} onChange={e => setForm({ ...form, imageUrl: e.target.value })} />
+              <Label>Image</Label>
+              <ImageUploader value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} />
             </div>
             <div className="space-y-2">
               <Label>Description</Label>

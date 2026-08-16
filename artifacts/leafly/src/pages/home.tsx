@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useListPlants, useGetFeaturedPlants, getListPlantsQueryKey } from "@workspace/api-client-react";
 import { useQuery } from "@tanstack/react-query";
+// useQuery retained for city recommendations
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
-import { Leaf, ShieldCheck, Truck, HeartHandshake, Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Leaf, ShieldCheck, Truck, HeartHandshake } from "lucide-react";
 import { motion } from "framer-motion";
 import { cardVariants, RevealMotion } from "@/components/motion";
 
@@ -253,11 +254,11 @@ export default function Home() {
                     viewport={{ once: true, amount: .12 }}
                     className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border"
                   >
-                    <div className="relative overflow-hidden">
+                    <div className="relative overflow-hidden bg-[#F0F5EC]">
                       <img
                         src={plant.imageUrl || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
                         alt={plant.name}
-                        className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-64 object-contain group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
                         {plant.difficulty}
@@ -269,7 +270,7 @@ export default function Home() {
                       <p className="text-sm text-muted-foreground italic mt-1">{plant.scientificName}</p>
                       <div className="flex items-center justify-between mt-4">
                         <p className="text-primary font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
-                        <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full font-medium">View Details →</span>
+                        <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full font-medium group-hover:bg-primary group-hover:text-white transition-all duration-200 inline-block">View Details →</span>
                       </div>
                     </div>
                   </motion.div>
@@ -305,9 +306,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <ContactSection />
-
       {/* CTA banner */}
       <section className="bg-primary text-primary-foreground py-20 text-center">
         <div className="container mx-auto px-5 md:px-20 max-w-2xl">
@@ -324,46 +322,3 @@ export default function Home() {
   );
 }
 
-function ContactSection() {
-  const { data: contact } = useQuery({
-    queryKey: ["contact"],
-    queryFn: () => fetch("/api/contact").then(r => r.json()),
-    staleTime: 60_000,
-  });
-
-  const items = [
-    { icon: Mail, label: "Email Us", value: contact?.email, href: `mailto:${contact?.email}` },
-    { icon: Phone, label: "Call / WhatsApp", value: contact?.phone, href: `tel:${contact?.phone}` },
-    { icon: MapPin, label: "Our Office", value: contact?.address, href: undefined },
-    { icon: Clock, label: "Business Hours", value: contact?.hours, href: undefined },
-  ];
-
-  return (
-    <section className="container mx-auto px-5 md:px-20 py-20">
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-          <Phone size={14} /> Get In Touch
-        </div>
-        <h2 className="text-4xl font-serif font-bold mb-3">Contact Us</h2>
-        <p className="text-muted-foreground text-lg">We're here to help you grow. Reach out anytime.</p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-        {items.map(({ icon: Icon, label, value, href }) => (
-          <div key={label} className="bg-card border border-border/60 rounded-2xl p-6 text-center hover:border-primary/40 hover:shadow-md transition-all group">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-              <Icon className="text-primary" size={22} />
-            </div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">{label}</p>
-            {href ? (
-              <a href={href} className="font-medium text-sm hover:text-primary transition-colors leading-snug block">
-                {value || "—"}
-              </a>
-            ) : (
-              <p className="font-medium text-sm leading-snug">{value || "—"}</p>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState } from "react";
 import {
   useAdminListPlants,
   useAdminTogglePlant,
@@ -14,127 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Pencil, Trash2, Plus, UploadCloud, X } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-/** Inline two-step presigned-URL uploader — no external deps needed */
-function useImageUpload(onUploaded: (imageUrl: string) => void) {
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-
-  const upload = useCallback(async (file: File) => {
-    setUploading(true);
-    setUploadError(null);
-    try {
-      // Step 1: request presigned URL
-      const metaRes = await fetch("/api/storage/uploads/request-url", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type || "image/jpeg" }),
-      });
-      if (!metaRes.ok) throw new Error("Failed to get upload URL");
-      const { uploadURL, objectPath } = await metaRes.json();
-
-      // Step 2: PUT directly to object storage
-      const putRes = await fetch(uploadURL, {
-        method: "PUT",
-        body: file,
-        headers: { "Content-Type": file.type || "image/jpeg" },
-      });
-      if (!putRes.ok) throw new Error("Upload to storage failed");
-
-      // objectPath looks like /objects/uploads/<uuid>; serve via API
-      onUploaded(`/api/storage${objectPath}`);
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  }, [onUploaded]);
-
-  return { upload, uploading, uploadError };
-}
-
-/** Drag-and-drop / click image uploader widget */
-function ImageUploader({ value, onChange }: { value: string; onChange: (url: string) => void }) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string>(value);
-  const { upload, uploading, uploadError } = useImageUpload((url) => {
-    onChange(url);
-    setPreview(url);
-  });
-
-  const handleFile = (file: File) => {
-    // Show local preview immediately
-    setPreview(URL.createObjectURL(file));
-    upload(file);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith("image/")) handleFile(file);
-  };
-
-  const clear = () => { onChange(""); setPreview(""); };
-
-  return (
-    <div className="space-y-2">
-      {/* Drop zone */}
-      <div
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        onClick={() => !uploading && fileInputRef.current?.click()}
-        className={`relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed transition-colors cursor-pointer
-          ${uploading ? "opacity-60 pointer-events-none" : "hover:border-[#4A7C3F] hover:bg-[#EDF4E9]/40"}
-          ${preview ? "border-[#4A7C3F]/40 bg-[#EDF4E9]/20 p-2" : "border-muted-foreground/25 bg-muted/30 p-8"}`}
-      >
-        {preview ? (
-          <>
-            <img src={preview} alt="Plant preview" className="h-40 w-full rounded-lg object-cover" />
-            {uploading && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/70">
-                <span className="text-sm font-medium text-[#1B3D2A]">Uploading…</span>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <UploadCloud size={28} className="text-muted-foreground" />
-            <p className="text-sm text-muted-foreground text-center">
-              {uploading ? "Uploading…" : "Click or drag an image here"}
-            </p>
-          </>
-        )}
-      </div>
-
-      {/* Clear + URL fallback row */}
-      <div className="flex gap-2">
-        <Input
-          placeholder="Or paste an image URL…"
-          value={value}
-          onChange={(e) => { onChange(e.target.value); setPreview(e.target.value); }}
-          className="flex-1 text-xs"
-        />
-        {(value || preview) && (
-          <Button type="button" variant="ghost" size="icon" className="shrink-0 text-muted-foreground" onClick={clear}>
-            <X size={15} />
-          </Button>
-        )}
-      </div>
-
-      {uploadError && <p className="text-xs text-destructive">{uploadError}</p>}
-
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
-      />
-    </div>
-  );
-}
+import { ImageUploader, MultiImageUploader } from "@/components/admin-image-uploader";
 
 type PlantForm = {
   name: string;
@@ -144,11 +26,12 @@ type PlantForm = {
   price: number;
   difficulty: string;
   imageUrl: string;
+  images: string[];
   description: string;
 };
 
 const BLANK: PlantForm = {
-  name: "", scientificName: "", category: "Indoor", size: "", price: 0, difficulty: "Easy", imageUrl: "", description: "",
+  name: "", scientificName: "", category: "Indoor", size: "", price: 0, difficulty: "Easy", imageUrl: "", images: [], description: "",
 };
 
 export default function AdminPlants() {
@@ -171,6 +54,7 @@ export default function AdminPlants() {
       price: plant.price ?? 0,
       difficulty: plant.difficulty ?? "Easy",
       imageUrl: plant.imageUrl ?? "",
+      images: plant.images ?? [],
       description: plant.description ?? "",
     });
     setDialog(plant.id);
@@ -329,10 +213,18 @@ export default function AdminPlants() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Plant Image</Label>
+              <Label>Cover Image</Label>
               <ImageUploader
                 value={form.imageUrl}
                 onChange={(url) => setForm({ ...form, imageUrl: url })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Additional Photos <span className="text-muted-foreground font-normal">(up to 4 more)</span></Label>
+              <MultiImageUploader
+                values={form.images}
+                onChange={(urls) => setForm({ ...form, images: urls })}
+                max={4}
               />
             </div>
             <div className="space-y-2">

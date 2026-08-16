@@ -151,11 +151,11 @@ export default function Shop() {
                 viewport={{ once: true, amount: .12 }}
                 className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border h-full flex flex-col"
               >
-                <div className="relative overflow-hidden">
+                <div className="relative overflow-hidden bg-[#F0F5EC]">
                   <img
                     src={plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
                     alt={plant.name}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-52 object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                   {!plant.isAvailable && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -176,9 +176,9 @@ export default function Shop() {
                   <p className="text-xs text-primary font-semibold uppercase tracking-wider mb-1">{plant.category}</p>
                   <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-2 flex-1">{plant.name}</h3>
                   <p className="text-sm text-muted-foreground italic mb-3">{plant.scientificName}</p>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mt-auto">
                     <p className="text-primary font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
-                    <span className="text-xs text-muted-foreground">{plant.size}</span>
+                    <span className="text-xs font-semibold bg-primary/10 text-primary px-3 py-1 rounded-full group-hover:bg-primary group-hover:text-white transition-all duration-200">View Details →</span>
                   </div>
                 </CardContent>
               </motion.div>

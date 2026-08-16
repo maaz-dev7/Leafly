@@ -61,6 +61,7 @@ export const GetPlantResponse = zod.object({
   "difficulty": zod.string(),
   "climateTags": zod.array(zod.string()),
   "imageUrl": zod.string(),
+  "images": zod.array(zod.string()).optional(),
   "description": zod.string().nullish(),
   "isAvailable": zod.boolean(),
   "createdAt": zod.string().optional()
@@ -80,6 +81,7 @@ export const GetFeaturedPlantsResponseItem = zod.object({
   "difficulty": zod.string(),
   "climateTags": zod.array(zod.string()),
   "imageUrl": zod.string(),
+  "images": zod.array(zod.string()).optional(),
   "description": zod.string().nullish(),
   "isAvailable": zod.boolean(),
   "createdAt": zod.string().optional()
@@ -560,6 +562,7 @@ export const AdminListPlantsResponseItem = zod.object({
   "difficulty": zod.string(),
   "climateTags": zod.array(zod.string()),
   "imageUrl": zod.string(),
+  "images": zod.array(zod.string()).optional(),
   "description": zod.string().nullish(),
   "isAvailable": zod.boolean(),
   "createdAt": zod.string().optional()
@@ -579,6 +582,7 @@ export const AdminCreatePlantBody = zod.object({
   "difficulty": zod.string(),
   "climateTags": zod.array(zod.string()).optional(),
   "imageUrl": zod.string().optional(),
+  "images": zod.array(zod.string()).optional(),
   "description": zod.string().optional(),
   "isAvailable": zod.boolean().optional()
 })
@@ -600,6 +604,7 @@ export const AdminUpdatePlantBody = zod.object({
   "difficulty": zod.string().optional(),
   "climateTags": zod.array(zod.string()).optional(),
   "imageUrl": zod.string().optional(),
+  "images": zod.array(zod.string()).optional(),
   "description": zod.string().optional(),
   "isAvailable": zod.boolean().optional()
 })
@@ -614,6 +619,7 @@ export const AdminUpdatePlantResponse = zod.object({
   "difficulty": zod.string(),
   "climateTags": zod.array(zod.string()),
   "imageUrl": zod.string(),
+  "images": zod.array(zod.string()).optional(),
   "description": zod.string().nullish(),
   "isAvailable": zod.boolean(),
   "createdAt": zod.string().optional()

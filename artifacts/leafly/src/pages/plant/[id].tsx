@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useParams } from "wouter";
 import { useGetPlant, useListVariants, useListAddons, OrderAddon, getGetPlantQueryKey } from "@workspace/api-client-react";
 import { useCart } from "@/lib/cart";
@@ -20,6 +20,13 @@ export default function PlantDetail() {
 
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>();
   const [selectedAddons, setSelectedAddons] = useState<OrderAddon[]>([]);
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  const allImages = useMemo(() => {
+    if (!plant) return [];
+    const extra = (plant as any).images as string[] | undefined;
+    return [plant.imageUrl, ...(extra || [])].filter(Boolean) as string[];
+  }, [plant]);
 
   const isAdenium = plant?.name.toLowerCase().includes("adenium");
   const availableVariants = useMemo(() => variants?.filter(v => v.isAvailable) || [], [variants]);
@@ -112,13 +119,14 @@ export default function PlantDetail() {
   return (
     <div className="container mx-auto px-5 md:px-20 py-12 max-w-6xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Image */}
-        <div className="space-y-4">
-          <div className="relative rounded-3xl overflow-hidden bg-muted aspect-square">
+        {/* Image Gallery */}
+        <div className="space-y-3">
+          {/* Main image */}
+          <div className="relative rounded-3xl overflow-hidden bg-[#F0F5EC] aspect-square">
             <img
-               src={plant.imageUrl || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
+              src={allImages[activeImgIndex] || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
               alt={plant.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain transition-opacity duration-200"
             />
             {!plant.isAvailable && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -126,6 +134,27 @@ export default function PlantDetail() {
               </div>
             )}
           </div>
+
+          {/* Thumbnails — only shown when more than 1 image */}
+          {allImages.length > 1 && (
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {allImages.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImgIndex(i)}
+                  className={`shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
+                    activeImgIndex === i
+                      ? "border-primary shadow-md"
+                      : "border-transparent opacity-60 hover:opacity-90"
+                  }`}
+                >
+                  <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-contain bg-[#F0F5EC]" />
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Climate tags */}
           <div className="flex gap-2 flex-wrap">
             {plant.climateTags?.map(tag => (
               <span key={tag} className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">{tag}</span>

@@ -12,6 +12,7 @@ export const plantsTable = pgTable("plants", {
   difficulty: text("difficulty").notNull().default("Easy"),
   climateTags: text("climate_tags").array().notNull().default([]),
   imageUrl: text("image_url").notNull().default("https://placehold.co/400x400/1D9E75/white?text=Leafly"),
+  images: text("images").array().notNull().default([]),
   description: text("description"),
   isAvailable: boolean("is_available").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
