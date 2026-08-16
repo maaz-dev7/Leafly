@@ -70,6 +70,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 Hire a Pro
               </div>
             </Link>
+            <Link href="/contact">
+              <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/contact" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
+                Contact Us
+              </div>
+            </Link>
             {token && (
               <Link href="/dashboard">
                 <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/dashboard" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
