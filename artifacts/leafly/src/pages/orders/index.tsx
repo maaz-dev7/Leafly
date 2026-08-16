@@ -186,7 +186,7 @@ export default function Orders() {
 
   if (!token) {
     return (
-      <div className="container mx-auto px-4 py-24 text-center max-w-md">
+      <div className="container mx-auto px-5 md:px-20 py-24 text-center max-w-md">
         <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
           <ShoppingBag className="text-primary" size={32} />
         </div>
@@ -208,7 +208,7 @@ export default function Orders() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-3xl">
+    <div className="container mx-auto px-5 md:px-20 py-12 max-w-3xl">
       <div className="mb-10 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-serif font-bold">My Orders</h1>

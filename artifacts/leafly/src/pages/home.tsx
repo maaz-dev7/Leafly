@@ -10,11 +10,11 @@ import { motion } from "framer-motion";
 import { cardVariants, RevealMotion } from "@/components/motion";
 
 const CATEGORIES = [
-  { label: "Indoor", image: "https://placehold.co/400x400/1B3D2A/FFFFFF?text=Indoor", query: "Indoor" },
-  { label: "Outdoor", image: "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Outdoor", query: "Outdoor" },
-  { label: "Succulents", image: "https://placehold.co/400x400/6B8F3E/FFFFFF?text=Succulents", query: "Succulents" },
-  { label: "Flowering", image: "https://placehold.co/400x400/6B8F3E/FFFFFF?text=Flowering", query: "Flowering" },
-  { label: "Air-Purifying", image: "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Air+Purifying", query: "Air-Purifying" },
+  { label: "Indoor", image: "/cat-indoor.png", query: "Indoor" },
+  { label: "Outdoor", image: "/cat-outdoor.png", query: "Outdoor" },
+  { label: "Succulents", image: "/cat-succulents.jpg", query: "Succulents" },
+  { label: "Flowering", image: "/cat-flowering.png", query: "Flowering" },
+  { label: "Air-Purifying", image: "/cat-air-purifying.png", query: "Air-Purifying" },
 ];
 
 const FEATURES = [
@@ -139,7 +139,7 @@ export default function Home() {
 
       {/* City search */}
       <section className="bg-primary/5 border-y py-16">
-        <div className="container mx-auto px-4 text-center max-w-2xl">
+        <div className="container mx-auto px-5 md:px-20 text-center max-w-2xl">
           <h2 className="text-3xl font-serif font-bold mb-2">Find plants that thrive in your city</h2>
           <p className="text-muted-foreground mb-8">
             Enter your city to see plants perfectly suited for your local climate in Pakistan.
@@ -202,7 +202,7 @@ export default function Home() {
       </section>
 
       {/* Shop by Category */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-5 md:px-20 py-20">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-serif font-bold mb-3">Shop by Category</h2>
           <p className="text-muted-foreground text-lg">Find the right plant for your space</p>
@@ -214,11 +214,13 @@ export default function Home() {
                 <img
                   src={cat.image}
                   alt={cat.label}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="text-white font-bold text-lg text-center px-2">{cat.label}</span>
-                </div>
+                {/* Bottom gradient — label shows exactly once */}
+                <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 to-transparent" />
+                <span className="absolute bottom-4 inset-x-0 text-center text-white font-bold text-base md:text-lg drop-shadow-md px-2">
+                  {cat.label}
+                </span>
               </div>
             </Link>
           ))}
@@ -227,7 +229,7 @@ export default function Home() {
 
       {/* Featured Plants */}
       <section className="bg-muted/30 py-20">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-5 md:px-20">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-serif font-bold mb-3">Featured Plants</h2>
             <p className="text-muted-foreground text-lg">Our most loved green companions</p>
@@ -285,7 +287,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-5 md:px-20 py-20">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-serif font-bold mb-3">Why Choose Leafly?</h2>
           <p className="text-muted-foreground text-lg">Pakistan's most trusted plant partner</p>
@@ -308,7 +310,7 @@ export default function Home() {
 
       {/* CTA banner */}
       <section className="bg-primary text-primary-foreground py-20 text-center">
-        <div className="container mx-auto px-4 max-w-2xl">
+        <div className="container mx-auto px-5 md:px-20 max-w-2xl">
           <h2 className="text-4xl font-serif font-bold mb-4">Ready to grow something beautiful?</h2>
           <p className="text-primary-foreground/80 text-lg mb-8">
             Join thousands of plant lovers across Pakistan who trust Leafly for their green journey.
@@ -337,7 +339,7 @@ function ContactSection() {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-20">
+    <section className="container mx-auto px-5 md:px-20 py-20">
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-4">
           <Phone size={14} /> Get In Touch

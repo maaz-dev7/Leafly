@@ -43,7 +43,7 @@ export default function AccessoriesShop() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-5 md:px-20 py-12">
       <div className="mb-10">
         <h1 className="text-4xl font-serif font-bold mb-2">Accessories</h1>
         <p className="text-muted-foreground">Everything you need to keep your plants thriving.</p>

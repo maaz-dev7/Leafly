@@ -139,7 +139,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
         <footer className="bg-[#F5F8F1] text-[#1B3D2A] border-t border-[#6B8F3E]/25 mt-auto py-16">
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="container mx-auto px-5 md:px-20 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="inline-flex mb-4 rounded-xl bg-white/70 px-3 py-2">
               <img
@@ -179,7 +179,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
         </div>
-         <div className="container mx-auto px-4 mt-8 pt-8 border-t border-[#6B8F3E]/20 text-center text-sm text-[#1B3D2A]/60">
+         <div className="container mx-auto px-5 md:px-20 mt-8 pt-8 border-t border-[#6B8F3E]/20 text-center text-sm text-[#1B3D2A]/60">
            © {new Date().getFullYear()} Leafly Pakistan. All rights reserved.
         </div>
       </footer>

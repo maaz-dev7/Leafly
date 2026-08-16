@@ -47,7 +47,7 @@ export default function HireAPro() {
 
   if (success) {
     return (
-      <div className="container mx-auto px-4 py-24 text-center max-w-lg">
+      <div className="container mx-auto px-5 md:px-20 py-24 text-center max-w-lg">
         <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg className="w-10 h-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -62,7 +62,7 @@ export default function HireAPro() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-auto px-5 md:px-20 py-16">
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-serif text-primary mb-4">Hire a Pro</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Expert help for your plants and garden, right at your doorstep.</p>

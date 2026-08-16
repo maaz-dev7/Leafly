@@ -49,7 +49,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-5 md:px-20 py-12">
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-4xl font-serif font-bold text-primary mb-2">Smart Care Dashboard</h1>

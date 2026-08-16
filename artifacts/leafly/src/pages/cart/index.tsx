@@ -59,7 +59,7 @@ export default function Cart() {
 
   if (success) {
     return (
-      <div className="container mx-auto px-4 py-24 text-center max-w-lg">
+      <div className="container mx-auto px-5 md:px-20 py-24 text-center max-w-lg">
         <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="text-primary" size={40} />
         </div>
@@ -79,7 +79,7 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-24 text-center">
+      <div className="container mx-auto px-5 md:px-20 py-24 text-center">
         <div className="text-6xl mb-4">🛒</div>
         <h1 className="text-3xl font-serif font-bold mb-4 text-primary">Your Cart is Empty</h1>
         <p className="text-muted-foreground mb-8">Looks like you haven't added any plants yet.</p>
@@ -89,7 +89,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-5 md:px-20 py-12">
       <h1 className="text-3xl font-serif font-bold mb-8">Your Cart</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Items list */}

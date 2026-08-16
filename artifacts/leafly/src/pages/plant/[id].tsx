@@ -61,7 +61,7 @@ export default function PlantDetail() {
 
   if (plantLoading) {
     return (
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="container mx-auto px-5 md:px-20 py-12 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-pulse">
            <div className="h-[500px] bg-[#4A7C3F]/15 rounded-3xl" />
           <div className="space-y-4">
@@ -76,7 +76,7 @@ export default function PlantDetail() {
 
   if (!plant) {
     return (
-      <div className="container mx-auto px-4 py-24 text-center">
+      <div className="container mx-auto px-5 md:px-20 py-24 text-center">
         <div className="text-6xl mb-4">🌿</div>
         <h2 className="text-2xl font-semibold mb-2">Plant not found</h2>
         <p className="text-muted-foreground">This plant may have been removed from our catalog.</p>
@@ -110,7 +110,7 @@ export default function PlantDetail() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="container mx-auto px-5 md:px-20 py-12 max-w-6xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Image */}
         <div className="space-y-4">

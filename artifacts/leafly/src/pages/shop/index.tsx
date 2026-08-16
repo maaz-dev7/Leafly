@@ -50,7 +50,7 @@ export default function Shop() {
   }, [plants, searchTerm]);
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-5 md:px-20 py-12">
       <div className="mb-10">
         <h1 className="text-4xl font-serif font-bold text-foreground mb-2">Plant Shop</h1>
         <p className="text-muted-foreground">Find your perfect green companion.</p>
