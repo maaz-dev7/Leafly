@@ -22,14 +22,11 @@ export async function sendMail(opts: { to: string; subject: string; html: string
     logger.warn("Email notification skipped: GMAIL_USER / GMAIL_APP_PASSWORD not configured");
     return;
   }
-  try {
-    await t.sendMail({
-      from: `Leafly <${process.env.GMAIL_USER}>`,
-      to: opts.to,
-      subject: opts.subject,
-      html: opts.html,
-    });
-  } catch (err) {
-    logger.error({ err }, "Failed to send email notification");
-  }
+  // Let the error propagate so callers (auth routes) can surface it to the user
+  await t.sendMail({
+    from: `Leafly <${process.env.GMAIL_USER}>`,
+    to: opts.to,
+    subject: opts.subject,
+    html: opts.html,
+  });
 }
