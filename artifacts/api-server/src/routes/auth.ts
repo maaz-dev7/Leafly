@@ -42,13 +42,67 @@ router.post("/auth/initiate-signup", async (req, res): Promise<void> => {
   const code = generateCode();
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
   await db.insert(emailVerifCodesTable).values({ email, name, passwordHash, city: city ?? null, code, expiresAt, used: false });
-  void sendMail({
-    to: email,
-    subject: "Your Leafly verification code",
-    html: `<p>Hi ${name},</p><p>Welcome to Leafly! Your verification code is:</p><h2 style="letter-spacing:0.3em">${code}</h2><p>This code expires in 15 minutes. If you didn't request this, you can ignore this email.</p>`,
-  });
+  try {
+    await sendMail({
+      to: email,
+      subject: "Your Leafly verification code",
+      html: `<p>Hi ${name},</p><p>Welcome to Leafly! Your verification code is:</p><h2 style="letter-spacing:0.3em;color:#1B3D2A">${code}</h2><p>This code expires in 15 minutes. If you didn't request this, you can ignore this email.</p>`,
+    });
+  } catch (err) {
+    req.log.error({ err, email }, "Failed to send signup verification email");
+    res.status(500).json({ error: "We couldn't send a verification email. Please try again in a moment." });
+    return;
+  }
   req.log.info({ email }, "Signup verification code sent");
   res.json({ message: "Verification code sent to your email." });
+});
+
+/**
+ * POST /auth/resend-code
+ * Re-sends a fresh verification code for a pending signup.
+ */
+router.post("/auth/resend-code", async (req, res): Promise<void> => {
+  const { email } = req.body as { email?: string };
+  if (!email || typeof email !== "string") {
+    res.status(400).json({ error: "Email is required." });
+    return;
+  }
+  // Make sure we have a pending (unused, not-yet-expired) entry
+  const [pending] = await db
+    .select()
+    .from(emailVerifCodesTable)
+    .where(
+      and(
+        eq(emailVerifCodesTable.email, email),
+        eq(emailVerifCodesTable.used, false),
+        gt(emailVerifCodesTable.expiresAt, new Date()),
+      ),
+    )
+    .orderBy(emailVerifCodesTable.createdAt);
+  if (!pending) {
+    res.status(404).json({ error: "No pending signup found. Please start over." });
+    return;
+  }
+  // Generate a fresh code and push the expiry forward
+  const code = generateCode();
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+  await db
+    .update(emailVerifCodesTable)
+    .set({ code, expiresAt })
+    .where(eq(emailVerifCodesTable.id, pending.id));
+  try {
+    await sendMail({
+      to: email,
+      subject: "Your new Leafly verification code",
+      html: `<p>Hi ${pending.name},</p><p>Here is your new Leafly verification code:</p><h2 style="letter-spacing:0.3em;color:#1B3D2A">${code}</h2><p>This code expires in 15 minutes.</p>`,
+    });
+  } catch (err) {
+    req.log.error({ err, email }, "Failed to resend verification email");
+    res.status(500).json({ error: "We couldn't send the email. Please try again." });
+    return;
+  }
+  req.log.info({ email }, "Verification code resent");
+  res.json({ message: "A new code has been sent to your email." });
 });
 
 /**

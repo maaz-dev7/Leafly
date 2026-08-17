@@ -132,11 +132,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <Button variant="ghost" size="sm" className="text-[#1B3D2A] hover:bg-[#E8F1E4] hover:text-[#1B3D2A] transition-colors cursor-pointer">Sign In</Button>
                   </Link>
                 )}
-                {location !== "/signup" && (
-                  <Link href="/signup">
-                    <Button size="sm" className="border border-[#6B8F3E]/25 bg-[#DCEBD8] text-[#1B3D2A] shadow-none hover:bg-[#CFE3C8] hover:text-[#1B3D2A] transition-colors cursor-pointer">Sign Up</Button>
-                  </Link>
-                )}
               </div>
             )}
           </div>

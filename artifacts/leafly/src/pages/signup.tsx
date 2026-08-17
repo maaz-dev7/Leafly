@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
-import { Leaf, Eye, EyeOff, CheckCircle, Mail, ArrowLeft } from "lucide-react";
+import { Leaf, Eye, EyeOff, CheckCircle, Mail, ArrowLeft, RefreshCw } from "lucide-react";
+
+const RESEND_COOLDOWN = 120; // seconds
 
 const CITIES = ["Lahore", "Karachi", "Islamabad", "Peshawar", "Quetta", "Multan", "Faisalabad", "Rawalpindi", "Sialkot", "Other"];
 
@@ -21,9 +23,29 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0); // seconds remaining
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { login } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
+
+  // Start a 2-minute countdown whenever we enter the verify step
+  const startCooldown = () => {
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
+    setResendCooldown(RESEND_COOLDOWN);
+    cooldownRef.current = setInterval(() => {
+      setResendCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(cooldownRef.current!);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  useEffect(() => () => { if (cooldownRef.current) clearInterval(cooldownRef.current); }, []);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +62,36 @@ export default function Signup() {
         return;
       }
       setStep("verify");
+      startCooldown();
       toast({ title: "Code sent!", description: `Check ${email} for your 6-digit verification code.` });
     } catch {
       toast({ title: "Error", description: "Something went wrong. Please try again.", variant: "destructive" });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return; // still cooling down — ignore stray clicks
+    setResending(true);
+    try {
+      const res = await fetch("/api/auth/resend-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast({ title: "Error", description: data.error || "Couldn't resend code. Please try again.", variant: "destructive" });
+        return;
+      }
+      setCode("");
+      startCooldown();
+      toast({ title: "Code resent!", description: `A new code was sent to ${email}.` });
+    } catch {
+      toast({ title: "Error", description: "Something went wrong. Please try again.", variant: "destructive" });
+    } finally {
+      setResending(false);
     }
   };
 
@@ -223,7 +270,7 @@ export default function Signup() {
                     className="h-14 text-2xl tracking-[0.4em] text-center font-mono"
                     autoFocus
                   />
-                  <p className="text-xs text-muted-foreground">Code expires in 15 minutes</p>
+                  <p className="text-xs text-muted-foreground">Code expires in 15 minutes. Check your spam folder if you don't see it.</p>
                 </div>
 
                 <Button
@@ -234,9 +281,31 @@ export default function Signup() {
                   {loading ? "Verifying…" : "Verify & Create Account"}
                 </Button>
 
+                {/* Resend code row */}
+                <div className="flex flex-col items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={resendCooldown > 0 || resending}
+                    className={`flex items-center gap-1.5 text-sm font-medium transition-all duration-200 rounded-lg px-3 py-1.5 ${
+                      resendCooldown > 0
+                        ? "text-muted-foreground/40 cursor-not-allowed"
+                        : "text-primary hover:bg-primary/10 cursor-pointer"
+                    }`}
+                  >
+                    <RefreshCw size={14} className={resending ? "animate-spin" : ""} />
+                    {resending ? "Sending…" : "Resend code"}
+                  </button>
+                  {resendCooldown > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      Available in {Math.floor(resendCooldown / 60)}:{String(resendCooldown % 60).padStart(2, "0")}
+                    </p>
+                  )}
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => { setStep("form"); setCode(""); }}
+                  onClick={() => { setStep("form"); setCode(""); if (cooldownRef.current) clearInterval(cooldownRef.current); setResendCooldown(0); }}
                   className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mx-auto"
                 >
                   <ArrowLeft size={14} /> Back — change email
