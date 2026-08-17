@@ -49,9 +49,22 @@ router.get("/orders", async (req, res): Promise<void> => {
 
   let orders = await db.select().from(ordersTable).orderBy(ordersTable.createdAt);
 
-  // Admins see all orders; regular users only see their own
+  // Admins see all orders; regular users see only orders matching their userId OR email
   if (user.role !== "admin") {
-    orders = orders.filter(o => o.userId === user.id);
+    orders = orders.filter(o =>
+      o.userId === user.id ||
+      (o.customerEmail && o.customerEmail.toLowerCase() === user.email.toLowerCase())
+    );
+
+    // Auto-link any orders matched purely by email so future lookups are faster
+    const toLink = orders.filter(o => !o.userId && o.customerEmail?.toLowerCase() === user.email.toLowerCase());
+    if (toLink.length > 0) {
+      await Promise.all(
+        toLink.map(o =>
+          db.update(ordersTable).set({ userId: user.id }).where(eq(ordersTable.id, o.id))
+        )
+      );
+    }
   }
 
   const { status, city } = req.query as { status?: string; city?: string };
@@ -73,13 +86,14 @@ router.post("/orders", async (req, res): Promise<void> => {
   const deliveryFee = getDeliveryFee(city);
   const total = itemsTotal + deliveryFee;
   const deliveryEstimate = getDeliveryEstimate(city);
-  // Extract userId from token if present (user must be logged in to order)
+  // Extract userId + email from token (if logged in) or fall back to request body email
   const rawToken = extractToken(req.headers.authorization);
   const tokenUser = rawToken ? verifyToken(rawToken) : null;
   const userId = tokenUser?.id ?? null;
+  const customerEmail = tokenUser?.email ?? (parsed.data as any).customerEmail ?? null;
   const [order] = await db
     .insert(ordersTable)
-    .values({ customerName, customerPhone, city, address, paymentMethod, items, total, status: "Confirmed", deliveryEstimate, userId })
+    .values({ customerName, customerPhone, city, address, paymentMethod, items, total, status: "Confirmed", deliveryEstimate, userId, customerEmail })
     .returning();
   res.status(201).json(GetOrderResponse.parse(serialize(order)));
 

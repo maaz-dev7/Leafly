@@ -297,6 +297,7 @@ export const ListOrdersResponse = zod.array(ListOrdersResponseItem)
 export const CreateOrderBody = zod.object({
   "customerName": zod.string(),
   "customerPhone": zod.string(),
+  "customerEmail": zod.string().optional(),
   "city": zod.string(),
   "address": zod.string(),
   "paymentMethod": zod.string(),

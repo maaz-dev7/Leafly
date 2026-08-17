@@ -14,6 +14,7 @@ export const ordersTable = pgTable("orders", {
   status: text("status").notNull().default("Confirmed"),
   deliveryEstimate: text("delivery_estimate"),
   userId: integer("user_id"),
+  customerEmail: text("customer_email"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

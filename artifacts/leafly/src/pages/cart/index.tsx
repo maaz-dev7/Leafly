@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
 import { useCreateOrder } from "@workspace/api-client-react";
+import { useAuth } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "wouter";
-import { Trash2, Plus, Minus, Truck, CheckCircle, Banknote, CreditCard } from "lucide-react";
+import { Trash2, Plus, Minus, Truck, CheckCircle, Banknote, CreditCard, Info } from "lucide-react";
+
+function decodeTokenEmail(token: string | null): string | null {
+  if (!token) return null;
+  try { return JSON.parse(atob(token.split(".")[1])).email ?? null; } catch { return null; }
+}
 
 const DELIVERY_FEES: Record<string, number> = { lahore: 250 };
 const DEFAULT_DELIVERY = 400;
@@ -20,7 +26,9 @@ const CITIES = ["Lahore", "Karachi", "Islamabad", "Peshawar", "Quetta", "Multan"
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, getTotal, clearCart } = useCart();
-  const [formData, setFormData] = useState({ customerName: "", customerPhone: "", city: "Lahore", address: "", paymentMethod: "" });
+  const { token } = useAuth();
+  const loggedInEmail = decodeTokenEmail(token);
+  const [formData, setFormData] = useState({ customerName: "", customerPhone: "", customerEmail: "", city: "Lahore", address: "", paymentMethod: "" });
   const [card, setCard] = useState({ number: "", name: "", expiry: "", cvv: "" });
   const [success, setSuccess] = useState(false);
 
@@ -35,7 +43,8 @@ export default function Cart() {
     /^\d{2}\/\d{2}$/.test(card.expiry) &&
     card.cvv.length >= 3
   );
-  const canSubmit = !!(formData.customerName && formData.customerPhone && formData.address && formData.paymentMethod && cardValid);
+  const effectiveEmail = loggedInEmail ?? formData.customerEmail;
+  const canSubmit = !!(formData.customerName && formData.customerPhone && formData.address && formData.paymentMethod && effectiveEmail && cardValid);
 
   const orderMutation = useCreateOrder({
     mutation: {
@@ -54,7 +63,7 @@ export default function Cart() {
       price: i.price,
       addons: i.addons.map(a => ({ name: a.name, price: a.price }))
     }));
-    orderMutation.mutate({ data: { ...formData, items: orderItems } });
+    orderMutation.mutate({ data: { ...formData, customerEmail: effectiveEmail ?? undefined, items: orderItems } });
   };
 
   if (success) {
@@ -183,6 +192,26 @@ export default function Cart() {
                   <Label className="text-xs">Phone Number</Label>
                   <Input value={formData.customerPhone} onChange={e => setFormData({ ...formData, customerPhone: e.target.value })} required placeholder="+92 300 000 0000" />
                 </div>
+                {loggedInEmail ? (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 px-3 py-2 rounded-lg">
+                    <Info size={13} className="shrink-0 text-primary" />
+                    Order linked to <span className="font-semibold text-foreground ml-1">{loggedInEmail}</span>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Email <span className="text-destructive">*</span></Label>
+                    <Input
+                      type="email"
+                      value={formData.customerEmail}
+                      onChange={e => setFormData({ ...formData, customerEmail: e.target.value })}
+                      required
+                      placeholder="you@example.com"
+                    />
+                    <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                      <Info size={11} className="shrink-0" /> Sign up with this email later to track your order.
+                    </p>
+                  </div>
+                )}
                 <div className="space-y-1.5">
                   <Label className="text-xs">City</Label>
                   <Select value={formData.city} onValueChange={v => setFormData({ ...formData, city: v })}>
