@@ -119,13 +119,16 @@ function OrderCard({ order }: { order: any }) {
 function OrderTracker() {
   const [orderIdInput, setOrderIdInput] = useState("");
   const [lookupId, setLookupId] = useState<number | null>(null);
+  const [searchKey, setSearchKey] = useState(0);
   const [notFound, setNotFound] = useState(false);
 
-  const { data: order, isFetching, isError } = useGetOrder(lookupId ?? 0, {
+  const { data: order, isFetching, isError, refetch } = useGetOrder(lookupId ?? 0, {
     query: {
       enabled: lookupId !== null,
       retry: false,
-      queryKey: getGetOrderQueryKey(lookupId ?? 0),
+      staleTime: 0,
+      refetchInterval: 20_000,
+      queryKey: [...getGetOrderQueryKey(lookupId ?? 0), searchKey],
     },
   });
 
@@ -138,6 +141,7 @@ function OrderTracker() {
       return;
     }
     setNotFound(false);
+    setSearchKey(k => k + 1);
     setLookupId(id);
   };
 
