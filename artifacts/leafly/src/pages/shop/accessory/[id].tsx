@@ -49,7 +49,7 @@ export default function AccessoryDetail() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-5 md:px-20 py-16">
+      <div className="px-5 md:px-20 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="aspect-square bg-muted animate-pulse rounded-3xl" />
           <div className="space-y-4 pt-4">
@@ -66,7 +66,7 @@ export default function AccessoryDetail() {
 
   if (isError || !addon) {
     return (
-      <div className="container mx-auto px-5 md:px-20 py-24 text-center">
+      <div className="px-5 md:px-20 py-24 text-center">
         <div className="text-5xl mb-4">🪴</div>
         <h2 className="text-2xl font-semibold mb-2">Accessory not found</h2>
         <p className="text-muted-foreground mb-6">This accessory may have been removed or the link is incorrect.</p>
@@ -83,7 +83,7 @@ export default function AccessoryDetail() {
   const typeLabel = TYPE_LABELS[addon.type] || addon.type;
 
   return (
-    <div className="container mx-auto px-5 md:px-20 py-12">
+    <div className="px-5 md:px-20 py-12">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
         <Link href="/shop/accessories" className="hover:text-foreground transition-colors">Accessories</Link>
