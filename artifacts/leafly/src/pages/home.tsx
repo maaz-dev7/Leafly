@@ -176,7 +176,7 @@ export default function Home() {
                           initial="hidden"
                           whileInView="visible"
                           viewport={{ once: true, amount: .12 }}
-                          className="plant-card group relative rounded-2xl overflow-hidden bg-card border cursor-pointer"
+                          className="plant-card group relative rounded-2xl overflow-hidden bg-card border cursor-pointer hover:shadow-md hover:border-primary/40 transition-all duration-200"
                         >
                           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                           <img
@@ -211,7 +211,7 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {CATEGORIES.map(cat => (
             <Link key={cat.label} href={`/shop?category=${cat.query}`}>
-              <div className="plant-card group relative aspect-square rounded-3xl overflow-hidden bg-muted cursor-pointer">
+              <div className="plant-card group relative aspect-square rounded-3xl overflow-hidden bg-muted cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
                 <img
                   src={cat.image}
                   alt={cat.label}
@@ -252,7 +252,7 @@ export default function Home() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: .12 }}
-                    className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border"
+                    className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border hover:shadow-lg hover:border-primary/40 transition-all duration-200"
                   >
                     <div className="relative overflow-hidden bg-[#F0F5EC]">
                       <img
@@ -295,8 +295,8 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {FEATURES.map(f => (
-            <div key={f.title} className="text-center group">
-              <div className="floating-leaf w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+            <div key={f.title} className="text-center group p-6 rounded-2xl border border-transparent hover:border-primary/20 hover:bg-primary/5 hover:shadow-md transition-all duration-200 cursor-default">
+              <div className="floating-leaf w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-200">
                 <f.icon className="text-primary" size={24} />
               </div>
               <h3 className="font-bold text-lg mb-2">{f.title}</h3>

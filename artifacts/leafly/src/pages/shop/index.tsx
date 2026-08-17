@@ -144,7 +144,7 @@ export default function Shop() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: .12 }}
-                className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border h-full flex flex-col"
+                className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border h-full flex flex-col hover:shadow-lg hover:border-primary/40 transition-all duration-200"
               >
                 <div className="relative overflow-hidden bg-[#F0F5EC]">
                   <img

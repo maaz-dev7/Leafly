@@ -85,7 +85,7 @@ export default function AccessoriesShop() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: .12 }}
-              className="plant-card group bg-card rounded-2xl overflow-hidden border flex flex-col"
+              className="plant-card group bg-card rounded-2xl overflow-hidden border flex flex-col cursor-pointer hover:shadow-lg hover:border-primary/40 transition-all duration-200"
             >
               <div className="overflow-hidden">
                 <img
