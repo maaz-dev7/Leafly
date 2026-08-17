@@ -73,7 +73,10 @@ router.post("/orders", async (req, res): Promise<void> => {
   const deliveryFee = getDeliveryFee(city);
   const total = itemsTotal + deliveryFee;
   const deliveryEstimate = getDeliveryEstimate(city);
-  const userId = (req as any).user?.id ?? null;
+  // Extract userId from token if present (user must be logged in to order)
+  const rawToken = extractToken(req.headers.authorization);
+  const tokenUser = rawToken ? verifyToken(rawToken) : null;
+  const userId = tokenUser?.id ?? null;
   const [order] = await db
     .insert(ordersTable)
     .values({ customerName, customerPhone, city, address, paymentMethod, items, total, status: "Confirmed", deliveryEstimate, userId })
