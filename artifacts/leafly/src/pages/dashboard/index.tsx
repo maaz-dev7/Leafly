@@ -71,11 +71,10 @@ function buildCareGuide(difficulty: string, category: string) {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string; bg: string }> = {
-  pending:    { label: "Pending",    icon: Clock,        color: "text-yellow-700 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950/30" },
-  confirmed:  { label: "Confirmed",  icon: CheckCircle,  color: "text-green-700 dark:text-green-400",  bg: "bg-green-50 dark:bg-green-950/30" },
-  processing: { label: "Processing", icon: Package,      color: "text-blue-700 dark:text-blue-400",    bg: "bg-blue-50 dark:bg-blue-950/30" },
-  shipped:    { label: "Shipped",    icon: Truck,        color: "text-purple-700 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/30" },
-  delivered:  { label: "Delivered",  icon: CheckCircle,  color: "text-primary dark:text-green-400",    bg: "bg-primary/10 dark:bg-green-950/30" },
+  confirmed:          { label: "Confirmed",        icon: CheckCircle, color: "text-green-700 dark:text-green-400",  bg: "bg-green-50 dark:bg-green-950/30" },
+  packed:             { label: "Packed",           icon: Package,     color: "text-blue-700 dark:text-blue-400",   bg: "bg-blue-50 dark:bg-blue-950/30" },
+  "out for delivery": { label: "Out for Delivery", icon: Truck,       color: "text-purple-700 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/30" },
+  delivered:          { label: "Delivered",        icon: CheckCircle, color: "text-primary dark:text-green-400",   bg: "bg-primary/10 dark:bg-green-950/30" },
 };
 
 function CarePanel({ plantName, plantId }: { plantName: string; plantId: number }) {

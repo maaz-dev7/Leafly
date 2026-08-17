@@ -7,14 +7,20 @@ import { Label } from "@/components/ui/label";
 import { Link, useLocation } from "wouter";
 import { Package, Truck, CheckCircle, Clock, ChevronRight, ShoppingBag, Search } from "lucide-react";
 
-const STATUS_STEPS = ["pending", "confirmed", "processing", "shipped", "delivered"];
+const STATUS_STEPS = ["confirmed", "packed", "out for delivery", "delivered"];
+
+const STATUS_STEP_LABELS: Record<string, string> = {
+  "confirmed":       "Confirmed",
+  "packed":          "Packed",
+  "out for delivery": "Out for Delivery",
+  "delivered":       "Delivered",
+};
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  pending:    { label: "Pending",    color: "text-[#6B8F3E]", bg: "bg-[#6B8F3E]/15",  icon: Clock },
-  confirmed:  { label: "Confirmed",  color: "text-[#1B3D2A]", bg: "bg-[#1B3D2A]/10",     icon: CheckCircle },
-  processing: { label: "Processing", color: "text-[#4A7C3F]", bg: "bg-[#4A7C3F]/15", icon: Package },
-  shipped:    { label: "Shipped",    color: "text-[#1B3D2A]", bg: "bg-[#6B8F3E]/20", icon: Truck },
-  delivered:  { label: "Delivered",  color: "text-[#1B3D2A]",  bg: "bg-[#4A7C3F]/20",   icon: CheckCircle },
+  confirmed:          { label: "Confirmed",       color: "text-[#1B3D2A]", bg: "bg-[#1B3D2A]/10",  icon: CheckCircle },
+  packed:             { label: "Packed",          color: "text-[#4A7C3F]", bg: "bg-[#4A7C3F]/15",  icon: Package },
+  "out for delivery": { label: "Out for Delivery", color: "text-[#6B8F3E]", bg: "bg-[#6B8F3E]/20",  icon: Truck },
+  delivered:          { label: "Delivered",       color: "text-[#1B3D2A]", bg: "bg-[#4A7C3F]/25",  icon: CheckCircle },
 };
 
 function StatusBar({ status }: { status: string }) {
@@ -75,7 +81,7 @@ function OrderCard({ order }: { order: any }) {
         <StatusBar status={statusKey} />
         <div className="flex justify-between mt-2 text-[10px] text-muted-foreground px-0.5">
           {STATUS_STEPS.map(s => (
-            <span key={s} className="capitalize w-10 text-center leading-tight">{s}</span>
+            <span key={s} className="capitalize text-center leading-tight" style={{ width: `${100 / STATUS_STEPS.length}%` }}>{STATUS_STEP_LABELS[s]}</span>
           ))}
         </div>
       </div>
