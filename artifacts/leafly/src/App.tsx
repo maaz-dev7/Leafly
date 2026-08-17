@@ -28,6 +28,7 @@ import AdminAccessories from "@/pages/admin/accessories";
 import AdminContact from "@/pages/admin/contact";
 import { AdminLayout } from "@/components/admin-layout";
 import { ScrollRevealShell } from "@/components/motion";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { AuthProvider } from "@/lib/auth-provider";
 
 const originalFetch = window.fetch;
@@ -94,6 +95,7 @@ function App() {
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <AuthProvider>
             <ScrollRevealShell>
+              <ScrollToTop />
               <Router />
             </ScrollRevealShell>
           </AuthProvider>

@@ -97,8 +97,14 @@ router.post("/orders", async (req, res): Promise<void> => {
     .returning();
   res.status(201).json(GetOrderResponse.parse(serialize(order)));
 
+  // Build URLs
+  const domain = process.env.REPLIT_DEV_DOMAIN;
+  const siteUrl = domain ? `https://${domain}/leafly` : "https://leafly.replit.app";
+  const trackUrl = `${siteUrl}/orders`;
+
+  // 1. Notify store admin
   const contact = await getContact();
-  const itemsHtml = (items as any[])
+  const adminItemsHtml = (items as any[])
     .map((i) => `<li>${i.quantity} × ${i.plantName ?? "Item"} — Rs. ${i.price}${(i.addons ?? []).length ? ` (+ ${i.addons.map((a: any) => a.name).join(", ")})` : ""}</li>`)
     .join("");
   void sendMail({
@@ -110,11 +116,126 @@ router.post("/orders", async (req, res): Promise<void> => {
       <p><strong>City:</strong> ${city}</p>
       <p><strong>Address:</strong> ${address}</p>
       <p><strong>Payment method:</strong> ${paymentMethod === "online" ? "Online (Card)" : "Cash on Delivery"}</p>
-      <ul>${itemsHtml}</ul>
+      <ul>${adminItemsHtml}</ul>
       <p><strong>Delivery fee:</strong> Rs. ${deliveryFee}</p>
       <p><strong>Total:</strong> Rs. ${total.toLocaleString()}</p>
     `,
   });
+
+  // 2. Send thank-you email to customer (if email is available)
+  if (customerEmail) {
+    const itemRowsHtml = (items as any[]).map((i: any) => {
+      const addonTotal = (i.addons ?? []).reduce((s: number, a: any) => s + (a.price ?? 0), 0);
+      const lineTotal = (i.price + addonTotal) * i.quantity;
+      const addonNote = i.addons?.length ? `<span style="color:#6B8F3E;font-size:12px;"> + ${i.addons.map((a: any) => a.name).join(", ")}</span>` : "";
+      return `
+        <tr>
+          <td style="padding:10px 0;border-bottom:1px solid #E8F1E4;color:#1B3D2A;font-size:14px;">
+            <strong>${i.quantity} × ${i.plantName ?? "Item"}</strong>${addonNote}
+          </td>
+          <td style="padding:10px 0;border-bottom:1px solid #E8F1E4;color:#1B3D2A;font-size:14px;text-align:right;font-weight:600;">
+            Rs. ${lineTotal.toLocaleString()}
+          </td>
+        </tr>`;
+    }).join("");
+
+    void sendMail({
+      to: customerEmail,
+      subject: `🌿 Your Leafly Order #${order.id} is confirmed!`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#F7FAF4;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F7FAF4;padding:32px 16px;">
+    <tr><td align="center">
+      <table width="100%" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(27,61,42,0.08);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#1B3D2A 0%,#4A7C3F 100%);padding:36px 40px;text-align:center;">
+            <div style="font-family:'Georgia',serif;font-size:28px;font-weight:bold;color:#ffffff;letter-spacing:1px;">🌿 Leafly</div>
+            <div style="color:#A8D5A2;font-size:13px;margin-top:4px;letter-spacing:2px;text-transform:uppercase;">Plant Delivery & Care</div>
+          </td>
+        </tr>
+
+        <!-- Thank you message -->
+        <tr>
+          <td style="padding:36px 40px 24px;text-align:center;">
+            <div style="font-size:40px;margin-bottom:16px;">🎉</div>
+            <h1 style="margin:0 0 8px;font-size:24px;color:#1B3D2A;font-family:'Georgia',serif;">Thank you, ${customerName.split(" ")[0]}!</h1>
+            <p style="margin:0;color:#4A7C3F;font-size:15px;">Your order has been received and is being prepared with care.</p>
+          </td>
+        </tr>
+
+        <!-- Order ID badge -->
+        <tr>
+          <td style="padding:0 40px 28px;text-align:center;">
+            <div style="display:inline-block;background:#F0F7EE;border:2px solid #6B8F3E;border-radius:12px;padding:14px 32px;">
+              <div style="color:#6B8F3E;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">Order ID</div>
+              <div style="color:#1B3D2A;font-size:28px;font-weight:800;font-family:'Georgia',serif;">#${order.id}</div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Items -->
+        <tr>
+          <td style="padding:0 40px 8px;">
+            <div style="background:#F7FAF4;border-radius:12px;padding:20px 24px;">
+              <div style="color:#1B3D2A;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Order Summary</div>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                ${itemRowsHtml}
+                <tr>
+                  <td style="padding:10px 0;color:#6B8F3E;font-size:13px;">Delivery fee (${city})</td>
+                  <td style="padding:10px 0;color:#6B8F3E;font-size:13px;text-align:right;">Rs. ${deliveryFee.toLocaleString()}</td>
+                </tr>
+                <tr>
+                  <td style="padding:14px 0 4px;color:#1B3D2A;font-size:16px;font-weight:800;border-top:2px solid #E8F1E4;">Total</td>
+                  <td style="padding:14px 0 4px;color:#1B3D2A;font-size:16px;font-weight:800;text-align:right;border-top:2px solid #E8F1E4;">Rs. ${total.toLocaleString()}</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Delivery estimate -->
+        <tr>
+          <td style="padding:20px 40px;">
+            <div style="background:#EEF7EB;border-left:4px solid #4A7C3F;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:20px;">🚚</span>
+              <div>
+                <div style="color:#1B3D2A;font-weight:600;font-size:14px;">${deliveryEstimate}</div>
+                <div style="color:#4A7C3F;font-size:12px;margin-top:2px;">Payment: ${paymentMethod === "online" ? "Online (Card)" : "Cash on Delivery"}</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- CTA -->
+        <tr>
+          <td style="padding:8px 40px 36px;text-align:center;">
+            <a href="${trackUrl}" style="display:inline-block;background:linear-gradient(135deg,#1B3D2A,#4A7C3F);color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:50px;letter-spacing:0.5px;">
+              🌿 Track Your Order
+            </a>
+            <p style="margin:14px 0 0;color:#9DB8A0;font-size:12px;">You can also find your order by searching for <strong>#${order.id}</strong> on the Track Order page.</p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#F0F7EE;padding:20px 40px;text-align:center;border-top:1px solid #D4EACB;">
+            <p style="margin:0;color:#6B8F3E;font-size:12px;">Questions? Reply to this email or visit <a href="${siteUrl}/contact" style="color:#1B3D2A;font-weight:600;text-decoration:none;">leafly.pk/contact</a></p>
+            <p style="margin:8px 0 0;color:#9DB8A0;font-size:11px;">© ${new Date().getFullYear()} Leafly Pakistan · Pakistan's #1 Plant Delivery Platform</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+    });
+  }
 });
 
 router.get("/orders/:id", async (req, res): Promise<void> => {
