@@ -186,7 +186,7 @@ export default function Home() {
                           />
                           <div className="p-3">
                             <p className="font-semibold text-sm truncate">{plant.name}</p>
-                            <p className="text-primary text-sm font-bold mt-1">Rs. {plant.price.toLocaleString()}</p>
+                            <p className="text-primary dark:text-white text-sm font-bold mt-1">Rs. {plant.price.toLocaleString()}</p>
                           </div>
                         </motion.div>
                       </Link>
@@ -269,7 +269,7 @@ export default function Home() {
                       <h3 className="font-serif text-xl font-bold">{plant.name}</h3>
                       <p className="text-sm text-muted-foreground italic mt-1">{plant.scientificName}</p>
                       <div className="flex items-center justify-between mt-4">
-                        <p className="text-primary font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
+                        <p className="text-primary dark:text-white font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
                         <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full font-medium group-hover:bg-primary group-hover:text-white transition-all duration-200 inline-block">View Details →</span>
                       </div>
                     </div>

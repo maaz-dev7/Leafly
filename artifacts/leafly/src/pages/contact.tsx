@@ -22,7 +22,7 @@ export default function Contact() {
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-5">
           <MessageCircle size={14} /> Get In Touch
         </div>
-        <h1 className="text-5xl font-serif font-bold mb-4 text-[#1B3D2A]">Contact Us</h1>
+        <h1 className="text-5xl font-serif font-bold mb-4 text-[#1B3D2A] dark:text-white">Contact Us</h1>
         <p className="text-muted-foreground text-lg max-w-xl mx-auto">
           We're here to help you grow. Whether you have a question about a plant, an order, or just need some gardening advice — reach out anytime.
         </p>

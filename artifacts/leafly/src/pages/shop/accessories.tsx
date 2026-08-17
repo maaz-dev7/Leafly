@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 import { cardVariants } from "@/components/motion";
+import { Link } from "wouter";
 
 const TABS = [
   { label: "All Categories", value: "all" },
@@ -87,29 +88,33 @@ export default function AccessoriesShop() {
               viewport={{ once: true, amount: .12 }}
               className="plant-card group bg-card rounded-2xl overflow-hidden border flex flex-col cursor-pointer hover:shadow-lg hover:border-primary/40 transition-all duration-200"
             >
-              <div className="overflow-hidden">
-                <img
-                  src={addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Accessory"}
-                  alt={addon.name}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-4 flex flex-col flex-1">
-                <span className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">
-                  {TABS.find(t => t.value === addon.type)?.label || addon.type}
-                </span>
-                <h3 className="font-semibold text-base mb-1">{addon.name}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-2 flex-1">{addon.description}</p>
-                <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                  <span className="font-bold text-lg">Rs. {addon.price.toLocaleString()}</span>
-                  <Button
-                    size="sm"
-                    onClick={() => handleAddToCart(addon)}
-                    className="gap-1.5"
-                  >
-                    <ShoppingCart size={14} /> Add to Cart
-                  </Button>
+              <Link href={`/shop/accessory/${addon.id}`} className="flex flex-col flex-1">
+                <div className="overflow-hidden">
+                  <img
+                    src={addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Accessory"}
+                    alt={addon.name}
+                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <span className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">
+                    {TABS.find(t => t.value === addon.type)?.label || addon.type}
+                  </span>
+                  <h3 className="font-semibold text-base mb-1">{addon.name}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2 flex-1">{addon.description}</p>
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                    <span className="font-bold text-lg">Rs. {addon.price.toLocaleString()}</span>
+                  </div>
+                </div>
+              </Link>
+              <div className="px-4 pb-4">
+                <Button
+                  size="sm"
+                  onClick={(e) => { e.stopPropagation(); handleAddToCart(addon); }}
+                  className="gap-1.5 w-full"
+                >
+                  <ShoppingCart size={14} /> Add to Cart
+                </Button>
               </div>
             </motion.div>
           ))}

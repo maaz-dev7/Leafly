@@ -172,7 +172,7 @@ export default function Shop() {
                   <h3 className="font-semibold text-base leading-snug mb-1 line-clamp-2">{plant.name}</h3>
                   <p className="text-sm text-muted-foreground italic mb-4 flex-1">{plant.scientificName}</p>
                   <div className="flex flex-col gap-2 mt-auto">
-                    <p className="text-primary font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
+                    <p className="text-primary dark:text-white font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
                     <span className="text-xs font-semibold bg-primary/10 text-primary py-1.5 rounded-full group-hover:bg-primary group-hover:text-white transition-all duration-200 text-center w-full">
                       View Details →
                     </span>

@@ -6,13 +6,57 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Banknote, CreditCard } from "lucide-react";
+import { Banknote, CreditCard, Shovel, TreePine, Flower2, Stethoscope, CheckCircle } from "lucide-react";
 
 const services = [
-  { id: "gardener", name: "Gardener", price: "Rs. 500/hr", desc: "Basic maintenance, watering, pruning" },
-  { id: "landscaper", name: "Landscaper", price: "from Rs. 5000", desc: "Full garden design and execution" },
-  { id: "decorator", name: "Plant Decorator", price: "Rs. 2500/room", desc: "Indoor styling and plant placement" },
-  { id: "consultant", name: "Plant Consultant", price: "Rs. 800/session", desc: "Expert advice on plant health" }
+  {
+    id: "gardener",
+    name: "Gardener",
+    price: "Rs. 500/hr",
+    desc: "Basic maintenance, watering, pruning and daily plant care",
+    icon: Shovel,
+    topBorder: "border-t-[3px] border-t-green-500",
+    iconBg: "bg-green-100 dark:bg-green-900/40",
+    iconColor: "text-green-600 dark:text-green-400",
+    cardBg: "bg-green-50/60 dark:bg-green-950/20",
+    priceColor: "text-green-700 dark:text-green-400 font-bold",
+  },
+  {
+    id: "landscaper",
+    name: "Landscaper",
+    price: "from Rs. 5,000",
+    desc: "Full garden design, layout planning and professional execution",
+    icon: TreePine,
+    topBorder: "border-t-[3px] border-t-teal-500",
+    iconBg: "bg-teal-100 dark:bg-teal-900/40",
+    iconColor: "text-teal-600 dark:text-teal-400",
+    cardBg: "bg-teal-50/60 dark:bg-teal-950/20",
+    priceColor: "text-teal-700 dark:text-teal-400 font-bold",
+  },
+  {
+    id: "decorator",
+    name: "Plant Decorator",
+    price: "Rs. 2,500/room",
+    desc: "Indoor plant styling, arrangement and aesthetic placement",
+    icon: Flower2,
+    topBorder: "border-t-[3px] border-t-purple-500",
+    iconBg: "bg-purple-100 dark:bg-purple-900/40",
+    iconColor: "text-purple-600 dark:text-purple-400",
+    cardBg: "bg-purple-50/60 dark:bg-purple-950/20",
+    priceColor: "text-purple-700 dark:text-purple-400 font-bold",
+  },
+  {
+    id: "consultant",
+    name: "Plant Consultant",
+    price: "Rs. 800/session",
+    desc: "Expert advice on plant health, diagnosis and treatment",
+    icon: Stethoscope,
+    topBorder: "border-t-[3px] border-t-sky-500",
+    iconBg: "bg-sky-100 dark:bg-sky-900/40",
+    iconColor: "text-sky-600 dark:text-sky-400",
+    cardBg: "bg-sky-50/60 dark:bg-sky-950/20",
+    priceColor: "text-sky-700 dark:text-sky-400 font-bold",
+  },
 ];
 
 export default function HireAPro() {
@@ -49,9 +93,7 @@ export default function HireAPro() {
     return (
       <div className="container mx-auto px-5 md:px-20 py-24 text-center max-w-lg">
         <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+          <CheckCircle className="w-10 h-10 text-primary" />
         </div>
         <h1 className="text-3xl font-serif mb-4">Booking Confirmed!</h1>
         <p className="text-muted-foreground mb-4">Your pro has been requested. We will contact you shortly to confirm the exact time.</p>
@@ -69,23 +111,45 @@ export default function HireAPro() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="space-y-6">
+        {/* Service Cards */}
+        <div className="space-y-4">
           <h2 className="text-2xl font-serif mb-6">Available Services</h2>
-          {services.map(s => (
-            <Card key={s.id} className={`cursor-pointer transition-colors ${formData.serviceType === s.id ? 'border-primary bg-primary/5' : ''}`} onClick={() => setFormData({...formData, serviceType: s.id})}>
-              <CardContent className="p-6 flex justify-between items-center">
-                <div>
-                  <h3 className="font-serif text-lg font-bold">{s.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{s.desc}</p>
+          {services.map(s => {
+            const Icon = s.icon;
+            const isSelected = formData.serviceType === s.id;
+            return (
+              <div
+                key={s.id}
+                onClick={() => setFormData({ ...formData, serviceType: s.id })}
+                className={`cursor-pointer rounded-2xl border-2 overflow-hidden transition-all duration-200 ${s.topBorder} ${s.cardBg} ${
+                  isSelected
+                    ? "border-primary shadow-md ring-2 ring-primary/20"
+                    : "border-border hover:border-primary/40 hover:shadow-md"
+                }`}
+              >
+                <div className="p-5 flex items-center gap-4">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${s.iconBg}`}>
+                    <Icon className={s.iconColor} size={26} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-serif text-lg font-bold">{s.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{s.desc}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className={`text-sm ${s.priceColor}`}>{s.price}</span>
+                    {isSelected && (
+                      <div className="mt-1 text-xs font-bold text-primary flex items-center gap-1 justify-end">
+                        <CheckCircle size={11} /> Selected
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="font-semibold text-primary">{s.price}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            );
+          })}
         </div>
 
+        {/* Booking Form */}
         <div>
           <Card>
             <CardHeader>
@@ -96,7 +160,7 @@ export default function HireAPro() {
               <form onSubmit={onSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label>Service</Label>
-                  <Select value={formData.serviceType} onValueChange={v => setFormData({...formData, serviceType: v})} required>
+                  <Select value={formData.serviceType} onValueChange={v => setFormData({ ...formData, serviceType: v })} required>
                     <SelectTrigger><SelectValue placeholder="Select a service" /></SelectTrigger>
                     <SelectContent>
                       {services.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
@@ -106,30 +170,30 @@ export default function HireAPro() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Full Name</Label>
-                    <Input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
+                    <Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
                   </div>
                   <div className="space-y-2">
                     <Label>Phone Number</Label>
-                    <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
+                    <Input value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} required />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>City</Label>
-                    <Input value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} required />
+                    <Input value={formData.city} onChange={e => setFormData({ ...formData, city: e.target.value })} required />
                   </div>
                   <div className="space-y-2">
                     <Label>Preferred Date</Label>
-                    <Input type="date" value={formData.preferredDate} onChange={e => setFormData({...formData, preferredDate: e.target.value})} required />
+                    <Input type="date" value={formData.preferredDate} onChange={e => setFormData({ ...formData, preferredDate: e.target.value })} required />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label>Address</Label>
-                  <Input value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} required placeholder="Street, Area" />
+                  <Input value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} required placeholder="Street, Area" />
                 </div>
                 <div className="space-y-2">
                   <Label>Additional Notes (Optional)</Label>
-                  <Textarea value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} rows={3} />
+                  <Textarea value={formData.notes} onChange={e => setFormData({ ...formData, notes: e.target.value })} rows={3} />
                 </div>
 
                 <div className="space-y-2">

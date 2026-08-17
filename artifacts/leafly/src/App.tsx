@@ -18,6 +18,7 @@ import Cart from "@/pages/cart/index";
 import Dashboard from "@/pages/dashboard/index";
 import Orders from "@/pages/orders/index";
 
+import AccessoryDetail from "@/pages/shop/accessory/[id]";
 import AdminDashboard, { AdminLogin } from "@/pages/admin/dashboard";
 import AdminPlants from "@/pages/admin/plants";
 import AdminOrders from "@/pages/admin/orders";
@@ -61,6 +62,7 @@ function Router() {
       <Route path="/shop"><Layout><Shop /></Layout></Route>
       <Route path="/shop/accessories"><Layout><AccessoriesShop /></Layout></Route>
       <Route path="/plant/:id"><Layout><PlantDetail /></Layout></Route>
+      <Route path="/shop/accessory/:id"><Layout><AccessoryDetail /></Layout></Route>
       <Route path="/hire"><Layout><HireAPro /></Layout></Route>
       <Route path="/cart"><Layout><Cart /></Layout></Route>
       <Route path="/dashboard"><Layout><Dashboard /></Layout></Route>

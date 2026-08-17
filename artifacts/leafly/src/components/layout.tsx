@@ -76,11 +76,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </div>
             </Link>
             {token && (
-              <Link href="/dashboard">
-                <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/dashboard" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
-                  Dashboard
-                </div>
-              </Link>
+              <>
+                <Link href="/dashboard">
+                  <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/dashboard" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
+                    Your Plants
+                  </div>
+                </Link>
+                <Link href="/orders">
+                  <div className={`px-3 py-2 rounded-lg transition-colors hover:bg-[#E8F1E4] ${location === "/orders" ? "text-[#1B3D2A] bg-[#E8F1E4]" : "text-[#1B3D2A]/75"}`}>
+                    Track Order
+                  </div>
+                </Link>
+              </>
             )}
           </nav>
 
@@ -111,7 +118,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="flex items-center gap-2 cursor-pointer">
-                      <LayoutDashboard size={15} /> Dashboard
+                      <LayoutDashboard size={15} /> Your Plants
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
