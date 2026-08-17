@@ -5,3 +5,4 @@
 - [Status enum casing](status-enum-casing.md) — match Select/dropdown option values to the exact casing the backend stores for status fields, or the current selection silently fails to display.
 - [Admin token selection by URL substring](admin-token-context-fetch.md) — fetch wrappers picking admin/customer token via URL substring miss admin-only endpoints outside `/api/admin/*`; key off page context instead.
 - [Framer Motion variant typing](framer-motion-typing.md) — explicit `Variants` typing is needed when variants use custom delays/easing in this workspace.
+- [Auth state must be React Context, not useState](auth-context-pattern.md) — useAuth as plain useState gives each component an isolated copy; Zustand conflicts with useLocation hook order; only React Context Provider at app root works.
