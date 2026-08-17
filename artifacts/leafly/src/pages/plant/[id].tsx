@@ -177,7 +177,7 @@ export default function PlantDetail() {
             <h1 className="text-4xl font-serif font-bold text-foreground">{plant.name}</h1>
             <p className="text-lg italic text-muted-foreground mt-1">{plant.scientificName}</p>
             <div className="mt-4">
-              <p className="text-4xl font-bold text-primary">Rs. {total.toLocaleString()}</p>
+              <p className="text-4xl font-bold text-primary dark:text-white">Rs. {total.toLocaleString()}</p>
               {addonsTotal > 0 && (
                 <p className="text-sm text-muted-foreground">Plant: Rs. {currentPrice.toLocaleString()} + Add-ons: Rs. {addonsTotal.toLocaleString()}</p>
               )}

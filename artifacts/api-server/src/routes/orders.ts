@@ -2,6 +2,7 @@ import { Router, type IRouter } from "express";
 import { eq } from "drizzle-orm";
 import { db, ordersTable } from "@workspace/db";
 import { requireAuth, requireAdmin } from "../middlewares/requireAuth";
+import { verifyToken, extractToken } from "../lib/auth";
 import { serialize } from "../lib/serialize";
 import { sendMail } from "../lib/mailer";
 import { getContact } from "../lib/contact-store";
@@ -38,7 +39,21 @@ function getDeliveryEstimate(city: string): string {
 const router: IRouter = Router();
 
 router.get("/orders", async (req, res): Promise<void> => {
+  // Require a valid token — orders are private
+  const rawToken = extractToken(req.headers.authorization);
+  const user = rawToken ? verifyToken(rawToken) : null;
+  if (!user) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
   let orders = await db.select().from(ordersTable).orderBy(ordersTable.createdAt);
+
+  // Admins see all orders; regular users only see their own
+  if (user.role !== "admin") {
+    orders = orders.filter(o => o.userId === user.id);
+  }
+
   const { status, city } = req.query as { status?: string; city?: string };
   if (status) orders = orders.filter(o => o.status.toLowerCase() === status.toLowerCase());
   if (city) orders = orders.filter(o => o.city.toLowerCase() === city.toLowerCase());

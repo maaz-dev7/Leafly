@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useListMyPlants, useMarkWatered, useMarkFertilized, getListMyPlantsQueryKey, useListOrders, getListOrdersQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Droplet, Leaf, Sun, Thermometer, FlaskConical, ChevronDown, ChevronUp, Package, Truck, CheckCircle, Clock, ShoppingBag } from "lucide-react";
@@ -36,12 +37,38 @@ const CARE_TIPS = [
   },
 ];
 
-const PLANT_CARE_GUIDE = [
-  { icon: Droplet, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-950/30", title: "Watering", tip: "Water when top 1–2 cm of soil is dry. Avoid waterlogging — always let excess drain away." },
-  { icon: Sun, color: "text-yellow-500", bg: "bg-yellow-50 dark:bg-yellow-950/30", title: "Sunlight", tip: "Place in bright, indirect light. Direct harsh afternoon sun can scorch leaves." },
-  { icon: Leaf, color: "text-green-600", bg: "bg-green-50 dark:bg-green-950/30", title: "Soil", tip: "Use a well-draining potting mix. Repot every 1–2 years when roots start coming out of the drainage holes." },
-  { icon: Thermometer, color: "text-orange-500", bg: "bg-orange-50 dark:bg-orange-950/30", title: "Temperature", tip: "Keep between 18–28°C. Protect from cold drafts, air-conditioner vents, and sudden temperature changes." },
-];
+function buildCareGuide(difficulty: string, category: string) {
+  const isOutdoor = category?.toLowerCase().includes("outdoor");
+
+  const watering: Record<string, string> = {
+    Easy:   "Water every 7–10 days. Let the top 2 cm of soil dry out before watering again — overwatering is the #1 killer.",
+    Medium: "Water every 4–7 days when the top inch of soil feels dry. Always let excess drain; never let roots sit in water.",
+    Hard:   "Check soil moisture every 1–2 days. Needs vary widely — under or overwatering can both be fatal for this plant.",
+  };
+  const sunlight: Record<string, string> = {
+    Easy:   isOutdoor ? "Thrives in full sun. Give 5–7 hours of direct sunlight daily — ideal for a balcony or garden." : "Tolerates low to medium indirect light. Any well-lit room works, even away from a window.",
+    Medium: isOutdoor ? "Needs 4–6 hours of direct morning sun. Protect from harsh afternoon sun in summer." : "Prefers bright indirect light near a north or east-facing window. Avoid harsh direct afternoon sun.",
+    Hard:   isOutdoor ? "Requires specific sun exposure — read your plant's tag for exact hours. Too much or too little will stress it." : "Has specific light requirements. Usually needs a very bright spot; rotate regularly for even growth.",
+  };
+  const soil: Record<string, string> = {
+    Easy:   "Standard potting mix works perfectly. Repot every 1–2 years or when roots escape the drainage holes.",
+    Medium: "Use a well-draining potting mix. Add 20–30% perlite or coarse sand to prevent waterlogging.",
+    Hard:   "Needs a specialised soil mix (e.g. succulent mix, orchid bark, or a custom blend). Do not use regular garden soil.",
+  };
+  const temp: Record<string, string> = {
+    Easy:   "Adaptable to 15–35°C. Keep away from freezing cold in winter. Can handle mild temperature swings.",
+    Medium: "Prefers 18–28°C. Keep away from air-conditioner vents, cold windowsills, and sudden temperature drops.",
+    Hard:   "Sensitive — maintain 20–25°C consistently. Even brief exposure to cold drafts or heat spikes can cause leaf drop.",
+  };
+
+  const d = difficulty ?? "Medium";
+  return [
+    { icon: Droplet,      color: "text-blue-500",   bg: "bg-blue-50 dark:bg-blue-950/30",   title: "Watering",     tip: watering[d] ?? watering.Medium },
+    { icon: Sun,          color: "text-yellow-500",  bg: "bg-yellow-50 dark:bg-yellow-950/30", title: "Sunlight",  tip: sunlight[d] ?? sunlight.Medium },
+    { icon: Leaf,         color: "text-green-600",   bg: "bg-green-50 dark:bg-green-950/30",  title: "Soil",       tip: soil[d] ?? soil.Medium },
+    { icon: Thermometer,  color: "text-orange-500",  bg: "bg-orange-50 dark:bg-orange-950/30", title: "Temperature", tip: temp[d] ?? temp.Medium },
+  ];
+}
 
 const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string; bg: string }> = {
   pending:    { label: "Pending",    icon: Clock,        color: "text-yellow-700 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950/30" },
@@ -51,25 +78,46 @@ const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; co
   delivered:  { label: "Delivered",  icon: CheckCircle,  color: "text-primary dark:text-green-400",    bg: "bg-primary/10 dark:bg-green-950/30" },
 };
 
-function CarePanel({ plantName }: { plantName: string }) {
+function CarePanel({ plantName, plantId }: { plantName: string; plantId: number }) {
+  const { data: plant, isLoading } = useQuery({
+    queryKey: ["plant-care-detail", plantId],
+    queryFn: async () => {
+      const res = await fetch(`/api/plants/${plantId}`);
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: plantId > 0,
+    staleTime: 10 * 60 * 1000,
+  });
+
+  const guide = buildCareGuide(plant?.difficulty ?? "Medium", plant?.category ?? "");
+
   return (
     <div className="mt-3 rounded-xl border border-border/60 overflow-hidden">
-      <div className="bg-primary/5 px-4 py-2 border-b border-border/40">
+      <div className="bg-primary/5 px-4 py-2 border-b border-border/40 flex items-center justify-between">
         <p className="text-xs font-bold text-primary uppercase tracking-wide">How to Care for {plantName}</p>
+        {plant && <span className="text-[10px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{plant.difficulty} · {plant.category}</span>}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-border/40">
-        {PLANT_CARE_GUIDE.map(tip => (
-          <div key={tip.title} className={`p-3 flex gap-3 items-start ${tip.bg}`}>
-            <div className="shrink-0 mt-0.5">
-              <tip.icon size={16} className={tip.color} />
+      {isLoading ? (
+        <div className="p-4 flex gap-2 items-center text-xs text-muted-foreground">
+          <div className="w-3 h-3 border-2 border-primary/40 border-t-primary rounded-full animate-spin" />
+          Loading care guide…
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-border/40">
+          {guide.map(tip => (
+            <div key={tip.title} className={`p-3 flex gap-3 items-start ${tip.bg}`}>
+              <div className="shrink-0 mt-0.5">
+                <tip.icon size={16} className={tip.color} />
+              </div>
+              <div>
+                <p className="text-xs font-bold mb-0.5">{tip.title}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{tip.tip}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-bold mb-0.5">{tip.title}</p>
-              <p className="text-xs text-muted-foreground leading-relaxed">{tip.tip}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
