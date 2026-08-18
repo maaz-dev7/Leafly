@@ -120,18 +120,44 @@ export default function Signup() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex">
-      {/* Left panel - photo */}
-      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+      {/* Left panel - photo + text overlay */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col justify-between p-12">
         <img
           src="/sign-up-page.jpg"
           alt="Beautiful flowering plants"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-[#1B3D2A]/55 pointer-events-none" />
         {/* Right-edge gradient blending into the form side */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to right, transparent 50%, rgba(255,255,255,0.85) 80%, white 100%)" }}
         />
+        {/* Text content */}
+        <Link href="/" className="relative z-10 flex items-center gap-2 text-white">
+          <Leaf className="h-7 w-7" />
+          <span className="font-serif text-2xl font-bold">Leafly</span>
+        </Link>
+        <div className="relative z-10 space-y-6">
+          <h2 className="text-4xl font-serif font-bold leading-tight text-white">
+            Start your plant journey today.
+          </h2>
+          <ul className="space-y-3">
+            {[
+              "Track orders with real-time delivery status",
+              "Personalized plant care reminders",
+              "Watering & fertilizer schedule dashboard",
+              "Order history at your fingertips",
+            ].map(item => (
+              <li key={item} className="flex items-center gap-3 text-white/90">
+                <CheckCircle size={18} className="shrink-0" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="relative z-10 text-white/50 text-sm">Pakistan's #1 Plant Delivery &amp; Care Platform</p>
       </div>
 
       {/* Right panel */}
