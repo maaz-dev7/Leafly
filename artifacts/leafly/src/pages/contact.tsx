@@ -11,7 +11,7 @@ export default function Contact() {
   const items = [
     { icon: Mail, label: "Email Us", value: contact?.email, href: `mailto:${contact?.email}` },
     { icon: Phone, label: "Call / WhatsApp", value: contact?.phone, href: `tel:${contact?.phone}` },
-    { icon: MapPin, label: "Our Office", value: contact?.address, href: contact?.addressLink || undefined },
+    { icon: MapPin, label: "Our Office", value: contact?.address, href: undefined },
     { icon: Clock, label: "Business Hours", value: contact?.hours, href: undefined },
   ];
 
@@ -51,15 +51,32 @@ export default function Contact() {
       </div>
 
       {/* Map / visual placeholder */}
-      <div className="max-w-5xl mx-auto rounded-3xl overflow-hidden border bg-[#EDF4E9]/60 flex items-center justify-center h-64 md:h-80">
-        <div className="text-center text-[#1B3D2A]/50 space-y-2">
-          <MapPin size={40} className="mx-auto opacity-40" />
-          <p className="text-sm font-medium">Visit us at our office</p>
-          {contact?.address && (
-            <p className="text-sm text-muted-foreground max-w-xs">{contact.address}</p>
-          )}
+      {contact?.addressLink ? (
+        <a
+          href={contact.addressLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="max-w-5xl mx-auto rounded-3xl overflow-hidden border bg-[#EDF4E9]/60 flex items-center justify-center h-64 md:h-80 hover:bg-[#EDF4E9] hover:border-primary/40 hover:shadow-lg transition-all group block"
+        >
+          <div className="text-center text-[#1B3D2A]/60 space-y-2">
+            <MapPin size={40} className="mx-auto opacity-50 group-hover:opacity-80 transition-opacity" />
+            <p className="text-sm font-semibold group-hover:text-primary transition-colors">View on Google Maps →</p>
+            {contact?.address && (
+              <p className="text-sm text-muted-foreground max-w-xs">{contact.address}</p>
+            )}
+          </div>
+        </a>
+      ) : (
+        <div className="max-w-5xl mx-auto rounded-3xl overflow-hidden border bg-[#EDF4E9]/60 flex items-center justify-center h-64 md:h-80">
+          <div className="text-center text-[#1B3D2A]/50 space-y-2">
+            <MapPin size={40} className="mx-auto opacity-40" />
+            <p className="text-sm font-medium">Visit us at our office</p>
+            {contact?.address && (
+              <p className="text-sm text-muted-foreground max-w-xs">{contact.address}</p>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
