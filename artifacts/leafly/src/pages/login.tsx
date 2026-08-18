@@ -35,21 +35,18 @@ export default function Login() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex">
-      {/* Left panel - branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12 text-primary-foreground">
-        <Link href="/" className="flex items-center gap-2">
-          <Leaf className="h-7 w-7" />
-          <span className="font-serif text-2xl font-bold">Leafly</span>
-        </Link>
-        <div>
-          <h2 className="text-4xl font-serif font-bold leading-tight mb-4">
-            Welcome back to your green journey.
-          </h2>
-          <p className="text-primary-foreground/70 text-lg">
-            Sign in to track your orders, manage your plant care dashboard, and access your order history.
-          </p>
-        </div>
-        <p className="text-primary-foreground/50 text-sm">Pakistan's #1 Plant Delivery & Care Platform</p>
+      {/* Left panel - photo */}
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+        <img
+          src="/sign-in-page.jpg"
+          alt="Beautiful flowering plant"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        {/* Right-edge gradient blending into the form side */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(to right, transparent 50%, rgba(255,255,255,0.85) 80%, white 100%)" }}
+        />
       </div>
 
       {/* Right panel - form */}

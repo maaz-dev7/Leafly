@@ -307,10 +307,15 @@ export default function Home() {
       </section>
 
       {/* CTA banner */}
-      <section className="bg-primary text-primary-foreground py-20 text-center">
-        <div className="container mx-auto px-5 md:px-20 max-w-2xl">
+      <section
+        className="relative py-20 text-center overflow-hidden"
+        style={{ backgroundImage: "url('/ready-to-grow.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}
+      >
+        {/* Dark green overlay */}
+        <div className="absolute inset-0 bg-[#1B3D2A]/60 pointer-events-none" />
+        <div className="relative z-10 container mx-auto px-5 md:px-20 max-w-2xl text-white">
           <h2 className="text-4xl font-serif font-bold mb-4">Ready to grow something beautiful?</h2>
-          <p className="text-primary-foreground/80 text-lg mb-8">
+          <p className="text-white/80 text-lg mb-8">
             Join thousands of plant lovers across Pakistan who trust Leafly for their green journey.
           </p>
           <Link href="/shop">

@@ -120,31 +120,18 @@ export default function Signup() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex">
-      {/* Left panel - branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12 text-primary-foreground">
-        <Link href="/" className="flex items-center gap-2">
-          <Leaf className="h-7 w-7" />
-          <span className="font-serif text-2xl font-bold">Leafly</span>
-        </Link>
-        <div className="space-y-6">
-          <h2 className="text-4xl font-serif font-bold leading-tight">
-            Start your plant journey today.
-          </h2>
-          <ul className="space-y-3">
-            {[
-              "Track orders with real-time delivery status",
-              "Personalized plant care reminders",
-              "Watering & fertilizer schedule dashboard",
-              "Order history at your fingertips",
-            ].map(item => (
-              <li key={item} className="flex items-center gap-3 text-primary-foreground/90">
-                <CheckCircle size={18} className="shrink-0" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <p className="text-primary-foreground/50 text-sm">Pakistan's #1 Plant Delivery & Care Platform</p>
+      {/* Left panel - photo */}
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+        <img
+          src="/sign-up-page.jpg"
+          alt="Beautiful flowering plants"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        {/* Right-edge gradient blending into the form side */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(to right, transparent 50%, rgba(255,255,255,0.85) 80%, white 100%)" }}
+        />
       </div>
 
       {/* Right panel */}
