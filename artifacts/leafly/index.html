@@ -12,7 +12,33 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Leafly" />
     <meta name="twitter:description" content="Leafly — built on Replit. Update this description to reflect the app." />
-    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="icon" type="image/png" href="/icon.png" id="favicon" />
+    <script>
+      (function () {
+        function applyDarkFavicon() {
+          var canvas = document.createElement('canvas');
+          canvas.width = 64; canvas.height = 64;
+          var ctx = canvas.getContext('2d');
+          var img = new Image();
+          img.src = '/icon.png';
+          img.onload = function () {
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(32, 32, 31, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.drawImage(img, 4, 4, 56, 56);
+            var link = document.getElementById('favicon');
+            link.href = canvas.toDataURL('image/png');
+          };
+        }
+        function resetFavicon() {
+          document.getElementById('favicon').href = '/icon.png';
+        }
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        if (mq.matches) applyDarkFavicon();
+        mq.addEventListener('change', function (e) { e.matches ? applyDarkFavicon() : resetFavicon(); });
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

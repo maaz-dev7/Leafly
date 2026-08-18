@@ -40,8 +40,8 @@ export default function Home() {
       {/* Hero — magazine split */}
       <section className="relative flex min-h-[680px] md:min-h-[780px] overflow-hidden bg-[#FAFAF8]">
 
-        {/* LEFT — text content, 55% */}
-        <div className="relative z-10 flex w-full md:w-[55%] flex-col justify-center px-8 sm:px-14 lg:px-20 py-20">
+        {/* LEFT — text content, 40% */}
+        <div className="relative z-10 flex w-full md:w-[40%] flex-col justify-center px-8 sm:px-14 lg:px-20 py-20">
 
           {/* Badge */}
           <motion.div
@@ -117,17 +117,17 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* RIGHT — hero image, 45% */}
+        {/* RIGHT — hero image, 60% */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="hidden md:block md:w-[45%] relative"
+          className="hidden md:block md:w-[60%] relative"
         >
           {/* left-edge gradient fade blending into page */}
           <div
             className="absolute inset-y-0 left-0 z-10 w-full pointer-events-none"
-            style={{ background: "linear-gradient(to right, rgba(250,250,248,1) 0%, rgba(250,250,248,0.97) 8%, rgba(250,250,248,0.88) 18%, rgba(250,250,248,0.65) 28%, rgba(250,250,248,0.38) 40%, rgba(250,250,248,0.14) 54%, rgba(250,250,248,0) 68%)" }}
+            style={{ background: "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 10%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0) 45%)" }}
           />
           <img
             src="/hero-section.jpg"
