@@ -8,6 +8,7 @@ export const contactSettingsTable = pgTable("contact_settings", {
   phone: text("phone").notNull().default("+92 300 123 4567"),
   address: text("address").notNull().default("123 Garden Street, Model Town, Lahore, Pakistan"),
   hours: text("hours").notNull().default("Mon–Sat, 9am–6pm PKT"),
+  addressLink: text("address_link").notNull().default(""),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

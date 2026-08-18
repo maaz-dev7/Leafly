@@ -50,10 +50,7 @@ export default function Login() {
           style={{ background: "linear-gradient(to right, transparent 50%, rgba(255,255,255,0.85) 80%, white 100%)" }}
         />
         {/* Text content */}
-        <Link href="/" className="relative z-10 flex items-center gap-2 text-white">
-          <Leaf className="h-7 w-7" />
-          <span className="font-serif text-2xl font-bold">Leafly</span>
-        </Link>
+        <div className="relative z-10 h-7" />
         <div className="relative z-10">
           <h2 className="text-4xl font-serif font-bold leading-tight mb-4 text-white">
             Welcome back to your green journey.

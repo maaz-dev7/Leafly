@@ -159,12 +159,13 @@ router.get("/admin/contact", requireAdmin, async (_req, res): Promise<void> => {
 });
 
 router.patch("/admin/contact", requireAdmin, async (req, res): Promise<void> => {
-  const { email, phone, address, hours } = req.body ?? {};
+  const { email, phone, address, hours, addressLink } = req.body ?? {};
   const updates: Record<string, string> = {};
   if (typeof email === "string") updates.email = email;
   if (typeof phone === "string") updates.phone = phone;
   if (typeof address === "string") updates.address = address;
   if (typeof hours === "string") updates.hours = hours;
+  if (typeof addressLink === "string") updates.addressLink = addressLink;
   const updated = await setContact(updates);
   res.json(updated);
 });

@@ -237,13 +237,13 @@ export default function Home() {
           </div>
 
           {featuredLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[1,2,3].map(i => <div key={i} className="h-96 bg-muted animate-pulse rounded-2xl" />)}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[1,2,3,4].map(i => <div key={i} className="h-80 bg-muted animate-pulse rounded-2xl" />)}
             </div>
           ) : featured?.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">No featured plants available right now.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {featured?.map((plant, index) => (
                 <Link key={plant.id} href={`/plant/${plant.id}`}>
                   <motion.div
@@ -252,25 +252,25 @@ export default function Home() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: .12 }}
-                    className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border hover:shadow-lg hover:border-primary/40 transition-all duration-200"
+                    className="plant-card group bg-card rounded-2xl overflow-hidden cursor-pointer border h-full flex flex-col hover:shadow-lg hover:border-primary/40 transition-all duration-200"
                   >
                     <div className="relative overflow-hidden bg-[#F0F5EC]">
                       <img
                         src={plant.imageUrl || "https://placehold.co/800x800/4A7C3F/FFFFFF?text=Plant"}
                         alt={plant.name}
-                        className="w-full h-64 object-contain group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
+                      <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
                         {plant.difficulty}
                       </div>
                     </div>
-                    <div className="p-6">
+                    <div className="p-4 flex-1 flex flex-col">
                       <p className="text-xs text-primary font-semibold uppercase tracking-wider mb-1">{plant.category}</p>
-                      <h3 className="font-serif text-xl font-bold">{plant.name}</h3>
-                      <p className="text-sm text-muted-foreground italic mt-1">{plant.scientificName}</p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="text-primary dark:text-white font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
-                        <span className="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full font-medium group-hover:bg-primary group-hover:text-white transition-all duration-200 inline-block">View Details →</span>
+                      <h3 className="font-serif text-base font-bold leading-snug line-clamp-2">{plant.name}</h3>
+                      <p className="text-sm text-muted-foreground italic mt-1 flex-1">{plant.scientificName}</p>
+                      <div className="flex flex-col gap-2 mt-3">
+                        <p className="text-primary dark:text-white font-bold text-base">Rs. {plant.price.toLocaleString()}</p>
+                        <span className="text-xs font-semibold bg-primary text-white py-1.5 rounded-full transition-transform duration-200 hover:scale-105 text-center w-full inline-block">View Details →</span>
                       </div>
                     </div>
                   </motion.div>

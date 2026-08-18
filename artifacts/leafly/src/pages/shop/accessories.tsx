@@ -93,7 +93,7 @@ export default function AccessoriesShop() {
                   <img
                     src={addon.imageUrl || TYPE_IMAGES[addon.type] || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Accessory"}
                     alt={addon.name}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <div className="p-4 flex flex-col flex-1">

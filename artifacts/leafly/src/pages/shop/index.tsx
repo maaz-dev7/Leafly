@@ -150,7 +150,7 @@ export default function Shop() {
                   <img
                     src={plant.imageUrl || "https://placehold.co/400x400/4A7C3F/FFFFFF?text=Plant"}
                     alt={plant.name}
-                    className="w-full h-52 object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {!plant.isAvailable && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -173,7 +173,7 @@ export default function Shop() {
                   <p className="text-sm text-muted-foreground italic mb-4 flex-1">{plant.scientificName}</p>
                   <div className="flex flex-col gap-2 mt-auto">
                     <p className="text-primary dark:text-white font-bold text-lg">Rs. {plant.price.toLocaleString()}</p>
-                    <span className="text-xs font-semibold bg-primary/10 text-primary py-1.5 rounded-full group-hover:bg-primary group-hover:text-white transition-all duration-200 text-center w-full">
+                    <span className="text-xs font-semibold bg-primary text-white py-1.5 rounded-full transition-transform duration-200 hover:scale-105 text-center w-full inline-block">
                       View Details →
                     </span>
                   </div>

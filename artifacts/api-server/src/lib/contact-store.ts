@@ -6,6 +6,7 @@ export interface ContactInfo {
   phone: string;
   address: string;
   hours: string;
+  addressLink: string;
 }
 
 async function ensureRow() {
@@ -17,7 +18,7 @@ async function ensureRow() {
 
 export async function getContact(): Promise<ContactInfo> {
   const row = await ensureRow();
-  return { email: row.email, phone: row.phone, address: row.address, hours: row.hours };
+  return { email: row.email, phone: row.phone, address: row.address, hours: row.hours, addressLink: row.addressLink };
 }
 
 export async function setContact(updates: Partial<ContactInfo>): Promise<ContactInfo> {
@@ -27,5 +28,5 @@ export async function setContact(updates: Partial<ContactInfo>): Promise<Contact
     .set({ ...updates, updatedAt: new Date() })
     .where(eq(contactSettingsTable.id, row.id))
     .returning();
-  return { email: updated.email, phone: updated.phone, address: updated.address, hours: updated.hours };
+  return { email: updated.email, phone: updated.phone, address: updated.address, hours: updated.hours, addressLink: updated.addressLink };
 }

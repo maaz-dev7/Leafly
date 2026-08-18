@@ -11,7 +11,7 @@ export default function Contact() {
   const items = [
     { icon: Mail, label: "Email Us", value: contact?.email, href: `mailto:${contact?.email}` },
     { icon: Phone, label: "Call / WhatsApp", value: contact?.phone, href: `tel:${contact?.phone}` },
-    { icon: MapPin, label: "Our Office", value: contact?.address, href: undefined },
+    { icon: MapPin, label: "Our Office", value: contact?.address, href: contact?.addressLink || undefined },
     { icon: Clock, label: "Business Hours", value: contact?.hours, href: undefined },
   ];
 

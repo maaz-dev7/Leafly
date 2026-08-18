@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, Clock, Save } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Save, Link2 } from "lucide-react";
 
 interface ContactInfo {
   email: string;
   phone: string;
   address: string;
   hours: string;
+  addressLink: string;
 }
 
 async function apiFetch(path: string, opts?: RequestInit) {
@@ -20,7 +21,7 @@ async function apiFetch(path: string, opts?: RequestInit) {
 
 export default function AdminContact() {
   const { toast } = useToast();
-  const [form, setForm] = useState<ContactInfo>({ email: "", phone: "", address: "", hours: "" });
+  const [form, setForm] = useState<ContactInfo>({ email: "", phone: "", address: "", hours: "", addressLink: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -127,6 +128,16 @@ export default function AdminContact() {
               value={form.hours}
               onChange={e => setForm({ ...form, hours: e.target.value })}
             />
+          </div>
+          <div className="space-y-2">
+            <Label className="flex items-center gap-2"><Link2 size={14} /> Office Address Link (Google Maps)</Label>
+            <Input
+              type="url"
+              placeholder="https://maps.google.com/..."
+              value={form.addressLink}
+              onChange={e => setForm({ ...form, addressLink: e.target.value })}
+            />
+            <p className="text-xs text-muted-foreground">Paste a Google Maps link — customers can tap it to get directions.</p>
           </div>
           <Button type="submit" disabled={saving} className="w-full gap-2">
             <Save size={16} /> {saving ? "Saving..." : "Save Contact Details"}
