@@ -127,7 +127,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout} className="flex items-center gap-2 text-destructive cursor-pointer">
+                  <DropdownMenuItem onClick={logout} className="flex items-center gap-2 text-destructive dark:text-red-400 cursor-pointer focus:text-destructive dark:focus:text-red-400">
                     <LogOut size={15} /> Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -136,7 +136,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div className="hidden md:flex items-center gap-2">
                 {location !== "/login" && location !== "/signup" && (
                   <Link href="/login">
-                    <Button variant="ghost" size="sm" className="text-[#1B3D2A] hover:bg-[#E8F1E4] hover:text-[#1B3D2A] transition-colors cursor-pointer">Sign In</Button>
+                    <Button size="sm" className="bg-[#1B3D2A] text-white hover:bg-[#2a5a3e] rounded-full px-5 transition-colors cursor-pointer">Sign In</Button>
                   </Link>
                 )}
               </div>
@@ -194,7 +194,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-3 text-sm text-[#1B3D2A]/70">
               <li className="leading-relaxed">Leafly was born from a love of greenery and a desire to make plant ownership easy for every Pakistani household.</li>
               <li className="leading-relaxed">We curate plants suited to Pakistan's diverse climates — from humid Karachi to cool Islamabad — and deliver them safely, nationwide.</li>
-              <li><Link href="/contact" className="hover:text-[#4A7C3F] transition-colors font-medium">Get in touch →</Link></li>
+              <li>
+                <Link href="/contact">
+                  <span className="inline-flex items-center gap-1.5 bg-[#1B3D2A] text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-[#2a5a3e] transition-colors cursor-pointer">
+                    Get in touch →
+                  </span>
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

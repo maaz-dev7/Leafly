@@ -156,9 +156,18 @@ export default function PlantDetail() {
 
           {/* Climate tags */}
           <div className="flex gap-2 flex-wrap">
-            {plant.climateTags?.map(tag => (
-              <span key={tag} className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">{tag}</span>
-            ))}
+            {plant.climateTags?.map((tag, i) => {
+              const palettes = [
+                "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300",
+                "bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300",
+                "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300",
+                "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
+                "bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300",
+              ];
+              return (
+                <span key={tag} className={`px-3 py-1 rounded-full text-xs font-semibold ${palettes[i % palettes.length]}`}>{tag}</span>
+              );
+            })}
           </div>
         </div>
 
@@ -271,39 +280,39 @@ export default function PlantDetail() {
 
           <TabsContent value="care" className="mt-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-start gap-4 p-5 bg-[#4A7C3F]/10 rounded-2xl">
-                <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Droplet className="text-[#4A7C3F]" size={20} />
+              <div className="flex items-start gap-4 p-5 bg-blue-50 dark:bg-blue-950/30 rounded-2xl">
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <Droplet className="text-blue-500 dark:text-blue-400" size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">Watering</h4>
+                  <h4 className="font-bold mb-1 text-blue-800 dark:text-blue-300">Watering</h4>
                   <p className="text-sm text-muted-foreground">Check the top inch of soil. If it's dry, water thoroughly until it drains from the bottom.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-4 p-5 bg-[#6B8F3E]/10 rounded-2xl">
-                <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Sun className="text-[#6B8F3E]" size={20} />
+              <div className="flex items-start gap-4 p-5 bg-amber-50 dark:bg-amber-950/30 rounded-2xl">
+                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <Sun className="text-amber-500 dark:text-amber-400" size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">Sunlight</h4>
+                  <h4 className="font-bold mb-1 text-amber-800 dark:text-amber-300">Sunlight</h4>
                   <p className="text-sm text-muted-foreground">Most indoor plants thrive in bright, indirect sunlight. Avoid harsh afternoon sun.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-5 bg-cyan-50 dark:bg-cyan-950/30 rounded-2xl">
-                <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Wind className="text-cyan-500" size={20} />
+                <div className="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/50 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <Wind className="text-cyan-500 dark:text-cyan-400" size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">Humidity</h4>
+                  <h4 className="font-bold mb-1 text-cyan-800 dark:text-cyan-300">Humidity</h4>
                   <p className="text-sm text-muted-foreground">Tropical plants love humidity. Mist them occasionally or use a pebble tray underneath.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-4 p-5 bg-[#1B3D2A]/10 rounded-2xl">
-                <div className="w-10 h-10 bg-white dark:bg-background rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                  <Leaf className="text-[#1B3D2A]" size={20} />
+              <div className="flex items-start gap-4 p-5 bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <Leaf className="text-emerald-600 dark:text-emerald-400" size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">Fertilizer</h4>
+                  <h4 className="font-bold mb-1 text-emerald-800 dark:text-emerald-300">Fertilizer</h4>
                   <p className="text-sm text-muted-foreground">Feed every 2–4 weeks during spring and summer. Pause during winter dormancy.</p>
                 </div>
               </div>
@@ -339,7 +348,7 @@ export default function PlantDetail() {
                   <div key={city} className="flex items-center justify-between py-2 border-b last:border-0">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm">{city}</span>
-                      {badge && <span className="bg-[#4A7C3F]/15 text-[#1B3D2A] text-xs px-2 py-0.5 rounded-full font-medium">{badge}</span>}
+                      {badge && <span className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 text-xs px-2 py-0.5 rounded-full font-semibold">{badge}</span>}
                     </div>
                     <span className="text-muted-foreground text-sm">{days}</span>
                   </div>

@@ -85,7 +85,7 @@ export default function Home() {
             <Link href="/shop">
               <Button
                 size="lg"
-                className="h-13 bg-[#1B3D2A] px-9 text-base text-white shadow-md hover:bg-[#2a5a3e]"
+                className="h-13 bg-[#1B3D2A] px-9 text-base text-white shadow-md hover:bg-[#2a5a3e] rounded-full"
               >
                 Shop Plants
               </Button>
@@ -94,7 +94,7 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-13 border-[#1B3D2A]/30 px-9 text-base text-[#1B3D2A] hover:bg-[#EDF4E9] hover:border-[#1B3D2A]/50"
+                className="h-13 border-[#1B3D2A]/30 px-9 text-base text-[#1B3D2A] hover:bg-[#EDF4E9] hover:border-[#1B3D2A]/50 rounded-full"
               >
                 Hire a Pro
               </Button>
@@ -153,7 +153,7 @@ export default function Home() {
               onKeyDown={e => e.key === "Enter" && setSearchedCity(city)}
               className="bg-background"
             />
-            <Button onClick={() => setSearchedCity(city)} className="shrink-0">Find Plants</Button>
+            <Button onClick={() => setSearchedCity(city)} className="shrink-0 rounded-full px-6">Find Plants</Button>
           </div>
 
           {searchedCity && (
@@ -281,7 +281,7 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <Link href="/shop">
-              <Button size="lg" variant="outline" className="px-10">Browse All Plants</Button>
+              <Button size="lg" className="px-10 bg-[#1B3D2A] text-white hover:bg-[#2a5a3e] rounded-full">Browse All Plants</Button>
             </Link>
           </div>
         </div>
