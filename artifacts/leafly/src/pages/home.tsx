@@ -319,7 +319,7 @@ export default function Home() {
             Join thousands of plant lovers across Pakistan who trust Leafly for their green journey.
           </p>
           <Link href="/shop">
-            <Button size="lg" variant="secondary" className="text-lg px-10">Shop Now</Button>
+            <Button size="lg" variant="secondary" className="text-lg px-10 rounded-full">Shop Now</Button>
           </Link>
         </div>
       </section>

@@ -66,7 +66,7 @@ export default function AccessoryDetail() {
 
   if (isError || !addon) {
     return (
-      <div className="px-5 md:px-20 py-24 text-center">
+      <div className="container mx-auto max-w-6xl px-5 md:px-20 py-24 text-center">
         <div className="text-5xl mb-4">🪴</div>
         <h2 className="text-2xl font-semibold mb-2">Accessory not found</h2>
         <p className="text-muted-foreground mb-6">This accessory may have been removed or the link is incorrect.</p>
@@ -83,7 +83,7 @@ export default function AccessoryDetail() {
   const typeLabel = TYPE_LABELS[addon.type] || addon.type;
 
   return (
-    <div className="px-5 md:px-20 py-12">
+    <div className="container mx-auto max-w-6xl px-5 md:px-20 py-12">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
         <Link href="/shop/accessories" className="hover:text-foreground transition-colors">Accessories</Link>
@@ -102,7 +102,7 @@ export default function AccessoryDetail() {
         </div>
 
         {/* Info */}
-        <div className="flex flex-col justify-center space-y-6">
+        <div className="space-y-7">
           {/* Badge */}
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">
@@ -121,7 +121,7 @@ export default function AccessoryDetail() {
           </div>
 
           <div>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold mb-3">{addon.name}</h1>
+            <h1 className="text-4xl font-serif font-bold mb-3">{addon.name}</h1>
             {addon.description && (
               <p className="text-muted-foreground text-base leading-relaxed">{addon.description}</p>
             )}
@@ -129,7 +129,7 @@ export default function AccessoryDetail() {
 
           {/* Price */}
           <div className="py-4 border-y border-border/60">
-            <p className="text-3xl font-bold dark:text-white">Rs. {Number(addon.price).toLocaleString()}</p>
+            <p className="text-4xl font-bold text-primary dark:text-white">Rs. {Number(addon.price).toLocaleString()}</p>
             <p className="text-xs text-muted-foreground mt-1">Inclusive of all taxes</p>
           </div>
 
@@ -147,7 +147,7 @@ export default function AccessoryDetail() {
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <Button
               size="lg"
-              className="flex-1 gap-2 text-base"
+              className="flex-1 gap-2 text-base h-13"
               onClick={handleAddToCart}
               disabled={addon.stock === 0}
             >
