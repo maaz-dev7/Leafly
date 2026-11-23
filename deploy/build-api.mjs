@@ -29,12 +29,11 @@ await esbuild({
   // when bundled (dynamic requires, path traversal to sibling files, native
   // modules). The output lives inside artifacts/api-server/ so that Node can
   // still resolve them from that package's own node_modules at runtime.
-  external: [
-    "*.node", "pg-native", "nodemailer", "@google-cloud/*", "@grpc/*", "@aws-sdk/*",
-    "sharp", "better-sqlite3", "sqlite3", "canvas", "bcrypt", "argon2",
-    "fsevents", "re2", "bufferutil", "utf-8-validate", "handlebars",
-    "protobufjs", "googleapis", "google-auth-library", "lightningcss",
-  ],
+  // Bundle EVERYTHING. Vercel's file tracer cannot reliably follow pnpm's
+  // symlinked node_modules, so any external package risks a runtime
+  // "Cannot find module" on every request. Only truly unbundleable native
+  // bindings stay out.
+  external: ["*.node", "pg-native"],
   banner: {
     js: `import { createRequire as __cr } from 'node:module';
 import __p from 'node:path';
