@@ -13,5 +13,6 @@ export interface OrderInput {
   city: string;
   address: string;
   paymentMethod: string;
+  customerEmail?: string;
   items: OrderItemInput[];
 }

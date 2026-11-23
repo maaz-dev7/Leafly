@@ -1,131 +1,137 @@
-# Deploying the Leafly demo to Vercel
+# Deploying the Leafly demo to Vercel + Neon
 
-A self-contained demo: frontend, API and database all on Vercel + Neon, with no
-dependency on Replit. Intended for presentations, not production.
+A self-contained demo: frontend, API, Postgres **and** file storage, with no
+dependency on Replit.
 
-Files added for this: `vercel.json`, `api/[...path].ts`, `demo-data/`.
-No existing application code was changed.
+Backend services are on Neon (project **Leafly**, `winter-poetry-35657064`,
+branch `production`), declared in [`neon.ts`](neon.ts):
+
+- **Lakebase Postgres** — the application database
+- **Object Storage** — S3-compatible bucket `assets`, for uploaded plant and
+  accessory images
+
+## Files added for deployment
+
+| Path | Purpose |
+|---|---|
+| `vercel.json` | Build config; supplies `PORT`/`BASE_PATH` (the Vite config throws without them, even at build time) and SPA routing that excludes `/api` |
+| `api/[...path].mjs` | Vercel serverless function — re-exports the pre-built API bundle |
+| `deploy/entry.ts`, `deploy/build-api.mjs` | Bundles the Express app into `artifacts/api-server/vercel-dist/handler.mjs` |
+| `neon.ts`, `.neon` | Neon service declaration and project link |
+| `demo-data/` | Scripts that seed a demo catalogue and customer |
+
+Vercel compiles **no TypeScript**: this project uses `moduleResolution: "bundler"`
+with a `customConditions: ["workspace"]` export condition, which Vercel's
+compiler does not honour. The API is pre-bundled with the project's own esbuild
+instead.
 
 ---
 
-## 1. Create a GitHub repo and push
+## 1. Push to GitHub
 
-This repo currently has **no GitHub remote** — only a local backup mirror
-(`gitsafe-backup`). Create the repo on GitHub first (github.com → New
-repository → *don't* add a README), then:
+Already done — https://github.com/maaz-dev7/Leafly. Vercel redeploys on push.
+
+## 2. Pull the Neon environment variables
+
+Already provisioned. To refresh them locally at any time:
 
 ```bash
-cd /Users/maaz/Downloads/LEAFLY
-git add vercel.json api/ demo-data/ DEPLOY.md pitch-assets/
-git commit -m "Add Vercel demo deployment config"
-git remote add origin https://github.com/<your-username>/<repo-name>.git
-git push -u origin main
+neon env pull        # writes .env.local (gitignored)
 ```
 
-Add the files by name rather than with `git add .` — the working tree also
-contains `Claude outputs/Leafly_Speaker_Notes_and_Prep.pdf`, your own speaker
-notes, which you probably don't want in a public repo. Skip `pitch-assets/`
-too (6.9 MB of screenshots) if you'd rather keep the repo lean.
-
-No secrets are committed — there are no `.env` files in this repo, and all
-credentials are set in the Vercel dashboard (step 4).
-
-## 2. Create a free Postgres database
-
-Go to [neon.tech](https://neon.tech) → sign up → create a project.
-
-Copy the **Pooled connection** string (it has `-pooler` in the host). The
-pooled one matters: the API opens a `pg` Pool per serverless invocation, and a
-direct connection will exhaust the database's connection limit.
-
-It looks like:
-```
-postgresql://user:pass@ep-xxx-pooler.region.aws.neon.tech/neondb?sslmode=require
-```
+That file holds `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, and the four `AWS_*`
+object-storage variables.
 
 ## 3. Create the tables
 
-From your machine, pointing at the Neon database:
+Use the **unpooled** connection for migrations — Neon's pooled endpoint runs
+PgBouncer in transaction mode and breaks session-level DDL:
 
 ```bash
-cd /Users/maaz/Downloads/LEAFLY
-export DATABASE_URL="<your Neon pooled connection string>"
-pnpm --filter @workspace/db run push
+set -a && . ./.env.local && set +a
+DATABASE_URL="$DATABASE_URL_UNPOOLED" pnpm --filter @workspace/db run push
 ```
+
+Already applied: all 11 tables exist on the `production` branch.
 
 ## 4. Import the project into Vercel
 
-[vercel.com](https://vercel.com) → **Add New → Project** → import your GitHub repo.
+[vercel.com](https://vercel.com) → **Add New → Project** → import
+`maaz-dev7/Leafly`. Leave the build settings alone; `vercel.json` drives them.
 
-Vercel reads `vercel.json`, so leave the build settings alone. Just add these
-**Environment Variables** (Production + Preview):
+Add these **Environment Variables** (Production + Preview). The values for the
+first and last four come from your `.env.local`:
 
 | Name | Value |
 |---|---|
-| `DATABASE_URL` | your Neon **pooled** connection string |
-| `ADMIN_PASSWORD` | any password you choose — **required**, the API refuses to start without it |
-| `SESSION_SECRET` | any long random string (otherwise JWTs are signed with a public fallback value) |
+| `DATABASE_URL` | Neon **pooled** string (the one with `-pooler`) |
+| `ADMIN_PASSWORD` | your choice — **required**, the API refuses to boot without it |
+| `SESSION_SECRET` | any long random string (else JWTs use a public fallback) |
+| `AWS_ACCESS_KEY_ID` | from `.env.local` |
+| `AWS_SECRET_ACCESS_KEY` | from `.env.local` |
+| `AWS_ENDPOINT_URL_S3` | from `.env.local` |
+| `AWS_REGION` | from `.env.local` |
 | `ADMIN_USERNAME` | `admin` (optional — this is the default) |
 
-Then **Deploy**. Under Settings → General, set the Node.js version to **22.x**
-or newer if it isn't already.
+Set Node.js to **22.x** or newer under Settings → General.
 
-`PORT` and `BASE_PATH` are already supplied by `vercel.json` — the Vite config
-throws without them, including at build time.
+`PORT` and `BASE_PATH` come from `vercel.json`; don't add them by hand.
 
 ## 5. Fill the demo with data
 
-Once the deployment is live, point the seed scripts at it:
+Already seeded on the `production` branch (14 plants, 10 accessories, 4
+variants, 1 customer, 2 orders, 1 booking). To re-run against the deployed
+site:
 
 ```bash
 export BASE_URL="https://<your-project>.vercel.app"
-export ADMIN_USERNAME=admin
-export ADMIN_PASSWORD='<the same one you set in Vercel>'
-
-node demo-data/seed.mjs       # 14 plants, 10 accessories, 4 colour variants
-node demo-data/testdata.mjs   # customer Ayesha Khan, 3 care plants, 2 orders, 1 booking
+export ADMIN_USERNAME=admin ADMIN_PASSWORD='<the one you set in Vercel>'
+node demo-data/seed.mjs
+node demo-data/testdata.mjs
 ```
 
-Both are safe to re-run; they skip anything that already exists.
+Both skip anything that already exists.
 
 ## 6. Demo credentials
 
 | | |
 |---|---|
 | Customer | `ayesha.khan@leafly-demo.test` / `DemoPass!2026` |
-| Admin | `/admin/login` → `admin` / the `ADMIN_PASSWORD` you set |
+| Admin | `/admin/login` → `admin` / your `ADMIN_PASSWORD` |
 
 ---
 
-## What works, and what doesn't
+## Object storage
 
-**Works:** catalogue and filters, plant detail with the add-on price
-calculator, cart and COD checkout, order tracking, Hire-a-Pro bookings, the
-plant-care dashboard, and the full admin panel (plants, accessories, variants,
-orders, bookings, contact info).
+[`artifacts/api-server/src/lib/objectStorage.ts`](artifacts/api-server/src/lib/objectStorage.ts)
+was rewritten from Replit Object Storage to Neon's S3-compatible bucket. The
+public API of the module is unchanged, so `routes/storage.ts` works as-is.
 
-**Won't work on Vercel — both fine for a demo:**
+- Credentials, endpoint and region come from the standard `AWS_*` env chain.
+- `forcePathStyle: true` is required — Neon uses path-style addressing.
+- Uploads go straight from the browser to a presigned `PUT` URL.
+- Postgres stores a path, not bytes: `/api/storage/objects/uploads/<uuid>`,
+  which is directly usable as an `<img src>` and is streamed back by the API.
+- The bucket is `private`; every read is proxied by the API, so no credentials
+  reach the browser.
+- Storage branches with the database, so a Neon branch gets its own copy of
+  both the rows and the files they point at.
 
-1. **Admin image upload.** It uses Replit Object Storage through a sidecar at
-   `127.0.0.1:1106` (`artifacts/api-server/src/lib/objectStorage.ts`), which
-   only exists inside Replit. Uploading an image from the admin panel will
-   error. Seeded plants use the images already bundled in the frontend, so the
-   catalogue still looks right.
-2. **Order confirmation emails.** `GMAIL_USER` / `GMAIL_APP_PASSWORD` aren't
-   set, so `sendMail` no-ops. Order creation still succeeds — this is the
-   documented behaviour.
+**Images uploaded on Replit do not carry over.** They live in Replit Object
+Storage and are not in this repo or the database. Re-upload them through the
+admin panel and they will land in the Neon bucket.
 
-**Signup on the live demo:** the signup form emails a verification code, which
-won't arrive without Gmail configured. Use the pre-made Ayesha Khan account
-above, or add plants via admin.
+## Rebuilding after backend changes
 
-## Before you present
+The serverless bundle is committed, so Vercel serves whatever was last built:
 
-The homepage shows hardcoded marketing claims with no data behind them —
-"Pakistan's #1 Plant Delivery Platform" (`home.tsx:54`), "500+ Plant varieties
-/ 20k+ Happy customers / 7-day Guarantee" (`home.tsx:111`). See
-`pitch-assets/facts.md` for the full list and the real numbers.
+```bash
+node deploy/build-api.mjs    # then commit artifacts/api-server/vercel-dist/handler.mjs
+```
 
-Also avoid demoing the shop's **Quetta** or **Faisalabad** city filters — the
-API has no climate profile for either, so they silently return the unfiltered
-catalogue (`routes/plants.ts:15-22`).
+## Known gaps
+
+- **Order confirmation emails** no-op: `GMAIL_USER` / `GMAIL_APP_PASSWORD` are unset. Order creation still succeeds — documented behaviour.
+- **Signup on the live demo** emails a verification code that won't arrive. Use the Ayesha Khan account above, or add data through the admin panel.
+- Avoid demoing the shop's **Quetta** or **Faisalabad** city filters — the API has no climate profile for either, so they silently return the unfiltered catalogue (`routes/plants.ts:15-22`).
+- The homepage shows hardcoded claims with no data behind them — "Pakistan's #1 Plant Delivery Platform" (`home.tsx:54`), "500+ / 20k+ / 7-day" (`home.tsx:111`). See `pitch-assets/facts.md`.

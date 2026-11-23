@@ -295,7 +295,7 @@ export default function Dashboard() {
                             )}
                           </div>
                           {isPlant && expandedCare === careKey && (
-                            <CarePanel plantName={item.plantName} />
+                            <CarePanel plantName={item.plantName} plantId={item.plantId} />
                           )}
                         </div>
                       );

@@ -30,7 +30,7 @@ await esbuild({
   // modules). The output lives inside artifacts/api-server/ so that Node can
   // still resolve them from that package's own node_modules at runtime.
   external: [
-    "*.node", "pg-native", "nodemailer", "@google-cloud/*", "@grpc/*",
+    "*.node", "pg-native", "nodemailer", "@google-cloud/*", "@grpc/*", "@aws-sdk/*",
     "sharp", "better-sqlite3", "sqlite3", "canvas", "bcrypt", "argon2",
     "fsevents", "re2", "bufferutil", "utf-8-validate", "handlebars",
     "protobufjs", "googleapis", "google-auth-library", "lightningcss",

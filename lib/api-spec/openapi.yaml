@@ -980,6 +980,7 @@ components:
         city: { type: string }
         address: { type: string }
         paymentMethod: { type: string }
+        customerEmail: { type: string }
         items:
           type: array
           items:
